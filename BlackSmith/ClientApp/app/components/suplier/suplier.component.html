@@ -1,0 +1,61 @@
+<div class="container">
+    <h1>Suplier Management</h1>
+    <form name="form" class="form-horizontal" (ngSubmit)="f.form.valid && save()" #f="ngForm" novalidate>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="title">Name</label>&nbsp;<label *ngIf="f.submitted && !name.valid" class="text-danger">Required</label>
+                <div [ngClass]="{ 'has-error': f.submitted && !name.valid }">
+                    <input type="text" maxlength="100" class="form-control" name="name" #name="ngModel" [(ngModel)]="model.name" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="title">Contact No</label>&nbsp;<label *ngIf="f.submitted && !contactNo.valid" class="text-danger">Required</label>
+                <div [ngClass]="{ 'has-error': f.submitted && !contactNo.valid }">
+                    <input type="text" maxlength="100" class="form-control" name="contactNo" #contactNo="ngModel" [(ngModel)]="model.contactNo" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="title">Email</label>
+                <input type="email" maxlength="100" class="form-control" name="emailId" #emailId="ngModel" [(ngModel)]="model.emailId">
+            </div>
+
+            <div class="form-group">
+                <label for="title">Address</label>&nbsp;<label *ngIf="f.submitted && !address.valid" class="text-danger">Required</label>
+                <div [ngClass]="{ 'has-error': f.submitted && !address.valid }">
+                    <textarea rows="6" maxlength="1000" class="form-control" name="address" #address="ngModel" [(ngModel)]="model.address" required></textarea>
+                </div>
+            </div>
+
+            <button class="btn btn-default">Save</button>
+            <input type="button" class="btn btn-default" value="Clear" (click)="addNew()">
+        </div>
+    </form>
+    <div class="col-md-8">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Contact No</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let each of modelList">
+                    <td>{{each.name}}</td>
+                    <td>{{each.contactNo}}</td>
+                    <td>{{each.emailId}}</td>
+                    <td>{{each.address}}</td>
+                    <td>
+                        <a><span class="glyphicon glyphicon-pencil" (click)="edit(each,model)"></span></a>
+                        <a><span class="glyphicon glyphicon-trash" (click)="delete(each)"></span></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>

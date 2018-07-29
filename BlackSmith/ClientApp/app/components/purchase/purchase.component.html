@@ -1,0 +1,16 @@
+<div class="container">
+    <h1>Purchase</h1>
+    <div class="row">
+        <div class="col-md-1">
+            <label for="suplier">Suplier</label>
+        </div>
+        <div class="col-md-2">
+            <select class="form-control">
+                <option *ngFor="let sup of loader.suplier"
+                        [value]="sup.iD">
+                    {{sup.name}}
+                </option>
+            </select>
+        </div>
+    </div>
+</div>

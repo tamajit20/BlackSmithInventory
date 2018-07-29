@@ -1,0 +1,58 @@
+<div class='main-nav'>
+    <div class='navbar navbar-inverse'>
+        <div class='navbar-header'>
+            <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse'>
+                <span class='sr-only'>Toggle navigation</span>
+                <span class='icon-bar'></span>
+                <span class='icon-bar'></span>
+                <span class='icon-bar'></span>
+            </button>
+            <a class='navbar-brand' [routerLink]="['/home']">BlackSmith</a>
+        </div>
+        <div class='clearfix'></div>
+        <div class='navbar-collapse collapse'>
+            <ul class='nav navbar-nav'>
+                <li [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/home']">
+                        <span class='glyphicon glyphicon-home'></span> Home
+                    </a>
+                </li>
+                <li [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/customer']">
+                        <span class='glyphicon glyphicon-th-list'></span> Customer
+                    </a>
+                </li>
+                <li [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/sale']">
+                        <span class='glyphicon glyphicon-th-list'></span> Sale
+                    </a>
+                </li>
+                <li [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/product']">
+                        <span class='glyphicon glyphicon-th-list'></span> Product
+                    </a>
+                </li>
+                <li [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/report']">
+                        <span class='glyphicon glyphicon-th-list'></span> Report
+                    </a>
+                </li>
+                <li [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/purchase']">
+                        <span class='glyphicon glyphicon-th-list'></span> Purchase
+                    </a>
+                </li>
+                <li [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/suplier']">
+                        <span class='glyphicon glyphicon-th-list'></span> Suplier
+                    </a>
+                </li>
+                <li [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/inventoryitem']">
+                        <span class='glyphicon glyphicon-th-list'></span> Inventory Item
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
