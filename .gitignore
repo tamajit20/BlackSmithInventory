@@ -7,3 +7,6 @@
 /BlackSmithDBConnect/obj/Debug/netcoreapp2.0
 /BlackSmithViewModels/obj/Debug/netcoreapp2.0
 /packages
+/BlackSmithCore/obj
+/BlackSmithDBConnect/obj
+/BlackSmithViewModels/obj
