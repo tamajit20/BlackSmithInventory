@@ -52,17 +52,21 @@ import { PurchaseService } from './services/purchaseservice';
         HttpModule,
         FormsModule,
         RouterModule.forRoot([
-            { path: '', redirectTo: 'login', pathMatch: 'full' },
-            { path: 'login', component: LoginComponent },
-            { path: 'customer', component: CustomerComponent },
-            { path: 'sale', component: SaleComponent },
-            { path: 'purchase', component: PurchaseComponent },
-            { path: 'report', component: ReportComponent },
-            { path: 'dashboard', component: DashboardComponent },
-            { path: 'product', component: ProductComponent },
-            { path: 'suplier', component: SuplierComponent },
-            { path: 'inventoryitem', component: InventoryItemComponent },
-            { path: '**', redirectTo: 'home' }
+            { path: '', component: LoginComponent },
+            {
+                path: 'home', component: HomeComponent,
+                children: [
+                    { path: 'customer', component: CustomerComponent, outlet: 'homeoutlet' },
+                    { path: 'sale', component: SaleComponent, outlet: 'homeoutlet' },
+                    { path: 'purchase', component: PurchaseComponent, outlet: 'homeoutlet' },
+                    { path: 'report', component: ReportComponent, outlet: 'homeoutlet' },
+                    { path: 'dashboard', component: DashboardComponent, outlet: 'homeoutlet' },
+                    { path: 'product', component: ProductComponent, outlet: 'homeoutlet' },
+                    { path: 'suplier', component: SuplierComponent, outlet: 'homeoutlet' },
+                    { path: 'inventoryitem', component: InventoryItemComponent, outlet: 'homeoutlet' }
+                ]
+            },
+            { path: '**', redirectTo: '' }
         ])
     ]
 })

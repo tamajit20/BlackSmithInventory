@@ -7,6 +7,7 @@ import { BaseComponent } from '../base.component';
 import { FormGroup } from '@angular/forms/src/model';
 import { UserService } from '../../services/userservice';
 import { User } from '../../model/user';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'login',
@@ -14,10 +15,11 @@ import { User } from '../../model/user';
 })
 export class LoginComponent extends BaseComponent implements OnInit {
 
-    model: User;
+   // model: User;
 
     constructor(
-        private _service: UserService
+        private _service: UserService,
+        public router: Router
     ) {
         super()
     }
@@ -27,8 +29,9 @@ export class LoginComponent extends BaseComponent implements OnInit {
     }
 
     ValidateUser() {
-        this._service.ValidateUser(this.model).subscribe(data => {
-            this.model = data;
-        });
+        //this._service.ValidateUser(this.model).subscribe(data => {
+        //    this.model = data;
+        //});
+        this.router.navigate(['/home', { outlets: {homeoutlet:['dashboard']}}]);
     }
 }

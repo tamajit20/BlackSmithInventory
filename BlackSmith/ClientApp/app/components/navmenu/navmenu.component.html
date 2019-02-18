@@ -18,37 +18,37 @@
                     </a>
                 </li>
                 <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/customer']">
+                    <a [routerLink]="['/home', { outlets: {homeoutlet:['customer']}}]">
                         <span class='glyphicon glyphicon-th-list'></span> Customer
                     </a>
                 </li>
                 <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/sale']">
+                    <a [routerLink]="['/home', { outlets: {homeoutlet:['sale']}}]">
                         <span class='glyphicon glyphicon-th-list'></span> Sale
                     </a>
                 </li>
                 <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/product']">
+                    <a [routerLink]="['/home', { outlets: {homeoutlet:['product']}}]">
                         <span class='glyphicon glyphicon-th-list'></span> Product
                     </a>
                 </li>
                 <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/report']">
+                    <a [routerLink]="['/home', { outlets: {homeoutlet:['report']}}]">
                         <span class='glyphicon glyphicon-th-list'></span> Report
                     </a>
                 </li>
                 <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/purchase']">
+                    <a [routerLink]="['/home', { outlets: {homeoutlet:['purchase']}}]">
                         <span class='glyphicon glyphicon-th-list'></span> Purchase
                     </a>
                 </li>
                 <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/suplier']">
+                    <a [routerLink]="['/home', { outlets: {homeoutlet:['splier']}}]">
                         <span class='glyphicon glyphicon-th-list'></span> Suplier
                     </a>
                 </li>
                 <li [routerLinkActive]="['link-active']">
-                    <a [routerLink]="['/inventoryitem']">
+                    <a [routerLink]="['/home', { outlets: {homeoutlet:['inventoryitem']}}]">
                         <span class='glyphicon glyphicon-th-list'></span> Inventory Item
                     </a>
                 </li>
