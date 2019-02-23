@@ -3,10 +3,13 @@
 ################################################################################
 
 /.vs
-/BlackSmithCore/obj/Debug/netcoreapp2.0
-/BlackSmithDBConnect/obj/Debug/netcoreapp2.0
-/BlackSmithViewModels/obj/Debug/netcoreapp2.0
-/packages
 /BlackSmithCore/obj
 /BlackSmithDBConnect/obj
+/packages
+/BlackSmithCore/bin
+/BlackSmithDBConnect/bin
 /BlackSmithViewModels/obj
+/BlackSmithViewModels/bin
+/BlackSmithCore/bin/Debug
+/BlackSmithDBConnect/bin/Debug
+/BlackSmithViewModels/bin/Debug
