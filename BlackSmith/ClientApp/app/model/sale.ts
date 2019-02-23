@@ -1,7 +1,9 @@
 ﻿import { ModelBase } from "./modelbase";
+import { Customer } from "./customer";
+import { Product } from "./product";
 
 export class Sale extends ModelBase {
-    fK_CustomerId: number;
+    fK_CustomerId: number
     note: string;
     gSTAmount: number;
     gSTRate: number;
@@ -21,4 +23,9 @@ export class SalePayment extends ModelBase {
     fK_SaleId: number;
     amount: number;
     note: number;
+}
+
+export class SaleLoader extends ModelBase {
+    customer: Customer[];
+    product: Product[];
 }

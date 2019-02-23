@@ -1,7 +1,7 @@
 import { Headers, RequestOptions } from '@angular/http';
 
 export class AppConfig {
-    public static API_ENDPOINT = "http://localhost:53305/api/";
+    public static API_ENDPOINT = "http://localhost:50813/api/";
     public static REQUEST_HEADER = new RequestOptions({ headers: new Headers({ 'Content-Type': 'application/json' }) });
 
     public static USER_VALIDATE = "User/Validate";
@@ -13,6 +13,10 @@ export class AppConfig {
     public static PRODUCT_SAVE = "Product/Save";
     public static PRODUCT_GETALL = "Product/GetAll";
     public static PRODUCT_DELETE = "Product/delete";
+
+    public static SALE_SAVE = "Sale/Save";
+    public static SALE_GETALL = "Sale/GetAll";
+    public static SALE_DELETE = "Sale/delete";
     
     public static SUPLIER_SAVE = "Suplier/Save";
     public static SUPLIER_GETALL = "Suplier/GetAll";
@@ -22,8 +26,8 @@ export class AppConfig {
     public static INVENTORYITEM_GETALL = "InventoryItem/GetAll";
     public static INVENTORYITEM_DELETE = "InventoryItem/Delete";
 
-    public static PURCHASE_SAVE = "Product/Save";
-    public static PURCHASE_GETALL = "Product/GetAll";
-    public static PURCHASE_DELETE = "Product/delete";
+    public static PURCHASE_SAVE = "Purchase/Save";
+    public static PURCHASE_GETALL = "Purchase/GetAll";
+    public static PURCHASE_DELETE = "Purchase/delete";
 
 }
