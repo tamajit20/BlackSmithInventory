@@ -1,18 +1,67 @@
-<div class="container">
-    <h1>Sale</h1>
+<div class="container-fluid">
+    <div>
+        <h1 class="custom-header">Sale</h1>
+    </div>
     <div class="row">
         <div class="col-md-1">
             <label for="customer">Customer</label>
         </div>
         <div class="col-md-2">
             <select class="form-control">
-                <option *ngFor="let cust of loader.customer"
+                <option *ngFor="let cust of loader.customers"
                         [value]="cust.iD">
                     {{cust.name}}
                 </option>
             </select>
         </div>
+
+        <div class="col-md-1">
+            <label for="customer">Date</label>
+        </div>
+        <div class="col-md-2">
+            <my-date-picker class="height-20px"></my-date-picker>
+        </div>
+
+        <div class="col-md-1">
+            <label for="customer">Total :</label>
+        </div>
+        <div class="col-md-4">
+            <div>Amount-{{model.total}} + GST-{{model.gSTAmount}}({{model.gSTRate}}%) = Rs -  {{model.grandTotal}} /-</div>
+        </div>
     </div>
     <div class="row">
+        <table class="table table-responsive table-hover">
+            <thead>
+                <tr>
+                    <th>SL#</th>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                    <th>
+                        <button type="button" class="btn btn-default btn-sm" (click)="addNewSaleDetail()">
+                            <span class="glyphicon glyphicon-plus"></span> Add
+                        </button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let eachSaleDetail of model.saleDetails;let i = index">
+                    <td>{{i+1}}</td>
+                    <td>
+                        <select class="height-30px form-control" name="fK_ProductId" #fK_ProductId="ngModel" [(ngModel)]="model.saleDetails[getIndexByDetailNo(eachSaleDetail.saleDetailNo)].fK_ProductId" required>
+                            <option value="" selected disabled hidden>Select</option>
+                            <option *ngFor="let each of loader.products" [value]="each.iD">
+                                {{each.name}}
+                            </option>
+                        </select>
+                    </td>
+                    <td><input (input)="calculateTotalPerProduct(eachSaleDetail.saleDetailNo)" class="inputText" type="number" max="9999999999" name="quantitiy" #quantitiy="ngModel" [(ngModel)]="model.saleDetails[getIndexByDetailNo(eachSaleDetail.saleDetailNo)].quantitiy" required></td>
+                    <td><input (input)="calculateTotalPerProduct(eachSaleDetail.saleDetailNo)" class="inputText" type="number" max="9999999999" name="price" #price="ngModel" [(ngModel)]="model.saleDetails[getIndexByDetailNo(eachSaleDetail.saleDetailNo)].price" required></td>
+                    <td>{{ eachSaleDetail.total}}</td>
+                    <td><a href="javascript:void(0)" (click)="deleteSaleDetail(eachSaleDetail.saleDetailNo)"><span class="glyphicon glyphicon-remove"></span></a></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>

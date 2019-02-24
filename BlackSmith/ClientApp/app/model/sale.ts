@@ -7,16 +7,19 @@ export class Sale extends ModelBase {
     note: string;
     gSTAmount: number;
     gSTRate: number;
-
-    detail: SaleDetail[];
-    payment: SalePayment[];
+    total: number;
+    grandTotal: number;
+    saleDetails: SaleDetail[];
+    paymentDetails: SalePayment[];
 }
 
 export class SaleDetail extends ModelBase {
+    saleDetailNo: number;
     fK_ProductId: number;
     fK_CustomerId: number;
     quantitiy: number;
     price: number;
+    total: number;
 }
 
 export class SalePayment extends ModelBase {
@@ -26,6 +29,6 @@ export class SalePayment extends ModelBase {
 }
 
 export class SaleLoader extends ModelBase {
-    customer: Customer[];
-    product: Product[];
+    customers: Customer[];
+    products: Product[];
 }

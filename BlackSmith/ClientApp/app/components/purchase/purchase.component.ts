@@ -7,7 +7,8 @@ import { PurchaseService } from '../../services/purchaseservice';
 
 @Component({
     selector: 'purchase',
-    templateUrl: './purchase.component.html'
+    templateUrl: './purchase.component.html',
+    styleUrls: ['../../style/style.css']
 })
 export class PurchaseComponent extends BaseComponent implements OnInit {
     model: Purchase;

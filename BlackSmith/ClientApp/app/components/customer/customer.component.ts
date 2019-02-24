@@ -8,8 +8,9 @@ import { FormGroup } from '@angular/forms/src/model';
 
 @Component({
     selector: 'customer',
-    templateUrl: './customer.component.html'
-})
+    templateUrl: './customer.component.html',
+    styleUrls: ['../../style/style.css']})
+
 export class CustomerComponent extends BaseComponent implements OnInit {
 
     model: Customer;

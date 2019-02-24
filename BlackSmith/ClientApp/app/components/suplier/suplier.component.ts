@@ -7,7 +7,8 @@ import { SharedService } from '../../services/sharedservice';
 
 @Component({
     selector: 'suplier',
-    templateUrl: './suplier.component.html'
+    templateUrl: './suplier.component.html',
+    styleUrls: ['../../style/style.css']
 })
 export class SuplierComponent implements OnInit {
 

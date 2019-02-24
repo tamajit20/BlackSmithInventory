@@ -1,0 +1,54 @@
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+<div class="nav-side-menu">
+    <div class="brand">Brand Logo</div>
+    <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
+
+    <div class="menu-list">
+        <ul id="menu-content" class="menu-content collapse out">
+            <li data-toggle="collapse" data-target="#sale" class="collapsed active">
+                <a><i class="fa fa-gift fa-lg"></i>Sale <span class="arrow"></span></a>
+            </li>
+            <ul class="sub-menu collapse" id="sale">
+                <li [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/home', { outlets: {homeoutlet:['product']}}]">
+                        <span class='glyphicon glyphicon-th-list'></span> Product
+                    </a>
+                </li>
+                <li [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/home', { outlets: {homeoutlet:['customer']}}]">
+                        <span class='glyphicon glyphicon-th-list'></span> Customer
+                    </a>
+                </li>
+                <li [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/home', { outlets: {homeoutlet:['sale']}}]">
+                        <span class='glyphicon glyphicon-th-list'></span> Sale
+                    </a>
+                </li>
+            </ul>
+
+
+            <li data-toggle="collapse" data-target="#purchase" class="collapsed active">
+                <a><i class="fa fa-gift fa-lg"></i>Purchase <span class="arrow"></span></a>
+            </li>
+            <ul class="sub-menu collapse" id="purchase">
+                <li [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/home', { outlets: {homeoutlet:['inventoryitem']}}]">
+                        <span class='glyphicon glyphicon-th-list'></span> Inventory Item
+                    </a>
+                </li>
+                <li [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/home', { outlets: {homeoutlet:['suplier']}}]">
+                        <span class='glyphicon glyphicon-th-list'></span> Suplier
+                    </a>
+                </li>
+                <li [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/home', { outlets: {homeoutlet:['purchase']}}]">
+                        <span class='glyphicon glyphicon-th-list'></span> Purchase
+                    </a>
+                </li>
+            </ul>
+
+
+        </ul>
+    </div>
+</div>

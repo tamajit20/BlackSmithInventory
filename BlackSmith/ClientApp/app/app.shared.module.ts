@@ -22,11 +22,15 @@ import { ProductSerivce } from './services/productservice';
 import { LoginComponent } from './components/login/login.component';
 import { UserService } from './services/userservice';
 import { PurchaseService } from './services/purchaseservice';
+import { SideMenuComponent } from './components/sidemenu/sidemenu.component';
+import { SaleService } from './services/saleservice';
+import { MyDatePickerModule } from 'mydatepicker';
 
 @NgModule({
     declarations: [
         AppComponent,
         NavMenuComponent,
+        SideMenuComponent,
         LoginComponent,
         HomeComponent,
         CustomerComponent,
@@ -37,7 +41,6 @@ import { PurchaseService } from './services/purchaseservice';
         ProductComponent,
         SuplierComponent,
         InventoryItemComponent
-
     ],
     providers: [
         CustomerSerivce,
@@ -45,12 +48,14 @@ import { PurchaseService } from './services/purchaseservice';
         InventoryItemService,
         ProductSerivce,
         UserService,
-        PurchaseService
+        PurchaseService,
+        SaleService
     ],
     imports: [
         CommonModule,
         HttpModule,
         FormsModule,
+        MyDatePickerModule,
         RouterModule.forRoot([
             { path: '', component: LoginComponent },
             {

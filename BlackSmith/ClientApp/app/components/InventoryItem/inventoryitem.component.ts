@@ -7,7 +7,8 @@ import { BaseComponent } from '../base.component';
 
 @Component({
     selector: 'inventoryitem',
-    templateUrl: './inventoryitem.component.html'
+    templateUrl: './inventoryitem.component.html',
+    styleUrls: ['../../style/style.css']
 })
 export class InventoryItemComponent extends BaseComponent implements OnInit {
 

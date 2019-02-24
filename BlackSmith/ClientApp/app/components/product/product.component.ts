@@ -7,7 +7,8 @@ import { BaseComponent } from '../base.component';
 
 @Component({
     selector: 'product',
-    templateUrl: './product.component.html'
+    templateUrl: './product.component.html',
+    styleUrls: ['../../style/style.css']
 })
 export class ProductComponent extends BaseComponent implements OnInit {
 
