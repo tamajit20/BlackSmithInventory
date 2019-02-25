@@ -23,11 +23,17 @@ namespace BlackSmithDBConnect
             modelBuilder.ApplyConfiguration(new SuplierDBMapper());
             modelBuilder.ApplyConfiguration(new ProductDBMapper());
             modelBuilder.ApplyConfiguration(new InventoryItemDBMapper());
+            modelBuilder.ApplyConfiguration(new SaleDetailDBMapper());
+            modelBuilder.ApplyConfiguration(new SaleDBMapper());
         }
 
         public virtual DbSet<Customer> Customer { get; set; }
         public virtual DbSet<Suplier> Suplier { get; set; }
         public virtual DbSet<InventoryItem> InventoryItem { get; set; }
+        public virtual DbSet<Sale> Sale { get; set; }
+        public virtual DbSet<SaleDetail> SaleDetail { get; set; }
+
+
 
     }
 }

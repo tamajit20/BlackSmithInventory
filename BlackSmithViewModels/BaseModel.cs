@@ -10,9 +10,9 @@ namespace ViewModels
     {
         public BaseModel()
         {
-            CreatedOn = System.DateTime.Now;
+            CreatedOn = DateTime.Now;
             CreatedBy = 0;
-            ModifiedOn = System.DateTime.Now;
+            ModifiedOn = DateTime.Now;
             ModifiedBy = 0;
         }
         public long Id { get; set; }

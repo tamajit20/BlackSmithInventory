@@ -28,10 +28,10 @@ export class SaleComponent extends BaseComponent implements OnInit {
 
     ngOnInit(): void {
         this.addNew();
-        this.model.gSTRate = 18;
+        this.model.cGSTRate = 9;
         this.model.total = 0;
-        this.model.gSTAmount = 0;
-        this.model.grandTotal = 0;
+        this.model.totalTax = 0;
+        this.model.finalTotal = 0;
 
         this.getAllCustomer();
         this.getAllProduct();
@@ -66,7 +66,7 @@ export class SaleComponent extends BaseComponent implements OnInit {
 
     deleteSaleDetail(delSaleDetailNo: number) {
         this.model.saleDetails.splice(this.model.saleDetails.findIndex(item => item.saleDetailNo === delSaleDetailNo), 1);
-        this.calculateFinalTotal();
+        //this.calculateFinalTotal();
     }
 
     getIndexByDetailNo(saleDetailNo: number) {
@@ -74,7 +74,7 @@ export class SaleComponent extends BaseComponent implements OnInit {
     }
 
     calculateTotalPerProduct(saleDetailNo: number) {
-        this.calculateFinalTotal();
+       // this.calculateFinalTotal();
         var obj = this.model.saleDetails.find(x => x.saleDetailNo === saleDetailNo);
         if (obj) {
             obj.total = obj.price * obj.quantitiy;
@@ -82,16 +82,22 @@ export class SaleComponent extends BaseComponent implements OnInit {
         return '0';
     }
 
-    calculateFinalTotal() {
-        this.model.total = 0;
-        this.model.grandTotal = 0;
+    //calculateFinalTotal() {
+    //    this.model.total = 0;
+    //    this.model.finalTotal = 0;
 
-        this.model.saleDetails.forEach(each => {
-            this.model.total = this.model.total + (each.quantitiy * each.price);
+    //    this.model.saleDetails.forEach(each => {
+    //        this.model.total = this.model.total + (each.quantitiy * each.price);
+    //    });
+    //    if (this.model.total) {
+    //        this.model.totalTax = this.model.total * (this.model.cGSTRate + this.model.sGSTRate) / 100;
+    //        this.model.finalTotal = this.model.totalTax + this.model.total;
+    //    }
+    //}
+
+    save() {
+        this._service.save(this.model).subscribe(data => {
+
         });
-        if (this.model.total) {
-            this.model.gSTAmount = this.model.total * this.model.gSTRate / 100;
-            this.model.grandTotal = this.model.gSTAmount + this.model.total;
-        }
     }
 }

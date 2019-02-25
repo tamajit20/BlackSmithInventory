@@ -16,7 +16,8 @@ namespace BlackSmith.StartUpObjects
             services.AddScoped<IOperation<Suplier>, Operation<Suplier>>();
             services.AddScoped<IOperation<InventoryItem>, Operation<InventoryItem>>();
             services.AddScoped<IOperation<Product>, Operation<Product>>();
-
+            services.AddScoped<IOperation<Sale>, Operation<Sale>>();
+            services.AddScoped<IOperation<SaleDetail>, Operation<SaleDetail>>();
         }
     }
 }
