@@ -20,7 +20,7 @@ export class Sale extends ModelBase {
 export class SaleDetail extends ModelBase {
     saleDetailNo: number;
     fK_ProductId: number;
-    fK_CustomerId: number;
+    FK_SaleId: number;
     quantity: number;
     price: number;
     total: number;

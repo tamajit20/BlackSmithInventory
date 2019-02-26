@@ -48,8 +48,10 @@ namespace BlackSmithAPI.Controllers
             List<Suplier> result = new List<Suplier>();
             try
             {
-                Expression<Func<Suplier, bool>> expression = x => x.IsDeleted == false;
-                result = _supOpp.FindBy(expression).ToList();
+                var predicate = PredicateBuilder.True<Suplier>();
+                predicate = predicate.And(x => !x.IsDeleted);
+
+                result = _supOpp.GetAllUsingExpression(out int totalCount, 1, 0, predicate).ToList();
             }
             catch (Exception ex)
             {

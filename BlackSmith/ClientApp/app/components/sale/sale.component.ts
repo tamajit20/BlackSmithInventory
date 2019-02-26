@@ -60,7 +60,7 @@ export class SaleComponent extends BaseComponent implements OnInit {
 
     addNewSaleDetail() {
         this.currentSaleDetailNo = this.currentSaleDetailNo + 1;
-        const newSaleDetail = <SaleDetail>({ saleDetailNo: this.currentSaleDetailNo, price: 0, quantitiy: 0, fK_ProductId: 1, total: 0 });
+        const newSaleDetail = <SaleDetail>({ FK_SaleId:0, saleDetailNo: this.currentSaleDetailNo, price: 0, quantity: 0, fK_ProductId: 1, total: 0 });
         this.model.saleDetails.push(newSaleDetail);
     }
 
@@ -77,7 +77,7 @@ export class SaleComponent extends BaseComponent implements OnInit {
        // this.calculateFinalTotal();
         var obj = this.model.saleDetails.find(x => x.saleDetailNo === saleDetailNo);
         if (obj) {
-            obj.total = obj.price * obj.quantitiy;
+            obj.total = obj.price * obj.quantity;
         }
         return '0';
     }

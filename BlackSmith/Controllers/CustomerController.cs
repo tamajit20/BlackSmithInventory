@@ -38,7 +38,6 @@ namespace BlackSmithAPI.Controllers
             catch (Exception ex)
             {
             }
-
             return input;
         }
 
@@ -48,8 +47,10 @@ namespace BlackSmithAPI.Controllers
             List<Customer> result = new List<Customer>();
             try
             {
-                Expression<Func<Customer, bool>> expression = x => x.IsDeleted == false;
-                result = _custOpp.FindBy(expression).ToList();
+                var predicate = PredicateBuilder.True<Customer>();
+                predicate = predicate.And(x => !x.IsDeleted);
+
+                result = _custOpp.GetAllUsingExpression(out int totalCount, 1, 0, predicate).ToList();
             }
             catch (Exception ex)
             {

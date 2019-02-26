@@ -41,8 +41,10 @@ namespace BlackSmithAPI.Controllers
             List<Product> result = new List<Product>();
             try
             {
-                Expression<Func<Product, bool>> expression = x => x.IsDeleted == false;
-                result = _baseOpp.FindBy(expression).ToList();
+                var predicate = PredicateBuilder.True<Product>();
+                predicate = predicate.And(x=>!x.IsDeleted);
+
+                result = _baseOpp.GetAllUsingExpression(out int totalCount,1,0, predicate).ToList();
             }
             catch (Exception ex)
             {
