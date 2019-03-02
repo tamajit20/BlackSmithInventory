@@ -5,16 +5,18 @@ import { Product } from "./product";
 export class Sale extends ModelBase {
     fK_CustomerId: number
     note: string;
-    totalTax: number;
-    cGSTRate: number;
-    sGSTRate: number;
+    cgstRate: number;
+    cgstTax: number;
+    sgstTax: number;
+    sgstRate: number;
     discount: number;
     total: number;
     finalTotal: number;
-    billDate: Date;
-    date: string;
+    billDate: string;
+    finalTotalInWords: string;
     saleDetails: SaleDetail[];
     paymentDetails: SalePayment[];
+    isGenerated: boolean = false;
 }
 
 export class SaleDetail extends ModelBase {

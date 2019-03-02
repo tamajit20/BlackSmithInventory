@@ -13,9 +13,47 @@
     border-bottom: 1px solid #cdc9c9;
 }
 
+.width-5em {
+    width: 5em;
+}
 
+.text-color-green {
+    color : green;
+}
+
+.text-color-green {
+    color:;
+}
+
+.vl {
+    border-left: 2px solid #cdc9c9;
+    padding:4px;
+}
+.text-color-red {
+    color: red;
+}
+
+.text-bolder {
+    font-weight: bolder;
+}
 /*dropdown customer start*/
 .height-30px {
     height: 30px;
 }
 /*dropdown custom end*/
+
+tbody {
+    display: block;
+    max-height: 350px;
+    overflow: auto;
+}
+
+    thead, tbody tr {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+thead {
+    width: calc( 100% - 1em )
+}

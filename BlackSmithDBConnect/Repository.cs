@@ -33,8 +33,11 @@ namespace BlackSmithDBConnect
         public virtual void Delete(long id)
         {
             var entity = GetById(id);
-            _entities.Set<T>().Remove(entity);
-            _entities.SaveChanges();
+            if (entity != null)
+            {
+                _entities.Set<T>().Remove(entity);
+                _entities.SaveChanges();
+            }
         }
 
         public T GetById(long id)

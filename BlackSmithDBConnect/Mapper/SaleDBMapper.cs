@@ -17,17 +17,22 @@ namespace BlackSmithDBConnect
             builder.Property(c => c.FK_CustomerId);
             builder.Property(c => c.CGSTRate);
             builder.Property(c => c.SGSTRate);
-            builder.Property(c => c.TotalTax);
+            builder.Property(c => c.CGSTTax);
+            builder.Property(c => c.SGSTTax);
             builder.Property(c => c.Note);
-            builder.Property(c => c.Date);
+            builder.Property(c => c.BillDate);
             builder.Property(c => c.Discount);
             builder.Property(c => c.BillId);
             builder.Property(c => c.Total);
-
+            builder.Property(c => c.FinalTotal);
             builder.Property(c => c.CreatedOn);
             builder.Property(c => c.CreatedBy);
             builder.Property(c => c.ModifiedOn);
             builder.Property(c => c.ModifiedBy);
+
+            builder.Ignore(c=>c.FinalTotalInWords);
+
+            builder.HasOne(p => p.Customer).WithMany(f => f.Sales).HasForeignKey(k => k.FK_CustomerId);
 
             builder.ToTable("tSale");
         }
@@ -47,6 +52,9 @@ namespace BlackSmithDBConnect
             builder.Property(c => c.CreatedBy);
             builder.Property(c => c.ModifiedOn);
             builder.Property(c => c.ModifiedBy);
+
+            builder.Ignore(c => c.SaleDetailNo);
+            builder.Ignore(c => c.Total);
 
             builder.HasOne(p => p.Sale).WithMany(f => f.SaleDetails).HasForeignKey(k => k.FK_SaleId);
 

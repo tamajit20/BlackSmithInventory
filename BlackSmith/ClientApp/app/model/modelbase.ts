@@ -4,4 +4,6 @@
     createdBy: number;
     modifiedOn: Date;
     modifiedBy: number;
+    msg: string;
+    isFailure: boolean = false;
 }

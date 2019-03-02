@@ -20,6 +20,11 @@ export class SaleService extends SharedService {
             .map(res => res.json());
     }
 
+    download(input: any) {
+        return this.http.post(AppConfig.API_ENDPOINT + AppConfig.SALE_DOWNLOAD, input, AppConfig.REQUEST_HEADER)
+            .map(res => res.json());
+    }
+
     delete(input: any) {
         return this.http.post(AppConfig.API_ENDPOINT + AppConfig.SALE_DELETE, input, AppConfig.REQUEST_HEADER)
             .map(res => res.json());

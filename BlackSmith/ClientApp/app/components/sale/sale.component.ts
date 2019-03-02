@@ -19,7 +19,7 @@ export class SaleComponent extends BaseComponent implements OnInit {
     modelList: Sale[] = [];
     loader: SaleLoader = new SaleLoader();
     currentSaleDetailNo: number = 0;
-
+    billDate: any;
     constructor(
         private _service: SaleService
     ) {
@@ -28,21 +28,17 @@ export class SaleComponent extends BaseComponent implements OnInit {
 
     ngOnInit(): void {
         this.addNew();
-        this.model.cGSTRate = 9;
-        this.model.total = 0;
-        this.model.totalTax = 0;
-        this.model.finalTotal = 0;
+        this.model.cgstRate = 9;
+        this.model.sgstRate = 9;
 
         this.getAllCustomer();
         this.getAllProduct();
         this.loader.products = [];
-        const x = <Product>({ id: 4, name: 'gfgf' });
-        this.loader.products.push(x);
-        console.log(this.loader.products);
     }
 
     addNew() {
-        this.model = <Sale>({});
+        this.model = <Sale>({isFailure:false});
+        this.billDate = this.model.billDate;
         this.model.saleDetails = [];
     }
 
@@ -59,14 +55,14 @@ export class SaleComponent extends BaseComponent implements OnInit {
     }
 
     addNewSaleDetail() {
+        this.model.isGenerated = false;
         this.currentSaleDetailNo = this.currentSaleDetailNo + 1;
-        const newSaleDetail = <SaleDetail>({ FK_SaleId:0, saleDetailNo: this.currentSaleDetailNo, price: 0, quantity: 0, fK_ProductId: 1, total: 0 });
+        const newSaleDetail = <SaleDetail>({ FK_SaleId: 0, saleDetailNo: this.currentSaleDetailNo, price: 0, quantity: 0, fK_ProductId: 1, total: 0 });
         this.model.saleDetails.push(newSaleDetail);
     }
 
     deleteSaleDetail(delSaleDetailNo: number) {
         this.model.saleDetails.splice(this.model.saleDetails.findIndex(item => item.saleDetailNo === delSaleDetailNo), 1);
-        //this.calculateFinalTotal();
     }
 
     getIndexByDetailNo(saleDetailNo: number) {
@@ -74,7 +70,7 @@ export class SaleComponent extends BaseComponent implements OnInit {
     }
 
     calculateTotalPerProduct(saleDetailNo: number) {
-       // this.calculateFinalTotal();
+        this.model.isGenerated = false;
         var obj = this.model.saleDetails.find(x => x.saleDetailNo === saleDetailNo);
         if (obj) {
             obj.total = obj.price * obj.quantity;
@@ -82,22 +78,20 @@ export class SaleComponent extends BaseComponent implements OnInit {
         return '0';
     }
 
-    //calculateFinalTotal() {
-    //    this.model.total = 0;
-    //    this.model.finalTotal = 0;
-
-    //    this.model.saleDetails.forEach(each => {
-    //        this.model.total = this.model.total + (each.quantitiy * each.price);
-    //    });
-    //    if (this.model.total) {
-    //        this.model.totalTax = this.model.total * (this.model.cGSTRate + this.model.sGSTRate) / 100;
-    //        this.model.finalTotal = this.model.totalTax + this.model.total;
-    //    }
-    //}
+    print() {
+        this._service.download(this.model).subscribe(data => {
+        });
+    }
 
     save() {
+        this.model.isGenerated = false;
+        this.model.billDate = this.billDate.formatted;
         this._service.save(this.model).subscribe(data => {
-
+            this.model = data;
+            if (!this.model.isFailure) {
+                this.model.isGenerated = true;
+                this.model.msg = "Bill Generated";
+            }
         });
     }
 }

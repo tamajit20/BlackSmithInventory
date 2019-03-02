@@ -14,6 +14,7 @@ export class AppConfig {
     public static PRODUCT_GETALL = "Product/GetAll";
     public static PRODUCT_DELETE = "Product/delete";
 
+    public static SALE_DOWNLOAD = "Sale/Download";
     public static SALE_SAVE = "Sale/Save";
     public static SALE_GETALL = "Sale/GetAll";
     public static SALE_DELETE = "Sale/delete";
