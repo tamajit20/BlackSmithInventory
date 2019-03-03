@@ -20,6 +20,16 @@ export class SaleService extends SharedService {
             .map(res => res.json());
     }
 
+    getOne(input: any) {
+        return this.http.post(AppConfig.API_ENDPOINT + AppConfig.SALE_GETONE, input, AppConfig.REQUEST_HEADER)
+            .map(res => res.json());
+    }
+
+    payment(input: any) {
+        return this.http.post(AppConfig.API_ENDPOINT + AppConfig.SALE_PAYMENT, input, AppConfig.REQUEST_HEADER)
+            .map(res => res.json());
+    }
+
     download(input: any) {
         return this.http.post(AppConfig.API_ENDPOINT + AppConfig.SALE_DOWNLOAD, input, AppConfig.REQUEST_HEADER)
             .map(res => res.json());

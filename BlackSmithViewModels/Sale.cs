@@ -8,7 +8,7 @@ namespace ViewModels
 {
     public class Sale : BaseModel
     {
-       public virtual long FK_CustomerId { get; set; }    
+        public virtual long FK_CustomerId { get; set; }
         public virtual double Discount { get; set; }
         public virtual double CGSTRate { get; set; }
         public virtual double CGSTTax { get; set; }
@@ -22,7 +22,10 @@ namespace ViewModels
         public virtual string FinalTotalInWords { get; set; }
 
         public virtual List<SaleDetail> SaleDetails { get; set; }
+        public virtual List<SalePayment> SalePayments { get; set; }
         public virtual Customer Customer { get; set; }
+
+        public virtual double TotalPaid { get; set; }
     }
 
     public class SaleDetail : BaseModel
@@ -35,5 +38,14 @@ namespace ViewModels
         public virtual long SaleDetailNo { get; set; }
         public virtual double Total { get; set; }
 
+    }
+
+    public class SalePayment : BaseModel
+    {
+        public virtual long FK_SaleId { get; set; }
+        public virtual double Amount { get; set; }
+        public virtual string Note { get; set; }
+        public virtual string BillId { get; set; }
+        public virtual Sale Sale { get; set; }
     }
 }

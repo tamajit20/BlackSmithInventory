@@ -13,7 +13,6 @@ import { ReportComponent } from './components/report/report.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { SuplierComponent } from './components/suplier/suplier.component';
 import { ProductComponent } from './components/product/product.component';
-import { SaleComponent } from './components/sale/sale.component';
 import { InventoryItemComponent } from './components/InventoryItem/inventoryitem.component';
 import { CustomerSerivce } from './services/customerservice';
 import { SuplierService } from './services/suplierservice';
@@ -25,6 +24,9 @@ import { PurchaseService } from './services/purchaseservice';
 import { SideMenuComponent } from './components/sidemenu/sidemenu.component';
 import { SaleService } from './services/saleservice';
 import { MyDatePickerModule } from 'mydatepicker';
+import { SaleConfigComponent } from './components/sale/saleconfig.component';
+import { SalePaymentComponent } from './components/sale/salepayment.component';
+import { SaleBillComponent } from './components/sale/salebill.component';
 
 @NgModule({
     declarations: [
@@ -34,7 +36,9 @@ import { MyDatePickerModule } from 'mydatepicker';
         LoginComponent,
         HomeComponent,
         CustomerComponent,
-        SaleComponent,
+        SaleBillComponent,
+        SaleConfigComponent,
+        SalePaymentComponent,
         PurchaseComponent,
         ReportComponent,
         DashboardComponent,
@@ -62,7 +66,7 @@ import { MyDatePickerModule } from 'mydatepicker';
                 path: 'home', component: HomeComponent,
                 children: [
                     { path: 'customer', component: CustomerComponent, outlet: 'homeoutlet' },
-                    { path: 'sale', component: SaleComponent, outlet: 'homeoutlet' },
+                    { path: 'saleconfig', component: SaleConfigComponent, outlet: 'homeoutlet' },
                     { path: 'purchase', component: PurchaseComponent, outlet: 'homeoutlet' },
                     { path: 'report', component: ReportComponent, outlet: 'homeoutlet' },
                     { path: 'dashboard', component: DashboardComponent, outlet: 'homeoutlet' },

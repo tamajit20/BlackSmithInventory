@@ -18,6 +18,9 @@ export class AppConfig {
     public static SALE_SAVE = "Sale/Save";
     public static SALE_GETALL = "Sale/GetAll";
     public static SALE_DELETE = "Sale/delete";
+    public static SALE_GETONE = "Sale/GetOne";
+    public static SALE_PAYMENT = "Sale/Payment";
+
     
     public static SUPLIER_SAVE = "Suplier/Save";
     public static SUPLIER_GETALL = "Suplier/GetAll";

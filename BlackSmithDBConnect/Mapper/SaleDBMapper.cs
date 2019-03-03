@@ -25,12 +25,14 @@ namespace BlackSmithDBConnect
             builder.Property(c => c.BillId);
             builder.Property(c => c.Total);
             builder.Property(c => c.FinalTotal);
+
             builder.Property(c => c.CreatedOn);
             builder.Property(c => c.CreatedBy);
             builder.Property(c => c.ModifiedOn);
             builder.Property(c => c.ModifiedBy);
 
             builder.Ignore(c=>c.FinalTotalInWords);
+            builder.Ignore(c => c.TotalPaid);
 
             builder.HasOne(p => p.Customer).WithMany(f => f.Sales).HasForeignKey(k => k.FK_CustomerId);
 
@@ -59,6 +61,28 @@ namespace BlackSmithDBConnect
             builder.HasOne(p => p.Sale).WithMany(f => f.SaleDetails).HasForeignKey(k => k.FK_SaleId);
 
             builder.ToTable("tSaleDetail");
+        }
+    }
+
+    public class SalePaymentDBMapper : IEntityTypeConfiguration<SalePayment>
+    {
+        public void Configure(EntityTypeBuilder<SalePayment> builder)
+        {
+            builder.HasKey(c => c.Id);
+            builder.Property(c => c.FK_SaleId);
+            builder.Property(c => c.Amount);
+            builder.Property(c => c.Note);
+
+            builder.Property(c => c.CreatedOn);
+            builder.Property(c => c.CreatedBy);
+            builder.Property(c => c.ModifiedOn);
+            builder.Property(c => c.ModifiedBy);
+
+            builder.Ignore(c => c.BillId);
+
+            builder.HasOne(p => p.Sale).WithMany(f => f.SalePayments).HasForeignKey(k => k.FK_SaleId);
+
+            builder.ToTable("tSalePayment");
         }
     }
 }

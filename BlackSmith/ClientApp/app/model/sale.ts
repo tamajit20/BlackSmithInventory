@@ -32,6 +32,9 @@ export class SalePayment extends ModelBase {
     fK_SaleId: number;
     amount: number;
     note: number;
+    billId: string;
+    sale: Sale;
+    paymentDate: string;
 }
 
 export class SaleLoader extends ModelBase {

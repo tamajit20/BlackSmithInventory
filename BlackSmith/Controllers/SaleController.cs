@@ -21,6 +21,7 @@ namespace BlackSmithAPI.Controllers
     {
         private IOperation<Sale> _saleOpp;
         private IOperation<SaleDetail> _saleDetailOpp;
+        private IOperation<SalePayment> _salePaymentOpp;
         private IConfiguration _configuration;
 
 
@@ -28,14 +29,91 @@ namespace BlackSmithAPI.Controllers
         public SaleController(
             IOperation<Sale> saleOpp,
             IOperation<SaleDetail> saleDetailOpp,
+            IOperation<SalePayment> salePaymentOpp,
             IConfiguration configuration
             )
         {
             _saleOpp = saleOpp;
             _saleDetailOpp = saleDetailOpp;
+            _salePaymentOpp = salePaymentOpp;
             _configuration = configuration;
         }
 
+        public SalePayment GetOne([FromBody] SalePayment input)
+        {
+            try
+            {
+                if (input != null)
+                {
+                    Expression<Func<Sale, object>>[] exp = new Expression<Func<Sale, object>>[] { x => x.SalePayments, x => x.SaleDetails, x => x.Customer };
+                    var predicate = PredicateBuilder.True<Sale>();
+                    predicate = predicate.And(x => !x.IsDeleted);
+
+                    if (!string.IsNullOrWhiteSpace(input.BillId))
+                        predicate = predicate.And(x => x.BillId.ToUpper().Trim() == input.BillId.ToUpper().Trim());
+
+                    if (input.FK_SaleId > 0)
+                    {
+                        predicate = predicate.And(x => x.Id == input.FK_SaleId);
+                    }
+
+                    var result = _saleOpp.GetAllUsingExpression(out int totalCount, 1, 0, predicate, null, null, exp).FirstOrDefault();
+
+                    if (result != null)
+                    {
+                        if (result.SalePayments != null)
+                        {
+                            foreach (var each in result.SalePayments)
+                            {
+                                result.TotalPaid = result.TotalPaid + each.Amount;
+                            }
+                        }
+                        //nullifying to avoid object chain
+                        if (result.SalePayments != null)
+                            result.SalePayments.ForEach(x => x.Sale = null);
+
+                        if (result.Customer != null)
+                            result.Customer.Sales = null;
+
+                        if (result.SaleDetails != null)
+                            result.SaleDetails.ForEach(x => x.Sale = null);
+
+                        input.Sale = result;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                input.IsFailure = true;
+                input.Msg = "";
+            }
+            return input;
+        }
+
+        public SalePayment Payment([FromBody] SalePayment input)
+        {
+            try
+            {
+                if (input != null)
+                {
+                    input.Sale = null;
+
+                    if (input.Id <= 0)
+                    {
+                        input.Id = 0;
+                        _salePaymentOpp.Add(input);
+                     }
+
+                    input = GetOne(input);
+                }
+            }
+            catch (Exception ex)
+            {
+                input.Msg = "";
+                input.IsFailure = true;
+            }
+            return input;
+        }
         public dynamic Download([FromBody]Sale input)
         {
             try

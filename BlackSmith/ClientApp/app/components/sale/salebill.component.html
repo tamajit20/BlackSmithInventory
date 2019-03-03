@@ -19,7 +19,7 @@
             <label for="customer">Date</label>
         </div>
         <div class="col-md-2 height-30px">
-            <my-date-picker [(ngModel)]="billDate"></my-date-picker>
+            <my-date-picker [options]="myDatePickerOptions" [(ngModel)]="billDate"></my-date-picker>
         </div>
         <div class="col-md-4">
             <button type="button" class="btn btn-success btn-sm" (click)="save()">

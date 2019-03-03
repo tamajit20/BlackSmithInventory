@@ -9,21 +9,28 @@ import { SaleService } from '../../services/saleservice';
 import { Product } from '../../model/product';
 
 @Component({
-    selector: 'sale',
-    templateUrl: './sale.component.html',
+    selector: 'salebill',
+    templateUrl: './salebill.component.html',
     styleUrls: ['../../style/style.css']
 })
 
-export class SaleComponent extends BaseComponent implements OnInit {
+export class SaleBillComponent extends BaseComponent implements OnInit {
     model: Sale;
     modelList: Sale[] = [];
     loader: SaleLoader = new SaleLoader();
     currentSaleDetailNo: number = 0;
-    billDate: any;
+    myDatePickerOptions = {
+        editableDateField: false,
+        dateFormat: 'dd/mm/yyyy'
+    };
+    today = { date: { year: (new Date()).getFullYear(), month: (new Date()).getMonth() + 1, day: (new Date()).getDate() } };
+    billDate: any = this.today;
+
     constructor(
         private _service: SaleService
     ) {
-        super()
+        super();
+        let d: Date = new Date();
     }
 
     ngOnInit(): void {
@@ -37,8 +44,8 @@ export class SaleComponent extends BaseComponent implements OnInit {
     }
 
     addNew() {
-        this.model = <Sale>({isFailure:false});
-        this.billDate = this.model.billDate;
+        this.model = <Sale>({ isFailure: false });
+        this.billDate = this.today;
         this.model.saleDetails = [];
     }
 
@@ -78,20 +85,46 @@ export class SaleComponent extends BaseComponent implements OnInit {
         return '0';
     }
 
-    print() {
+    download() {
         this._service.download(this.model).subscribe(data => {
         });
     }
 
-    save() {
-        this.model.isGenerated = false;
-        this.model.billDate = this.billDate.formatted;
-        this._service.save(this.model).subscribe(data => {
-            this.model = data;
-            if (!this.model.isFailure) {
-                this.model.isGenerated = true;
-                this.model.msg = "Bill Generated";
+    validate() {
+        this.model.msg = "Invalid input";
+        this.model.isFailure = true;
+        if (this.model) {
+            if (!this.billDate) {
+                this.model.msg = "Invalid Bill Date";
+                return false;
             }
-        });
+            if (!this.model.fK_CustomerId) {
+                this.model.msg = "Invalid Customer";
+                return false;
+            }
+            if (!this.model.saleDetails || this.model.saleDetails.length === 0) {
+                this.model.msg = "No Sale Item";
+                return false;
+            }
+            this.model.msg = "";
+            this.model.isFailure = false;
+            return true;
+        }
+        return false;
+    }
+
+    save() {
+        if (this.validate()) {
+            this.model.isGenerated = false;
+            this.model.billDate = this.billDate.date.month + "/" + this.billDate.date.day + "/" + this.billDate.date.year;
+            console.log(this.model.billDate);
+            this._service.save(this.model).subscribe(data => {
+                this.model = data;
+                if (!this.model.isFailure) {
+                    this.model.isGenerated = true;
+                    this.model.msg = "Bill Generated";
+                }
+            });
+        }
     }
 }

@@ -19,8 +19,8 @@ namespace ViewModels
         public virtual long Id { get; set; }
         public virtual DateTime CreatedOn { get; set; }
         public virtual long CreatedBy { get; set; }
-        public virtual DateTime ModifiedOn { get; set; }
-        public virtual long ModifiedBy { get; set; }
+        public virtual DateTime? ModifiedOn { get; set; }
+        public virtual long? ModifiedBy { get; set; }
         public virtual bool IsDeleted { get; set; }
         [NotMapped]
         public virtual string Msg { get; set; }

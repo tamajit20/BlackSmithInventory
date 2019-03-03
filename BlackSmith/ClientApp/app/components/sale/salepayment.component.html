@@ -1,0 +1,29 @@
+
+<div class="row">
+    <div class="col-md-1">
+        <label for="billId">Bill ID</label>
+    </div>
+    <div class="col-md-2">
+        <input type="text" maxlength="100" class="form-control" name="billId" #billId="ngModel" [(ngModel)]="model.billId" required>
+    </div>
+    <div class="col-md-1">
+        <button type="button" class="btn btn-default btn-sm" (click)="getOne()">
+            <span class="glyphicon glyphicon-search"></span>
+        </button>
+    </div>
+    <div class="col-md-8">
+        <span>Total : </span>
+        <span> {{model.sale.finalTotal}}</span>
+        <span>Paid : </span>
+        <span>{{model.sale.totalPaid}}</span>
+        <span>Pending : </span>
+        <span>{{model.sale.finalToal - model.sale.totalPaid}}</span>
+        <span>Pay : </span>
+        <span>
+            <input type="text" maxlength="100" class="form-control" name="amount" #contactNo="ngModel" [(ngModel)]="model.amount" required>
+        </span>
+        <button type="button" class="btn btn-default btn-sm" (click)="pay()">
+            <span class="glyphicon glyphicon-search"></span>
+        </button>
+    </div>
+</div>

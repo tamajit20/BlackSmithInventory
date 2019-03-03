@@ -25,6 +25,7 @@ namespace BlackSmithDBConnect
             modelBuilder.ApplyConfiguration(new InventoryItemDBMapper());
             modelBuilder.ApplyConfiguration(new SaleDetailDBMapper());
             modelBuilder.ApplyConfiguration(new SaleDBMapper());
+            modelBuilder.ApplyConfiguration(new SalePaymentDBMapper());
         }
 
         public virtual DbSet<Customer> Customer { get; set; }
@@ -32,6 +33,8 @@ namespace BlackSmithDBConnect
         public virtual DbSet<InventoryItem> InventoryItem { get; set; }
         public virtual DbSet<Sale> Sale { get; set; }
         public virtual DbSet<SaleDetail> SaleDetail { get; set; }
+        public virtual DbSet<SalePayment> SalePayment { get; set; }
+
 
 
 
