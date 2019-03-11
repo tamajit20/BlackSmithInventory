@@ -7,23 +7,31 @@
         <input type="text" maxlength="100" class="form-control" name="billId" #billId="ngModel" [(ngModel)]="model.billId" required>
     </div>
     <div class="col-md-1">
-        <button type="button" class="btn btn-default btn-sm" (click)="getOne()">
-            <span class="glyphicon glyphicon-search"></span>
-        </button>
+        <button type="button" class="btn btn-default btn-sm" (click)="getOne()"><span class="glyphicon glyphicon-search"></span></button>
     </div>
+    <div *ngIf="model.sale">
+        <div class="col-md-1 text-bolder">Date : </div>
+        <div class="col-md-2 height-30px">
+            <my-date-picker [options]="myDatePickerOptions" [(ngModel)]="paymentDate"></my-date-picker>
+        </div>
+        <div class="col-md-1 text-bolder">Pay : </div>
+        <div class="col-md-2">
+            <input type="number" maxlength="100" class="form-control" name="amount" #amount="ngModel" [(ngModel)]="model.amount" required>
+        </div>
+        <div class="col-md-1">
+            <button type="button" class="btn btn-default btn-sm" (click)="pay()"><span>Update</span></button>
+        </div>
+    </div>
+</div>
+
+<div class="row" *ngIf="model.sale">
     <div class="col-md-8">
-        <span>Total : </span>
-        <span> {{model.sale.finalTotal}}</span>
-        <span>Paid : </span>
-        <span>{{model.sale.totalPaid}}</span>
-        <span>Pending : </span>
-        <span>{{model.sale.finalToal - model.sale.totalPaid}}</span>
-        <span>Pay : </span>
-        <span>
-            <input type="text" maxlength="100" class="form-control" name="amount" #contactNo="ngModel" [(ngModel)]="model.amount" required>
-        </span>
-        <button type="button" class="btn btn-default btn-sm" (click)="pay()">
-            <span class="glyphicon glyphicon-search"></span>
-        </button>
+        <span class="text-bolder">Total :</span><span>{{model.sale.finalTotal}} </span><span class="vl"></span>
+        <span class="text-bolder">Paid :</span><span>{{model.sale.totalPaid}} </span><span class="vl"></span>
+        <span class="text-bolder">Due :</span><span>{{model.sale.due}} </span>
+    </div>
+    <div class="col-md-4">
+        <span *ngIf="model.isFailure" class="text-bolder  text-color-red">{{model.msg}}</span>
+        <span *ngIf="!model.isFailure" class="text-bolder text-color-green">{{model.msg}}</span>
     </div>
 </div>

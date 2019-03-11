@@ -24,6 +24,11 @@
                         <span class='glyphicon glyphicon-th-list'></span> Sale
                     </a>
                 </li>
+                <li [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/home', { outlets: {homeoutlet:['salesearch']}}]">
+                        <span class='glyphicon glyphicon-th-list'></span> Search
+                    </a>
+                </li>
             </ul>
 
 

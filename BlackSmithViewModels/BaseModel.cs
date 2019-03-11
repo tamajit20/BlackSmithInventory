@@ -26,6 +26,5 @@ namespace ViewModels
         public virtual string Msg { get; set; }
         [NotMapped]
         public virtual bool IsFailure { get; set; }
-
-    }
+     }
 }

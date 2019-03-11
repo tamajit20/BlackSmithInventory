@@ -7,6 +7,7 @@ import { PurchaseService } from '../../services/purchaseservice';
 import { Sale, SaleLoader, SaleDetail } from '../../model/sale';
 import { SaleService } from '../../services/saleservice';
 import { Product } from '../../model/product';
+import { saveAs } from 'file-saver';
 
 @Component({
     selector: 'salebill',
@@ -86,8 +87,7 @@ export class SaleBillComponent extends BaseComponent implements OnInit {
     }
 
     download() {
-        this._service.download(this.model).subscribe(data => {
-        });
+        this._service.downloadBill(this.model);
     }
 
     validate() {
@@ -117,7 +117,6 @@ export class SaleBillComponent extends BaseComponent implements OnInit {
         if (this.validate()) {
             this.model.isGenerated = false;
             this.model.billDate = this.billDate.date.month + "/" + this.billDate.date.day + "/" + this.billDate.date.year;
-            console.log(this.model.billDate);
             this._service.save(this.model).subscribe(data => {
                 this.model = data;
                 if (!this.model.isFailure) {

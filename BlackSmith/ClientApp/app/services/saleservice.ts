@@ -1,8 +1,11 @@
 ﻿import { Injectable, NgModule } from "@angular/core";
-import { Http, HttpModule } from "@angular/http";
+import { Http, HttpModule, ResponseContentType, RequestOptions } from "@angular/http";
 import { AppConfig } from "../app.config";
 import 'rxjs/add/operator/map'
 import { SharedService } from "./sharedservice";
+import { Observable } from "rxjs/Observable";
+import { HttpHeaders } from "@angular/common/http";
+import { saveAs } from 'file-saver';
 
 @NgModule({
     imports: [HttpModule]
@@ -11,12 +14,17 @@ import { SharedService } from "./sharedservice";
 @Injectable()
 export class SaleService extends SharedService {
 
-    constructor(public http: Http) {
+    constructor(public http: Http, public httpClient: HttpModule) {
         super(http);
     }
 
     save(input: any) {
         return this.http.post(AppConfig.API_ENDPOINT + AppConfig.SALE_SAVE, input, AppConfig.REQUEST_HEADER)
+            .map(res => res.json());
+    }
+
+    getSaleList(input: any) {
+        return this.http.post(AppConfig.API_ENDPOINT + AppConfig.SALE_LIST, input, AppConfig.REQUEST_HEADER)
             .map(res => res.json());
     }
 
@@ -30,9 +38,10 @@ export class SaleService extends SharedService {
             .map(res => res.json());
     }
 
-    download(input: any) {
-        return this.http.post(AppConfig.API_ENDPOINT + AppConfig.SALE_DOWNLOAD, input, AppConfig.REQUEST_HEADER)
-            .map(res => res.json());
+    downloadBill(input : any) {
+        this.http.get(AppConfig.API_ENDPOINT + AppConfig.SALE_DOWNLOAD, new RequestOptions({ params:{id:input.id}, responseType: ResponseContentType.Blob })).subscribe(res => {
+            saveAs(res.blob(), "bill.pdf");
+        });
     }
 
     delete(input: any) {

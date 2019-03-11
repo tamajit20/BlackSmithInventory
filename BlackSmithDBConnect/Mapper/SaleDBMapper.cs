@@ -33,6 +33,7 @@ namespace BlackSmithDBConnect
 
             builder.Ignore(c=>c.FinalTotalInWords);
             builder.Ignore(c => c.TotalPaid);
+            builder.Ignore(c => c.Due);
 
             builder.HasOne(p => p.Customer).WithMany(f => f.Sales).HasForeignKey(k => k.FK_CustomerId);
 
@@ -59,6 +60,7 @@ namespace BlackSmithDBConnect
             builder.Ignore(c => c.Total);
 
             builder.HasOne(p => p.Sale).WithMany(f => f.SaleDetails).HasForeignKey(k => k.FK_SaleId);
+            builder.HasOne(p => p.Product).WithMany(f => f.SaleDetails).HasForeignKey(k => k.FK_ProductId);
 
             builder.ToTable("tSaleDetail");
         }
@@ -77,6 +79,7 @@ namespace BlackSmithDBConnect
             builder.Property(c => c.CreatedBy);
             builder.Property(c => c.ModifiedOn);
             builder.Property(c => c.ModifiedBy);
+            builder.Property(c => c.PaymentDate);
 
             builder.Ignore(c => c.BillId);
 

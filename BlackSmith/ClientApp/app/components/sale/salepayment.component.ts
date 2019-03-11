@@ -16,7 +16,15 @@ import { Product } from '../../model/product';
 
 export class SalePaymentComponent extends BaseComponent implements OnInit {
     model: SalePayment = new SalePayment();
-    ngOnInit() { }
+    myDatePickerOptions = {
+        editableDateField: false,
+        dateFormat: 'dd/mm/yyyy'
+    };
+    today = { date: { year: (new Date()).getFullYear(), month: (new Date()).getMonth() + 1, day: (new Date()).getDate() } };
+    paymentDate: any = this.today;
+
+    ngOnInit() {
+    }
 
     constructor(
         private _service: SaleService
@@ -37,9 +45,16 @@ export class SalePaymentComponent extends BaseComponent implements OnInit {
 
     pay() {
         if (this.validate()) {
+            this.model.paymentDate = this.paymentDate.date.month + "/" + this.paymentDate.date.day + "/" + this.paymentDate.date.year;
+
             this.model.fK_SaleId = this.model.sale.id;
+            this.model.id = 0;
             this._service.payment(this.model).subscribe(data => {
                 this.model = data;
+                this.model.amount = 0;
+                if (!this.model.isFailure) {
+                    this.model.msg = "Payment Successful";
+                }
             });
         }
     }
@@ -53,10 +68,14 @@ export class SalePaymentComponent extends BaseComponent implements OnInit {
                 this.model.msg = "Sale not found";
                 return false;
             }
-            //if (!this.model.paymentDate) {
-            //    this.model.msg = "Invalid date";
-            //    return false;
-            //}
+            if (!this.paymentDate) {
+                this.model.msg = "Invalid Date";
+                return false;
+            }
+            if (this.model.sale.due < this.model.amount) {
+                this.model.msg = "Over payment";
+                return false;
+            }
             this.model.msg = "";
             this.model.isFailure = false;
             return true;

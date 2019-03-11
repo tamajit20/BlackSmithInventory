@@ -1,7 +1,11 @@
 ﻿using BlackSmithCore;
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
+using iTextSharp.text;
+using iTextSharp.text.html.simpleparser;
+using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using PdfSharpCore.Pdf;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,26 +14,26 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using ViewModels;
-
 
 namespace BlackSmithAPI.Controllers
 {
-    [Produces("application/json")]
+    // [Produces("application/json")]
     [Route("api/Sale/[action]")]
     public class SaleController : Controller
     {
         private IOperation<Sale> _saleOpp;
         private IOperation<SaleDetail> _saleDetailOpp;
+        private IOperation<Product> _productOpp;
         private IOperation<SalePayment> _salePaymentOpp;
         private IConfiguration _configuration;
-
-
 
         public SaleController(
             IOperation<Sale> saleOpp,
             IOperation<SaleDetail> saleDetailOpp,
             IOperation<SalePayment> salePaymentOpp,
+           IOperation<Product> productOpp,
             IConfiguration configuration
             )
         {
@@ -37,8 +41,63 @@ namespace BlackSmithAPI.Controllers
             _saleDetailOpp = saleDetailOpp;
             _salePaymentOpp = salePaymentOpp;
             _configuration = configuration;
+            _productOpp = productOpp;
         }
 
+
+        public SaleList GetSaleList([FromBody]SearchObject input)
+        {
+            SaleList result = new SaleList();
+            try
+            {
+                Expression<Func<Sale, object>>[] exp = new Expression<Func<Sale, object>>[] { x => x.SalePayments, x => x.SaleDetails, x => x.Customer };
+                var predicate = PredicateBuilder.True<Sale>();
+                predicate = predicate.And(x => !x.IsDeleted);
+
+                if (input.FromDate != null)
+                    predicate = predicate.And(x => x.BillDate.Date >= input.FromDate.Date);
+
+                if (input.ToDate != null)
+                    predicate = predicate.And(x => x.BillDate.Date <= input.ToDate.Date);
+
+                if (input.BillIds != null && input.BillIds.Count > 0)
+                    predicate = predicate.And(x => input.BillIds.ConvertAll(c => c.ToUpper().Trim()).Contains(x.BillId.ToUpper().Trim()));
+
+                if (input.CustomerIds != null && input.CustomerIds.Count > 0)
+                    predicate = predicate.And(x => input.CustomerIds.Contains(x.FK_CustomerId));
+
+                result.Sales = _saleOpp.GetAllUsingExpression(out int totalCount, 1, 0, predicate, null, null, exp).OrderByDescending(x=>x.BillDate).ToList();
+
+                var predicateProd = PredicateBuilder.True<Product>();
+                predicateProd = predicateProd.And(x => !x.IsDeleted);
+                var productList = _productOpp.GetAllUsingExpression(out int total, 1, 0, predicateProd).ToList();
+
+                //nullifying to avoid object chain
+
+                if (result.Sales != null)
+                {
+                    result.Sales.ForEach(x =>
+                    {
+                        if (x.SaleDetails != null)
+                            x.SaleDetails.ForEach(y =>
+                            {
+                                y.Sale = null;
+                                y.Product = productList.Where(p => p.Id == y.FK_ProductId).FirstOrDefault();
+                            });
+
+                        if (x.SalePayments != null)
+                            x.SalePayments.ForEach(y => { y.Sale = null; });
+                        if (x.Customer != null)
+                            x.Customer.Sales = null;
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return result;
+        }
         public SalePayment GetOne([FromBody] SalePayment input)
         {
             try
@@ -68,6 +127,8 @@ namespace BlackSmithAPI.Controllers
                                 result.TotalPaid = result.TotalPaid + each.Amount;
                             }
                         }
+
+                        result.Due = Math.Round(result.FinalTotal - result.TotalPaid, 2);
                         //nullifying to avoid object chain
                         if (result.SalePayments != null)
                             result.SalePayments.ForEach(x => x.Sale = null);
@@ -102,7 +163,7 @@ namespace BlackSmithAPI.Controllers
                     {
                         input.Id = 0;
                         _salePaymentOpp.Add(input);
-                     }
+                    }
 
                     input = GetOne(input);
                 }
@@ -114,26 +175,33 @@ namespace BlackSmithAPI.Controllers
             }
             return input;
         }
-        public dynamic Download([FromBody]Sale input)
+
+        public FileStreamResult DownloadBill([FromQuery] string id)
         {
             try
             {
-                Expression<Func<Sale, object>>[] exp = new Expression<Func<Sale, object>>[] { x => x.SaleDetails, x => x.Customer };
-                var predicate = PredicateBuilder.True<Sale>();
-                predicate = predicate.And(x => x.Id == input.Id);
+                MemoryStream memoryStream = new MemoryStream();
+                if (!string.IsNullOrWhiteSpace(id))
+                {
+                    var input = _saleOpp.GetUsingId(Convert.ToInt64(id));
 
-                var result = _saleOpp.GetAllUsingExpression(out int totalCount, 1, 0, predicate, null, null, exp).FirstOrDefault();
-
-                PdfDocument document = new PdfDocument();
-
+                    using (FileStream file = new FileStream(_configuration["Configuration:BillStorePath"] + input.Id + "_" + input.BillId + ".pdf", FileMode.Open, FileAccess.Read))
+                    {
+                        byte[] bytes = new byte[file.Length];
+                        file.Read(bytes, 0, (int)file.Length);
+                        memoryStream.Write(bytes, 0, (int)file.Length);
+                    }
+                    memoryStream.Position = 0;
+                    return new FileStreamResult(memoryStream, "application/pdf");
+                }
             }
             catch (Exception ex)
             {
-                input.Msg = "";
-                input.IsFailure = true;
+
             }
-            return true;
+            return null;
         }
+
 
         public Sale Save([FromBody] Sale input)
         {
@@ -171,6 +239,8 @@ namespace BlackSmithAPI.Controllers
                         }
                         input.SaleDetails = saleDetails;
                     }
+
+                    SaveBillInBillStore(input);
                 }
             }
             catch (Exception ex)
@@ -182,6 +252,54 @@ namespace BlackSmithAPI.Controllers
         }
 
         #region private methods
+
+
+        private bool SaveBillInBillStore(Sale input)
+        {
+            try
+            {
+                string text = System.IO.File.ReadAllText(_configuration["Configuration:BillFormatTemplatePath"], Encoding.UTF8);
+
+                ReplacePlaceHolderInBill(ref text, null);
+                MemoryStream memoryStream = new MemoryStream();
+                Document document = new Document(PageSize.A4, 10f, 10f, 10f, 0f);
+                HtmlWorker htmlparser = new HtmlWorker(document);
+                PdfWriter.GetInstance(document, memoryStream).CloseStream = false;
+
+                document.Open();
+                StringReader html = new StringReader(text);
+                htmlparser.Parse(html);
+                document.Close();
+
+                byte[] byteInfo = memoryStream.ToArray();
+                memoryStream.Write(byteInfo, 0, byteInfo.Length);
+                memoryStream.Position = 0;
+
+                using (FileStream file = new FileStream(_configuration["Configuration:BillStorePath"] + input.Id + "_" + input.BillId + ".pdf", FileMode.Create, FileAccess.Write))
+                {
+                    byte[] bytes = new byte[memoryStream.Length];
+                    memoryStream.Read(bytes, 0, (int)memoryStream.Length);
+                    file.Write(bytes, 0, bytes.Length);
+                    memoryStream.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            return true;
+        }
+        private void ReplacePlaceHolderInBill(ref string html, Sale saleInfo)
+        {
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         private bool HardDelete(Sale input)
         {

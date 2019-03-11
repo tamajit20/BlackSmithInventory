@@ -26,6 +26,7 @@ namespace ViewModels
         public virtual Customer Customer { get; set; }
 
         public virtual double TotalPaid { get; set; }
+        public virtual double Due { get; set; }
     }
 
     public class SaleDetail : BaseModel
@@ -37,15 +38,22 @@ namespace ViewModels
         public virtual Sale Sale { get; set; }
         public virtual long SaleDetailNo { get; set; }
         public virtual double Total { get; set; }
+        public virtual Product Product { get; set; }
 
     }
 
     public class SalePayment : BaseModel
     {
+        public virtual DateTime PaymentDate { get; set; }
         public virtual long FK_SaleId { get; set; }
         public virtual double Amount { get; set; }
         public virtual string Note { get; set; }
         public virtual string BillId { get; set; }
         public virtual Sale Sale { get; set; }
+    }
+
+    public class SaleList : BaseModel
+    {
+        public virtual List<Sale> Sales { get; set; }
     }
 }

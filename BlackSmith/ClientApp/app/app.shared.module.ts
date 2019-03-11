@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
-
+//import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './components/app/app.component';
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { HomeComponent } from './components/home/home.component';
@@ -27,6 +27,8 @@ import { MyDatePickerModule } from 'mydatepicker';
 import { SaleConfigComponent } from './components/sale/saleconfig.component';
 import { SalePaymentComponent } from './components/sale/salepayment.component';
 import { SaleBillComponent } from './components/sale/salebill.component';
+import { BrowserModule } from '@angular/platform-browser';
+import { SaleSearchComponent } from './components/sale/salesearch.component';
 
 @NgModule({
     declarations: [
@@ -39,6 +41,7 @@ import { SaleBillComponent } from './components/sale/salebill.component';
         SaleBillComponent,
         SaleConfigComponent,
         SalePaymentComponent,
+        SaleSearchComponent,
         PurchaseComponent,
         ReportComponent,
         DashboardComponent,
@@ -56,7 +59,9 @@ import { SaleBillComponent } from './components/sale/salebill.component';
         SaleService
     ],
     imports: [
-        CommonModule,
+       // CommonModule,
+        BrowserModule,
+        HttpClientModule,
         HttpModule,
         FormsModule,
         MyDatePickerModule,
@@ -67,6 +72,7 @@ import { SaleBillComponent } from './components/sale/salebill.component';
                 children: [
                     { path: 'customer', component: CustomerComponent, outlet: 'homeoutlet' },
                     { path: 'saleconfig', component: SaleConfigComponent, outlet: 'homeoutlet' },
+                    { path: 'salesearch', component: SaleSearchComponent, outlet: 'homeoutlet' },
                     { path: 'purchase', component: PurchaseComponent, outlet: 'homeoutlet' },
                     { path: 'report', component: ReportComponent, outlet: 'homeoutlet' },
                     { path: 'dashboard', component: DashboardComponent, outlet: 'homeoutlet' },

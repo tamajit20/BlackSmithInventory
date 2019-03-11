@@ -12,11 +12,14 @@ export class Sale extends ModelBase {
     discount: number;
     total: number;
     finalTotal: number;
+    totalPaid: number;
     billDate: string;
     finalTotalInWords: string;
     saleDetails: SaleDetail[];
     paymentDetails: SalePayment[];
     isGenerated: boolean = false;
+    customer: Customer;
+    due: number;
 }
 
 export class SaleDetail extends ModelBase {
@@ -26,6 +29,7 @@ export class SaleDetail extends ModelBase {
     quantity: number;
     price: number;
     total: number;
+    product: Product;
 }
 
 export class SalePayment extends ModelBase {
@@ -37,6 +41,9 @@ export class SalePayment extends ModelBase {
     paymentDate: string;
 }
 
+export class SaleList extends ModelBase {
+    sales: Sale[] = [];
+}
 export class SaleLoader extends ModelBase {
     customers: Customer[];
     products: Product[];

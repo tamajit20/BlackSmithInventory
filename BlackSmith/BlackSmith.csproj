@@ -8,8 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="DocumentFormat.OpenXml" Version="2.9.0" />
+    <PackageReference Include="iTextSharp.LGPLv2.Core" Version="1.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.6" />
-    <PackageReference Include="PdfSharpCore" Version="1.0.7" />
     <PackageReference Include="Swashbuckle" Version="5.6.0" />
   </ItemGroup>
 
@@ -32,6 +33,7 @@
     <None Remove="ClientApp\app\model\product.ts" />
     <None Remove="ClientApp\app\model\purchase.ts" />
     <None Remove="ClientApp\app\model\sale.ts" />
+    <None Remove="ClientApp\app\model\searchobject.ts" />
     <None Remove="ClientApp\app\model\suplier.ts" />
     <None Remove="ClientApp\app\model\user.ts" />
     <None Remove="ClientApp\app\services\customerservice.ts" />
@@ -52,6 +54,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\app\model\searchobject.ts" />
     <TypeScriptCompile Include="ClientApp\app\model\modelbase.ts" />
     <TypeScriptCompile Include="ClientApp\app\model\user.ts" />
     <TypeScriptCompile Include="ClientApp\app\model\suplier.ts" />
