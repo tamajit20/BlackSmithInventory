@@ -16,6 +16,9 @@ import { Product } from '../../model/product';
 
 export class SalePaymentComponent extends BaseComponent implements OnInit {
     model: SalePayment = new SalePayment();
+    saleDetails: SaleDetail[] = [];
+    salePayments: SalePayment[] = [];
+
     myDatePickerOptions = {
         editableDateField: false,
         dateFormat: 'dd/mm/yyyy'
@@ -81,6 +84,14 @@ export class SalePaymentComponent extends BaseComponent implements OnInit {
             return true;
         }
         return false;
+    }
+
+    showSaleDetail(saleDetails: any) {
+        this.saleDetails = saleDetails;
+    }
+
+    showPaymentDetail(salePayments: any) {
+        this.salePayments = salePayments;
     }
 }
 

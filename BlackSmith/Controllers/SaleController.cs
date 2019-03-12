@@ -1,11 +1,13 @@
 ﻿using BlackSmithCore;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Spreadsheet;
 using iTextSharp.text;
 using iTextSharp.text.html.simpleparser;
 using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -44,60 +46,88 @@ namespace BlackSmithAPI.Controllers
             _productOpp = productOpp;
         }
 
-
-        public SaleList GetSaleList([FromBody]SearchObject input)
+        public IActionResult GetSaleListOnExcel([FromQuery]string searchObject)
         {
-            SaleList result = new SaleList();
+            dynamic ret = null;
             try
             {
-                Expression<Func<Sale, object>>[] exp = new Expression<Func<Sale, object>>[] { x => x.SalePayments, x => x.SaleDetails, x => x.Customer };
-                var predicate = PredicateBuilder.True<Sale>();
-                predicate = predicate.And(x => !x.IsDeleted);
+                SearchObject input = JsonConvert.DeserializeObject<SearchObject>(searchObject);
+                SaleList result = GetSaleList(input);
 
-                if (input.FromDate != null)
-                    predicate = predicate.And(x => x.BillDate.Date >= input.FromDate.Date);
+                MemoryStream memoryStream = new MemoryStream();
 
-                if (input.ToDate != null)
-                    predicate = predicate.And(x => x.BillDate.Date <= input.ToDate.Date);
-
-                if (input.BillIds != null && input.BillIds.Count > 0)
-                    predicate = predicate.And(x => input.BillIds.ConvertAll(c => c.ToUpper().Trim()).Contains(x.BillId.ToUpper().Trim()));
-
-                if (input.CustomerIds != null && input.CustomerIds.Count > 0)
-                    predicate = predicate.And(x => input.CustomerIds.Contains(x.FK_CustomerId));
-
-                result.Sales = _saleOpp.GetAllUsingExpression(out int totalCount, 1, 0, predicate, null, null, exp).OrderByDescending(x=>x.BillDate).ToList();
-
-                var predicateProd = PredicateBuilder.True<Product>();
-                predicateProd = predicateProd.And(x => !x.IsDeleted);
-                var productList = _productOpp.GetAllUsingExpression(out int total, 1, 0, predicateProd).ToList();
-
-                //nullifying to avoid object chain
-
-                if (result.Sales != null)
+                using (SpreadsheetDocument document = SpreadsheetDocument.Create(memoryStream, SpreadsheetDocumentType.Workbook))
                 {
-                    result.Sales.ForEach(x =>
-                    {
-                        if (x.SaleDetails != null)
-                            x.SaleDetails.ForEach(y =>
-                            {
-                                y.Sale = null;
-                                y.Product = productList.Where(p => p.Id == y.FK_ProductId).FirstOrDefault();
-                            });
+                    WorkbookPart workbookPart = document.AddWorkbookPart();
+                    workbookPart.Workbook = new Workbook();
 
-                        if (x.SalePayments != null)
-                            x.SalePayments.ForEach(y => { y.Sale = null; });
-                        if (x.Customer != null)
-                            x.Customer.Sales = null;
-                    });
+                    WorksheetPart worksheetPart = workbookPart.AddNewPart<WorksheetPart>();
+                    worksheetPart.Worksheet = new Worksheet();
+
+                    Sheets sheets = workbookPart.Workbook.AppendChild(new Sheets());
+
+                    Sheet sheet = new Sheet() { Id = workbookPart.GetIdOfPart(worksheetPart), SheetId = 1, Name = "Report" };
+
+                    sheets.Append(sheet);
+
+                    workbookPart.Workbook.Save();
+
+                    SheetData sheetData = worksheetPart.Worksheet.AppendChild(new SheetData());
+
+                    // Constructing header
+                    DocumentFormat.OpenXml.Spreadsheet.Row row = new DocumentFormat.OpenXml.Spreadsheet.Row();
+
+                    row.Append(
+                       ConstructCell("From", CellValues.String),
+                       ConstructCell(input.FromDate.ToString("dd/MM/yyyy"), CellValues.String),
+                       ConstructCell("To", CellValues.String),
+                       ConstructCell(input.ToDate.ToString("dd/MM/yyyy"), CellValues.String));
+
+                    sheetData.AppendChild(row);
+                    sheetData.AppendChild(new DocumentFormat.OpenXml.Spreadsheet.Row());
+
+                    DocumentFormat.OpenXml.Spreadsheet.Row heading = new DocumentFormat.OpenXml.Spreadsheet.Row();
+
+                    heading.Append(
+                        ConstructCell("BillNo", CellValues.String),
+                        ConstructCell("Customer", CellValues.String),
+                        ConstructCell("Amount", CellValues.String),
+                        ConstructCell("Date(DD/MM/YYYY)", CellValues.String));
+
+                    // Insert the header row to the Sheet Data
+                    sheetData.AppendChild(heading);
+
+                    // Inserting each employee
+                    foreach (var eachSale in result.Sales)
+                    {
+                        row = new DocumentFormat.OpenXml.Spreadsheet.Row();
+
+                        row.Append(
+                            ConstructCell(eachSale.BillId, CellValues.Number),
+                            ConstructCell(eachSale.Customer.Name, CellValues.String),
+                            ConstructCell(eachSale.FinalTotal.ToString(), CellValues.Number),
+                            ConstructCell(eachSale.BillDate.ToString("dd/MM/yyyy"), CellValues.String));
+
+                        sheetData.AppendChild(row);
+                    }
+                    worksheetPart.Worksheet.Save();
                 }
+                memoryStream.Position = 0;
+                ret = new FileStreamResult(memoryStream, "application/octet-stream");
             }
             catch (Exception ex)
             {
 
             }
-            return result;
+            return ret;
         }
+
+        public SaleList GetSaleListOnScreen([FromBody]SearchObject input)
+        {
+            return GetSaleList(input);
+        }
+
+
         public SalePayment GetOne([FromBody] SalePayment input)
         {
             try
@@ -253,6 +283,70 @@ namespace BlackSmithAPI.Controllers
 
         #region private methods
 
+        private DocumentFormat.OpenXml.Spreadsheet.Cell ConstructCell(string value, CellValues dataType)
+        {
+            return new DocumentFormat.OpenXml.Spreadsheet.Cell()
+            {
+                CellValue = new CellValue(value),
+                DataType = new EnumValue<CellValues>(dataType)
+            };
+        }
+
+        private SaleList GetSaleList(SearchObject input)
+        {
+            SaleList result = new SaleList();
+            try
+            {
+                Expression<Func<Sale, object>>[] exp = new Expression<Func<Sale, object>>[] { x => x.SalePayments, x => x.SaleDetails, x => x.Customer };
+                var predicate = PredicateBuilder.True<Sale>();
+                predicate = predicate.And(x => !x.IsDeleted);
+
+                if (input.FromDate != null)
+                    predicate = predicate.And(x => x.BillDate.Date >= input.FromDate.Date);
+
+                if (input.ToDate != null)
+                    predicate = predicate.And(x => x.BillDate.Date <= input.ToDate.Date);
+
+                if (!string.IsNullOrWhiteSpace(input.BillIds))
+                {
+                    var billIds = input.BillIds.Split(',').ToList().ConvertAll(c=>c.ToUpper().Trim());
+                    predicate = predicate.And(x => billIds.Contains(x.BillId.ToUpper().Trim()));
+                }
+                if (input.CustomerIds != null && input.CustomerIds.Count > 0)
+                    predicate = predicate.And(x => input.CustomerIds.Contains(x.FK_CustomerId));
+
+                result.Sales = _saleOpp.GetAllUsingExpression(out int totalCount, 1, 0, predicate, null, null, exp).OrderByDescending(x => x.BillDate).ToList();
+
+                var predicateProd = PredicateBuilder.True<Product>();
+                predicateProd = predicateProd.And(x => !x.IsDeleted);
+                var productList = _productOpp.GetAllUsingExpression(out int total, 1, 0, predicateProd).ToList();
+
+                //nullifying to avoid object chain
+
+                if (result.Sales != null)
+                {
+                    result.Sales.ForEach(x =>
+                    {
+                        if (x.SaleDetails != null)
+                            x.SaleDetails.ForEach(y =>
+                            {
+                                y.Sale = null;
+                                y.Product = productList.Where(p => p.Id == y.FK_ProductId).FirstOrDefault();
+                            });
+
+                        if (x.SalePayments != null)
+                            x.SalePayments.ForEach(y => { y.Sale = null; });
+                        if (x.Customer != null)
+                            x.Customer.Sales = null;
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return result;
+        }
 
         private bool SaveBillInBillStore(Sale input)
         {

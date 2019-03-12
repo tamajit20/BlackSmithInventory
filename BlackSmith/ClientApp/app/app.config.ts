@@ -20,7 +20,8 @@ export class AppConfig {
     public static SALE_DELETE = "Sale/delete";
     public static SALE_GETONE = "Sale/GetOne";
     public static SALE_PAYMENT = "Sale/Payment";
-    public static SALE_LIST = "Sale/GetSaleList";
+    public static SALE_LIST_ONSCREEN = "Sale/GetSaleListOnScreen";
+    public static SALE_LIST_ONEXCEL = "Sale/GetSaleListOnExcel";
 
     
     public static SUPLIER_SAVE = "Suplier/Save";

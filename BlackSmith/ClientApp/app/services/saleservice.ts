@@ -23,9 +23,15 @@ export class SaleService extends SharedService {
             .map(res => res.json());
     }
 
-    getSaleList(input: any) {
-        return this.http.post(AppConfig.API_ENDPOINT + AppConfig.SALE_LIST, input, AppConfig.REQUEST_HEADER)
+    getSaleListOnScreen(input: any) {
+        return this.http.post(AppConfig.API_ENDPOINT + AppConfig.SALE_LIST_ONSCREEN, input, AppConfig.REQUEST_HEADER)
             .map(res => res.json());
+    }
+
+    getSaleListOnExcel(input: any) {
+        this.http.get(AppConfig.API_ENDPOINT + AppConfig.SALE_LIST_ONEXCEL, new RequestOptions({ params: { searchObject: JSON.stringify(input) }, responseType: ResponseContentType.Blob })).subscribe(res => {
+            saveAs(res.blob(), "report.xlsx");
+        });
     }
 
     getOne(input: any) {
@@ -38,8 +44,8 @@ export class SaleService extends SharedService {
             .map(res => res.json());
     }
 
-    downloadBill(input : any) {
-        this.http.get(AppConfig.API_ENDPOINT + AppConfig.SALE_DOWNLOAD, new RequestOptions({ params:{id:input.id}, responseType: ResponseContentType.Blob })).subscribe(res => {
+    downloadBill(input: any) {
+        this.http.get(AppConfig.API_ENDPOINT + AppConfig.SALE_DOWNLOAD, new RequestOptions({ params: { id: input.id }, responseType: ResponseContentType.Blob })).subscribe(res => {
             saveAs(res.blob(), "bill.pdf");
         });
     }

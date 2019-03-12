@@ -8,7 +8,7 @@ namespace ViewModels
 {
     public class SearchObject : BaseModel
     {
-        public List<string> BillIds { get; set; }
+        public string BillIds { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
         public List<long> CustomerIds { get; set; }

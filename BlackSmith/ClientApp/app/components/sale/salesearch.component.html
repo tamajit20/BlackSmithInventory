@@ -4,6 +4,12 @@
     </div>
     <div class="row">
         <div class="col-md-1">
+            <label for="customer">Bill ID</label>
+        </div>
+        <div class="col-md-2">
+            <input type="text" maxlength="100" class="form-control" name="billIds" #billIds="ngModel" [(ngModel)]="model.billIds">
+        </div>
+        <div class="col-md-1">
             <label for="customer">From</label>
         </div>
         <div class="col-md-2 height-30px">
@@ -15,7 +21,7 @@
         <div class="col-md-2 height-30px">
             <my-date-picker [options]="myDatePickerOptions" [(ngModel)]="toDate"></my-date-picker>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-1">
             <button type="button" class="btn btn-success btn-sm" (click)="search()">
                 <span class="btn-default"></span> Search
             </button>
@@ -23,7 +29,7 @@
         </div>
 
 
-        <div class="col-md-2">
+        <div class="col-md-1">
             <button type="button" class="btn btn-warning btn-sm" (click)="download()">
                 <span class="fa fa-download"></span>
             </button>

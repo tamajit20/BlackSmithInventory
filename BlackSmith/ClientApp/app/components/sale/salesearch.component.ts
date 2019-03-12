@@ -68,12 +68,38 @@ export class SaleSearchComponent extends BaseComponent implements OnInit {
     }
 
     search() {
-        this.model.fromDate = this.fromDate.date.month + "/" + this.fromDate.date.day + "/" + this.fromDate.date.year;
-        this.model.toDate = this.toDate.date.month + "/" + this.toDate.date.day + "/" + this.toDate.date.year;
+        if (this.fromDate) {
+            this.model.fromDate = this.fromDate.date.month + "/" + this.fromDate.date.day + "/" + this.fromDate.date.year;
+        }
+        else {
+            this.model.fromDate = '01/01/1900';
+        }
+        if (this.toDate) {
+            this.model.toDate = this.toDate.date.month + "/" + this.toDate.date.day + "/" + this.toDate.date.year;
+        }
+        else {
+            this.model.toDate = '01/01/2099';
+        }
 
-        this._service.getSaleList(this.model).subscribe(data => {
+        this._service.getSaleListOnScreen(this.model).subscribe(data => {
             this.searchResult = data;
         });
+    }
+
+    download() {
+        if (this.fromDate) {
+            this.model.fromDate = this.fromDate.date.month + "/" + this.fromDate.date.day + "/" + this.fromDate.date.year;
+        }
+        else {
+            this.model.fromDate = '01/01/1900';
+        }
+        if (this.toDate) {
+            this.model.toDate = this.toDate.date.month + "/" + this.toDate.date.day + "/" + this.toDate.date.year;
+        }
+        else {
+            this.model.toDate = '01/01/2099';
+        }
+        this._service.getSaleListOnExcel(this.model);
     }
 
     showSaleDetail(saleDetails: any) {
