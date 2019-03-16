@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -270,6 +271,7 @@ namespace BlackSmithAPI.Controllers
                         input.SaleDetails = saleDetails;
                     }
 
+
                     SaveBillInBillStore(input);
                 }
             }
@@ -282,6 +284,7 @@ namespace BlackSmithAPI.Controllers
         }
 
         #region private methods
+
 
         private DocumentFormat.OpenXml.Spreadsheet.Cell ConstructCell(string value, CellValues dataType)
         {
@@ -352,31 +355,37 @@ namespace BlackSmithAPI.Controllers
         {
             try
             {
-                string text = System.IO.File.ReadAllText(_configuration["Configuration:BillFormatTemplatePath"], Encoding.UTF8);
+                string fileNameExisting = @_configuration["Configuration:BillFormatTemplatePath"];
+                string fileNameNew = @_configuration["Configuration:BillStorePath"] + input.Id + "_" + input.BillId + ".pdf";
 
-                ReplacePlaceHolderInBill(ref text, null);
-                MemoryStream memoryStream = new MemoryStream();
-                Document document = new Document(PageSize.A4, 10f, 10f, 10f, 0f);
-                HtmlWorker htmlparser = new HtmlWorker(document);
-                PdfWriter.GetInstance(document, memoryStream).CloseStream = false;
-
-                document.Open();
-                StringReader html = new StringReader(text);
-                htmlparser.Parse(html);
-                document.Close();
-
-                byte[] byteInfo = memoryStream.ToArray();
-                memoryStream.Write(byteInfo, 0, byteInfo.Length);
-                memoryStream.Position = 0;
-
-                using (FileStream file = new FileStream(_configuration["Configuration:BillStorePath"] + input.Id + "_" + input.BillId + ".pdf", FileMode.Create, FileAccess.Write))
+                using (var existingFileStream = new FileStream(fileNameExisting, FileMode.Open))
+                using (var newFileStream = new FileStream(fileNameNew, FileMode.Create))
                 {
-                    byte[] bytes = new byte[memoryStream.Length];
-                    memoryStream.Read(bytes, 0, (int)memoryStream.Length);
-                    file.Write(bytes, 0, bytes.Length);
-                    memoryStream.Close();
+                    // Open existing PDF
+                    var pdfReader = new PdfReader(existingFileStream);
+
+                    // PdfStamper, which will create
+                    var stamper = new PdfStamper(pdfReader, newFileStream);
+
+                    var form = stamper.AcroFields;
+                    var fieldKeys = form.Fields.Keys;
+
+                    foreach (string fieldKey in fieldKeys)
+                    {
+                        form.SetField(fieldKey, "REPLACED!");
+                    }
+
+                    // "Flatten" the form so it wont be editable/usable anymore
+                    stamper.FormFlattening = true;
+
+                    // You can also specify fields to be flattened, which
+                    // leaves the rest of the form still be editable/usable
+                    stamper.PartialFormFlattening("field1");
+
+                    stamper.Close();
+                    pdfReader.Close();
                 }
-            }
+            }        
             catch (Exception ex)
             {
                 return false;
