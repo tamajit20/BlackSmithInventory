@@ -26,6 +26,7 @@ export class SaleBillComponent extends BaseComponent implements OnInit {
     };
     today = { date: { year: (new Date()).getFullYear(), month: (new Date()).getMonth() + 1, day: (new Date()).getDate() } };
     billDate: any = this.today;
+    paymentTerms = ['Cash','Check'];
 
     constructor(
         private _service: SaleService

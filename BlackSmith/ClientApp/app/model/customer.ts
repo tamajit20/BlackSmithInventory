@@ -5,4 +5,6 @@ export class Customer extends ModelBase {
     address: string;
     contactNo: string;
     emailId: string;
+    gstin: string;
+    pan: string;
 }

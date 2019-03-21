@@ -22,6 +22,8 @@ namespace BlackSmithDBConnect
             builder.Property(c => c.ModifiedOn);
             builder.Property(c => c.ModifiedBy);
             builder.Property(c => c.ContactNo);
+            builder.Property(c => c.GSTIN);
+            builder.Property(c => c.PAN);
 
             builder.ToTable("tCustomer");
         }

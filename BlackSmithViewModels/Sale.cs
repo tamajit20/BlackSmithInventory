@@ -20,6 +20,8 @@ namespace ViewModels
         public virtual double Total { get; set; }
         public virtual double FinalTotal { get; set; }
         public virtual string FinalTotalInWords { get; set; }
+        public string PaymentTerm { get; set; }
+        public string DispatchThru { get; set; }
 
         public virtual List<SaleDetail> SaleDetails { get; set; }
         public virtual List<SalePayment> SalePayments { get; set; }

@@ -18,6 +18,20 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="title">GSTIN</label>&nbsp;
+                    <div>
+                        <input type="text" maxlength="100" class="form-control" name="gstin" #gstin="ngModel" [(ngModel)]="model.gstin">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="title">PAN</label>&nbsp;
+                    <div>
+                        <input type="text" maxlength="100" class="form-control" name="pan" #pan="ngModel" [(ngModel)]="model.pan">
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label for="title">Email</label>
                     <input type="email" maxlength="100" class="form-control" name="emailId" #emailId="ngModel" [(ngModel)]="model.emailId">
                 </div>

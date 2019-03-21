@@ -20,6 +20,8 @@ export class Sale extends ModelBase {
     isGenerated: boolean = false;
     customer: Customer;
     due: number;
+    paymentTerm: string;
+    dispatchThru: string;
 }
 
 export class SaleDetail extends ModelBase {

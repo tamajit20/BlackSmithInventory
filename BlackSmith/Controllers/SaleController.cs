@@ -92,7 +92,7 @@ namespace BlackSmithAPI.Controllers
                     heading.Append(
                         ConstructCell("BillNo", CellValues.String),
                         ConstructCell("Customer", CellValues.String),
-                        ConstructCell("Amount", CellValues.String),
+                        ConstructCell("Amount (Rs)", CellValues.String),
                         ConstructCell("Date(DD/MM/YYYY)", CellValues.String));
 
                     // Insert the header row to the Sheet Data
@@ -310,9 +310,14 @@ namespace BlackSmithAPI.Controllers
                 if (input.ToDate != null)
                     predicate = predicate.And(x => x.BillDate.Date <= input.ToDate.Date);
 
+                if (input.SaleIds != null && input.SaleIds.Count > 0)
+                {
+                    predicate = predicate.And(x => input.SaleIds.Contains(x.Id));
+                }
+
                 if (!string.IsNullOrWhiteSpace(input.BillIds))
                 {
-                    var billIds = input.BillIds.Split(',').ToList().ConvertAll(c=>c.ToUpper().Trim());
+                    var billIds = input.BillIds.Split(',').ToList().ConvertAll(c => c.ToUpper().Trim());
                     predicate = predicate.And(x => billIds.Contains(x.BillId.ToUpper().Trim()));
                 }
                 if (input.CustomerIds != null && input.CustomerIds.Count > 0)
@@ -355,37 +360,179 @@ namespace BlackSmithAPI.Controllers
         {
             try
             {
-                string fileNameExisting = @_configuration["Configuration:BillFormatTemplatePath"];
-                string fileNameNew = @_configuration["Configuration:BillStorePath"] + input.Id + "_" + input.BillId + ".pdf";
+                SearchObject s = new SearchObject() { SaleIds = new List<long>() { input.Id } };
 
-                using (var existingFileStream = new FileStream(fileNameExisting, FileMode.Open))
-                using (var newFileStream = new FileStream(fileNameNew, FileMode.Create))
+                var result = GetSaleList(s);
+
+                if (result != null && result.Sales != null)
                 {
-                    // Open existing PDF
-                    var pdfReader = new PdfReader(existingFileStream);
-
-                    // PdfStamper, which will create
-                    var stamper = new PdfStamper(pdfReader, newFileStream);
-
-                    var form = stamper.AcroFields;
-                    var fieldKeys = form.Fields.Keys;
-
-                    foreach (string fieldKey in fieldKeys)
-                    {
-                        form.SetField(fieldKey, "REPLACED!");
-                    }
-
-                    // "Flatten" the form so it wont be editable/usable anymore
-                    stamper.FormFlattening = true;
-
-                    // You can also specify fields to be flattened, which
-                    // leaves the rest of the form still be editable/usable
-                    stamper.PartialFormFlattening("field1");
-
-                    stamper.Close();
-                    pdfReader.Close();
+                    input = result.Sales.FirstOrDefault();
                 }
-            }        
+                if (input != null)
+                {
+                    input.FinalTotalInWords = input.FinalTotalInWords = "Rupees " + GetNumberInWords(input.FinalTotal) + " Only";
+
+                    string fileNameExisting = @_configuration["Configuration:BillFormatTemplatePath"];
+                    string fileNameNew = @_configuration["Configuration:BillStorePath"] + input.Id + "_" + input.BillId + ".pdf";
+
+                    using (var existingFileStream = new FileStream(fileNameExisting, FileMode.Open))
+                    using (var newFileStream = new FileStream(fileNameNew, FileMode.Create))
+                    {
+                        var pdfReader = new PdfReader(existingFileStream);
+                        var stamper = new PdfStamper(pdfReader, newFileStream);
+
+                        var form = stamper.AcroFields;
+                        var keys = form.Fields.Keys;
+                        List<string> fieldKeys = new List<string>();
+                        foreach (string each in keys)
+                        {
+                            fieldKeys.Add(each);
+                        }
+
+                        var customerName = fieldKeys.Find(x => x.ToUpper() == "CUSTOMERNAME");
+                        if (customerName != null && input.Customer != null && input.Customer.Name != null)
+                        {
+                            form.SetField(customerName, input.Customer.Name);
+                        }
+
+                        var customerGSTIN = fieldKeys.Find(x => x.ToUpper() == "CUSTOMERGSTIN");
+                        if (customerGSTIN != null && input.Customer != null && input.Customer.GSTIN != null)
+                        {
+                            form.SetField(customerGSTIN, input.Customer.GSTIN);
+                        }
+
+                        var customerPAN = fieldKeys.Find(x => x.ToUpper() == "CUSTOERPAN");
+                        if (customerPAN != null && input.Customer != null && input.Customer.PAN != null)
+                        {
+                            form.SetField(customerPAN, input.Customer.PAN);
+                        }
+
+                        var invoiceNo = fieldKeys.Find(x => x.ToUpper() == "INVOICENO");
+                        if (invoiceNo != null && input.BillId != null)
+                        {
+                            form.SetField(invoiceNo, input.BillId);
+                        }
+
+                        var invoiceDate = fieldKeys.Find(x => x.ToUpper() == "INVOICEDATE");
+                        if (invoiceDate != null && input.BillDate != null)
+                        {
+                            form.SetField(invoiceDate, input.BillDate.ToString("dd-MM-yyyy"));
+                        }
+
+                        var paymentTerm = fieldKeys.Find(x => x.ToUpper() == "PAYMENTTERMS");
+                        if (paymentTerm != null && input.PaymentTerm != null)
+                        {
+                            form.SetField(paymentTerm, input.PaymentTerm);
+                        }
+
+                        var dispatchThru = fieldKeys.Find(x => x.ToUpper() == "INVOICETHROUGH");
+                        if (dispatchThru != null && input.DispatchThru != null)
+                        {
+                            form.SetField(dispatchThru, input.DispatchThru);
+                        }
+
+                        var total = fieldKeys.Find(x => x.ToUpper() == "TOTAL");
+                        if (total != null)
+                        {
+                            form.SetField(total, input.Total.ToString());
+                        }
+
+                        var cgst = fieldKeys.Find(x => x.ToUpper() == "CGST");
+                        if (cgst != null)
+                        {
+                            form.SetField(cgst, input.CGSTTax.ToString());
+                        }
+
+                        var sgst = fieldKeys.Find(x => x.ToUpper() == "SGST");
+                        if (sgst != null)
+                        {
+                            form.SetField(sgst, input.SGSTTax.ToString());
+                        }
+
+                        var discount = fieldKeys.Find(x => x.ToUpper() == "DISCOUNT");
+                        if (discount != null)
+                        {
+                            form.SetField(discount, input.Discount.ToString());
+                        }
+
+                        var finalTotal = fieldKeys.Find(x => x.ToUpper() == "FINALTOTAL");
+                        if (finalTotal != null)
+                        {
+                            form.SetField(finalTotal, input.FinalTotal.ToString());
+                        }
+
+                        var billingAddress = fieldKeys.Find(x => x.ToUpper() == "BILLINGADDRESS");
+                        if (billingAddress != null && input.Customer != null && input.Customer.Address != null)
+                        {
+                            form.SetField(billingAddress, input.Customer.Address);
+                        }
+
+                        var shippingAddress = fieldKeys.Find(x => x.ToUpper() == "SHIPPINGADDRESS");
+                        if (shippingAddress != null)
+                        {
+                            form.SetField(shippingAddress, input.Customer.Address);
+                        }
+
+                        var inWords = fieldKeys.Find(x => x.ToUpper() == "INWORDS");
+                        if (inWords != null && input.FinalTotalInWords != null)
+                        {
+                            form.SetField(inWords, input.FinalTotalInWords);
+                        }
+
+                        if (input.SaleDetails != null && input.SaleDetails.Count > 0)
+                        {
+                            for (int i = 0; i < input.SaleDetails.Count; i++)
+                            {
+                                var sl = fieldKeys.Find(x => x.ToUpper() == "SL" + (i + 1));
+                                if (sl != null)
+                                {
+                                    form.SetField(sl, (i + 1).ToString());
+                                }
+                                var hsn = fieldKeys.Find(x => x.ToUpper() == "HSN" + (i + 1));
+                                if (hsn != null)
+                                {
+                                    form.SetField(hsn, _configuration["Configuration:HSN"]);
+                                }
+                                var desc = fieldKeys.Find(x => x.ToUpper() == "DESC" + (i + 1));
+                                if (desc != null)
+                                {
+                                    form.SetField(desc, input.SaleDetails[i].Product != null ? input.SaleDetails[i].Product.Name : string.Empty);
+                                }
+                                var qty = fieldKeys.Find(x => x.ToUpper() == "QTY" + (i + 1));
+                                if (qty != null)
+                                {
+                                    form.SetField(qty, input.SaleDetails[i].Quantity.ToString());
+                                }
+                                var unit = fieldKeys.Find(x => x.ToUpper() == "UNIT" + (i + 1));
+                                if (unit != null)
+                                {
+                                    form.SetField(unit, "Piece");
+                                }
+                                var rate = fieldKeys.Find(x => x.ToUpper() == "RATE" + (i + 1));
+                                if (rate != null)
+                                {
+                                    form.SetField(rate, input.SaleDetails[i].Price.ToString());
+                                }
+                                var amount = fieldKeys.Find(x => x.ToUpper() == "AMT" + (i + 1));
+                                if (amount != null)
+                                {
+                                    double amt = Math.Round((input.SaleDetails[i].Price * input.SaleDetails[i].Quantity),2);
+                                    form.SetField(amount, amt.ToString());
+                                }
+                            }
+                        }
+                        stamper.FormFlattening = true; // "Flatten" the form so it wont be editable/usable anymore
+
+
+                        // You can also specify fields to be flattened, which
+                        // leaves the rest of the form still be editable/usable
+                        //stamper.PartialFormFlattening("field1");
+
+                        stamper.Close();
+                        pdfReader.Close();
+                    }
+                }
+            }
             catch (Exception ex)
             {
                 return false;

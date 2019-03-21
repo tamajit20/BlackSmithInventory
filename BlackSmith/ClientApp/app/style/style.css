@@ -6,6 +6,9 @@
     min-height: 30px;
 }
 
+.row-gap {
+    padding-top : .5em;
+}
 .inputText {
     border: 0;
     outline: 0;

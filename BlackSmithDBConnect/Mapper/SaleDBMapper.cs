@@ -25,6 +25,8 @@ namespace BlackSmithDBConnect
             builder.Property(c => c.BillId);
             builder.Property(c => c.Total);
             builder.Property(c => c.FinalTotal);
+            builder.Property(c => c.DispatchThru);
+            builder.Property(c => c.PaymentTerm);
 
             builder.Property(c => c.CreatedOn);
             builder.Property(c => c.CreatedBy);

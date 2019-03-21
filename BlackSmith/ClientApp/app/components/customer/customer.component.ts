@@ -36,6 +36,7 @@ export class CustomerComponent extends BaseComponent implements OnInit {
 
     getAll() {
         this._service.getAllCustomer().subscribe(data => {
+            console.log(data);
             this.modelList = data;
         });
     }

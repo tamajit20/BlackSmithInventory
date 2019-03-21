@@ -21,6 +21,37 @@
         <div class="col-md-2 height-30px">
             <my-date-picker [options]="myDatePickerOptions" [(ngModel)]="billDate"></my-date-picker>
         </div>
+
+        <div class="col-md-1">
+            <label for="dispatchThru">Dispatch By</label>
+        </div>
+        <div class="col-md-2">
+            <input type="text" maxlength="100" class="form-control" name="dispatchThru" #dispatchThru="ngModel" [(ngModel)]="model.dispatchThru">
+        </div>
+
+        <div class="col-md-1">
+            <label for="customer">Payment</label>
+        </div>
+        <div class="col-md-2">
+            <select class="form-control" name="paymentTerm" #paymentTerm="ngModel" [(ngModel)]="model.paymentTerm">
+                <option *ngFor="let each of paymentTerms"
+                        [value]="each">
+                    {{each}}
+                </option>
+            </select>
+        </div>
+
+
+    </div>
+
+    <div class="row row-gap">
+        <div class="col-md-1">
+            <label for="discount">Discount (Rs)</label>
+        </div>
+        <div class="col-md-2">
+            <input type="number" max="999999" maxlength="100" class="form-control" name="discount" #discount="ngModel" [(ngModel)]="model.discount">
+        </div>
+
         <div class="col-md-4">
             <button type="button" class="btn btn-success btn-sm" (click)="save()">
                 <span class="btn-default"></span> Generate
@@ -36,8 +67,7 @@
             </span>
         </div>
 
-
-        <div class="col-md-2">
+        <div class="col-md-5">
             <button *ngIf="model.billId && model.isGenerated" type="button" class="btn btn-warning btn-sm" (click)="download()">
                 <span class="fa fa-download"></span>
             </button>
@@ -53,8 +83,8 @@
                     <th class="width-5em">SL#</th>
                     <th>Product</th>
                     <th>Quantity</th>
-                    <th>Price</th>
-                    <th>Total</th>
+                    <th>Price (Rs)</th>
+                    <th>Total (Rs)</th>
                     <th>
                         <button type="button" class="btn btn-default btn-sm" (click)="addNewSaleDetail()">
                             <span class="glyphicon glyphicon-plus"></span>
