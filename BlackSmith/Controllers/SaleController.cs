@@ -343,9 +343,12 @@ namespace BlackSmithAPI.Controllers
                             });
 
                         if (x.SalePayments != null)
-                            x.SalePayments.ForEach(y => { y.Sale = null; });
+                            x.SalePayments.ForEach(y => { y.Sale = null; x.TotalPaid = x.TotalPaid + y.Amount; });
                         if (x.Customer != null)
                             x.Customer.Sales = null;
+
+                        x.Due = Math.Round(x.FinalTotal - x.TotalPaid, 2);
+
                     });
                 }
             }
@@ -488,31 +491,37 @@ namespace BlackSmithAPI.Controllers
                                 {
                                     form.SetField(sl, (i + 1).ToString());
                                 }
+
                                 var hsn = fieldKeys.Find(x => x.ToUpper() == "HSN" + (i + 1));
                                 if (hsn != null)
                                 {
                                     form.SetField(hsn, _configuration["Configuration:HSN"]);
                                 }
+
                                 var desc = fieldKeys.Find(x => x.ToUpper() == "DESC" + (i + 1));
                                 if (desc != null)
                                 {
                                     form.SetField(desc, input.SaleDetails[i].Product != null ? input.SaleDetails[i].Product.Name : string.Empty);
                                 }
+
                                 var qty = fieldKeys.Find(x => x.ToUpper() == "QTY" + (i + 1));
                                 if (qty != null)
                                 {
                                     form.SetField(qty, input.SaleDetails[i].Quantity.ToString());
                                 }
+
                                 var unit = fieldKeys.Find(x => x.ToUpper() == "UNIT" + (i + 1));
                                 if (unit != null)
                                 {
                                     form.SetField(unit, "Piece");
                                 }
+
                                 var rate = fieldKeys.Find(x => x.ToUpper() == "RATE" + (i + 1));
                                 if (rate != null)
                                 {
                                     form.SetField(rate, input.SaleDetails[i].Price.ToString());
                                 }
+
                                 var amount = fieldKeys.Find(x => x.ToUpper() == "AMT" + (i + 1));
                                 if (amount != null)
                                 {

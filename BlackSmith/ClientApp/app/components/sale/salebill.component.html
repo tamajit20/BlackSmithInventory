@@ -1,126 +1,121 @@
-<div class="container-fluid">
-    <div>
-        <h1 class="custom-header">Sale</h1>
+<div class="row">
+    <div class="col-md-1">
+        <label for="customer">Customer</label>
     </div>
-    <div class="row">
-        <div class="col-md-1">
-            <label for="customer">Customer</label>
-        </div>
-        <div class="col-md-2">
-            <select class="form-control" name="fK_CustomerId" #fK_CustomerId="ngModel" [(ngModel)]="model.fK_CustomerId">
-                <option *ngFor="let cust of loader.customers"
-                        [value]="cust.id">
-                    {{cust.name}}
-                </option>
-            </select>
-        </div>
-
-        <div class="col-md-1">
-            <label for="customer">Date</label>
-        </div>
-        <div class="col-md-2 height-30px">
-            <my-date-picker [options]="myDatePickerOptions" [(ngModel)]="billDate"></my-date-picker>
-        </div>
-
-        <div class="col-md-1">
-            <label for="dispatchThru">Dispatch By</label>
-        </div>
-        <div class="col-md-2">
-            <input type="text" maxlength="100" class="form-control" name="dispatchThru" #dispatchThru="ngModel" [(ngModel)]="model.dispatchThru">
-        </div>
-
-        <div class="col-md-1">
-            <label for="customer">Payment</label>
-        </div>
-        <div class="col-md-2">
-            <select class="form-control" name="paymentTerm" #paymentTerm="ngModel" [(ngModel)]="model.paymentTerm">
-                <option *ngFor="let each of paymentTerms"
-                        [value]="each">
-                    {{each}}
-                </option>
-            </select>
-        </div>
-
-
+    <div class="col-md-2">
+        <select class="form-control" name="fK_CustomerId" #fK_CustomerId="ngModel" [(ngModel)]="model.fK_CustomerId">
+            <option *ngFor="let cust of loader.customers"
+                    [value]="cust.id">
+                {{cust.name}}
+            </option>
+        </select>
     </div>
 
-    <div class="row row-gap">
-        <div class="col-md-1">
-            <label for="discount">Discount (Rs)</label>
-        </div>
-        <div class="col-md-2">
-            <input type="number" max="999999" maxlength="100" class="form-control" name="discount" #discount="ngModel" [(ngModel)]="model.discount">
-        </div>
+    <div class="col-md-1">
+        <label for="customer">Date</label>
+    </div>
+    <div class="col-md-2 height-30px">
+        <my-date-picker [options]="myDatePickerOptions" [(ngModel)]="billDate"></my-date-picker>
+    </div>
 
-        <div class="col-md-4">
-            <button type="button" class="btn btn-success btn-sm" (click)="save()">
-                <span class="btn-default"></span> Generate
-            </button>
-            <span *ngIf="model.isFailure" class="text-bolder  text-color-red">{{model.msg}}</span>
-            <span *ngIf="!model.isFailure && model.isGenerated">
-                <span class="text-bolder text-color-green">{{model.msg}}</span>
-                <span *ngIf="model.billId">
-                    <span class="vl"></span>
-                    <span class="text-bolder">Bill ID : </span>
-                    <span class="text-color-red text-bolder">{{model.billId}}</span>
-                </span>
+    <div class="col-md-1">
+        <label for="dispatchThru">Dispatch By</label>
+    </div>
+    <div class="col-md-2">
+        <input type="text" maxlength="100" class="form-control" name="dispatchThru" #dispatchThru="ngModel" [(ngModel)]="model.dispatchThru">
+    </div>
+
+    <div class="col-md-1">
+        <label for="customer">Payment</label>
+    </div>
+    <div class="col-md-2">
+        <select class="form-control" name="paymentTerm" #paymentTerm="ngModel" [(ngModel)]="model.paymentTerm">
+            <option *ngFor="let each of paymentTerms"
+                    [value]="each">
+                {{each}}
+            </option>
+        </select>
+    </div>
+
+
+</div>
+
+<div class="row row-gap">
+    <div class="col-md-1">
+        <label for="discount">Discount (Rs)</label>
+    </div>
+    <div class="col-md-2">
+        <input type="number" max="999999" maxlength="100" class="form-control" name="discount" #discount="ngModel" [(ngModel)]="model.discount">
+    </div>
+
+    <div class="col-md-4">
+        <button type="button" class="btn btn-success btn-sm" (click)="save()">
+            <span class="btn-default"></span> Generate
+        </button>
+        <span *ngIf="model.isFailure" class="text-bolder  text-color-red">{{model.msg}}</span>
+        <span *ngIf="!model.isFailure && model.isGenerated">
+            <span class="text-bolder text-color-green">{{model.msg}}</span>
+            <span *ngIf="model.billId">
+                <span class="vl"></span>
+                <span class="text-bolder">Bill ID : </span>
+                <span class="text-color-red text-bolder">{{model.billId}}</span>
             </span>
-        </div>
-
-        <div class="col-md-5">
-            <button *ngIf="model.billId && model.isGenerated" type="button" class="btn btn-warning btn-sm" (click)="download()">
-                <span class="fa fa-download"></span>
-            </button>
-            <button type="button" class="btn btn-info btn-sm pull-right" (click)="addNew()">
-                <span class="btn-info"></span> New
-            </button>
-        </div>
-    </div>
-    <div class="row">
-        <table class="table table-responsive table-hover table-striped">
-            <thead>
-                <tr>
-                    <th class="width-5em">SL#</th>
-                    <th>Product</th>
-                    <th>Quantity</th>
-                    <th>Price (Rs)</th>
-                    <th>Total (Rs)</th>
-                    <th>
-                        <button type="button" class="btn btn-default btn-sm" (click)="addNewSaleDetail()">
-                            <span class="glyphicon glyphicon-plus"></span>
-                        </button>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let eachSaleDetail of model.saleDetails;let i = index">
-                    <td class="width-5em">{{i+1}}</td>
-                    <td>
-                        <select class="height-30px form-control" name="fK_ProductId" #fK_ProductId="ngModel" [(ngModel)]="model.saleDetails[getIndexByDetailNo(eachSaleDetail.saleDetailNo)].fK_ProductId" required>
-                            <option value="" selected disabled hidden>Select</option>
-                            <option *ngFor="let each of loader.products" [value]="each.id">
-                                {{each.name}}
-                            </option>
-                        </select>
-                    </td>
-                    <td><input (input)="calculateTotalPerProduct(eachSaleDetail.saleDetailNo)" class="inputText" type="number" max="999999" name="quantity_{{i}}" #quantity="ngModel" [(ngModel)]="model.saleDetails[getIndexByDetailNo(eachSaleDetail.saleDetailNo)].quantity" required></td>
-                    <td><input (input)="calculateTotalPerProduct(eachSaleDetail.saleDetailNo)" class="inputText" type="number" max="999999" name="price_{{i}}" #price="ngModel" [(ngModel)]="model.saleDetails[getIndexByDetailNo(eachSaleDetail.saleDetailNo)].price" required></td>
-                    <td>{{ eachSaleDetail.total}}</td>
-                    <td><a href="javascript:void(0)" (click)="deleteSaleDetail(eachSaleDetail.saleDetailNo)"><span class="glyphicon glyphicon-remove"></span></a></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="row" *ngIf="model.isGenerated && !model.isFailure">
-        <span>
-            <span class="text-bolder">Total :</span>
-            <span>Price : {{model.total}} + CGST({{model.cgstRate}}%) : {{model.cgstTax}} + SGST ({{model.sgstRate}}%) : {{model.sgstTax}} - Discount : {{model.discount}} = Rs- </span>
-            <span class="text-color-green text-bolder">{{model.finalTotal}} /-</span>
         </span>
-        <span class="vl"></span>
-        <span>
-            <span class="text-bolder"> In Words :</span>
-            <span class="text-color-green text-bolder">{{model.finalTotalInWords}}</span>
-        </span>        
     </div>
+
+    <div class="col-md-5">
+        <button *ngIf="model.billId && model.isGenerated" type="button" class="btn btn-warning btn-sm" (click)="download()">
+            <span class="fa fa-download"></span>
+        </button>
+        <button type="button" class="btn btn-info btn-sm pull-right" (click)="addNew()">
+            <span class="btn-info"></span> New
+        </button>
+    </div>
+</div>
+<div class="row">
+    <table class="table table-responsive table-hover table-striped">
+        <thead>
+            <tr>
+                <th class="width-5em">SL#</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price (Rs)</th>
+                <th>Total (Rs)</th>
+                <th>
+                    <button type="button" class="btn btn-default btn-sm" (click)="addNewSaleDetail()">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let eachSaleDetail of model.saleDetails;let i = index">
+                <td class="width-5em">{{i+1}}</td>
+                <td>
+                    <select class="height-30px form-control" name="fK_ProductId" #fK_ProductId="ngModel" [(ngModel)]="model.saleDetails[getIndexByDetailNo(eachSaleDetail.saleDetailNo)].fK_ProductId" required>
+                        <option value="" selected disabled hidden>Select</option>
+                        <option *ngFor="let each of loader.products" [value]="each.id">
+                            {{each.name}}
+                        </option>
+                    </select>
+                </td>
+                <td><input (input)="calculateTotalPerProduct(eachSaleDetail.saleDetailNo)" class="inputText" type="number" max="999999" name="quantity_{{i}}" #quantity="ngModel" [(ngModel)]="model.saleDetails[getIndexByDetailNo(eachSaleDetail.saleDetailNo)].quantity" required></td>
+                <td><input (input)="calculateTotalPerProduct(eachSaleDetail.saleDetailNo)" class="inputText" type="number" max="999999" name="price_{{i}}" #price="ngModel" [(ngModel)]="model.saleDetails[getIndexByDetailNo(eachSaleDetail.saleDetailNo)].price" required></td>
+                <td>{{ eachSaleDetail.total}}</td>
+                <td><a href="javascript:void(0)" (click)="deleteSaleDetail(eachSaleDetail.saleDetailNo)"><span class="glyphicon glyphicon-remove"></span></a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="row" *ngIf="model.isGenerated && !model.isFailure">
+    <span>
+        <span class="text-bolder">Total :</span>
+        <span>Price : {{model.total}} + CGST({{model.cgstRate}}%) : {{model.cgstTax}} + SGST ({{model.sgstRate}}%) : {{model.sgstTax}} - Discount : {{model.discount}} = Rs- </span>
+        <span class="text-color-green text-bolder">{{model.finalTotal}} /-</span>
+    </span>
+    <span class="vl"></span>
+    <span>
+        <span class="text-bolder"> In Words :</span>
+        <span class="text-color-green text-bolder">{{model.finalTotalInWords}}</span>
+    </span>
 </div>
