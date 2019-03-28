@@ -34,4 +34,14 @@ export class SharedService {
         return this.http.post(AppConfig.API_ENDPOINT + AppConfig.INVENTORYITEM_GETALL, null, AppConfig.REQUEST_HEADER)
             .map(res => res.json());
     }
+
+    print(doc: any) {
+        var objFra = document.createElement('iframe');   // Create an IFrame.
+        objFra.style.visibility = "hidden";    // Hide the frame.
+        objFra.src = URL.createObjectURL(doc);                      // Set source.
+        document.body.appendChild(objFra);  // Add the frame to the web page.
+        objFra.contentWindow!.focus();
+        //  print();// Set focus.
+        objFra.contentWindow!.print();      // Print it.
+    }
 }

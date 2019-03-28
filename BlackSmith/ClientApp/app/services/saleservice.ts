@@ -44,11 +44,16 @@ export class SaleService extends SharedService {
             .map(res => res.json());
     }
 
+
     downloadBill(input: any) {
         this.http.get(AppConfig.API_ENDPOINT + AppConfig.SALE_DOWNLOAD, new RequestOptions({ params: { id: input.id }, responseType: ResponseContentType.Blob })).subscribe(res => {
-            saveAs(res.blob(), "bill.pdf");
+            //  saveAs(res.blob(), "bill.pdf");
+            saveAs(res.blob(), "C:/bill.pdf");
+            this.print(res.blob());
+
         });
     }
+  
 
     delete(input: any) {
         return this.http.post(AppConfig.API_ENDPOINT + AppConfig.SALE_DELETE, input, AppConfig.REQUEST_HEADER)

@@ -9,6 +9,7 @@ namespace ViewModels
     public class InventoryItem : BaseModel
     {
         public string Name { get; set; }
-        public string Description { get; set; }    
+        public string Description { get; set; }
+        public virtual List<PurchaseDetail> PurchaseDetails { get; set; }
     }
 }

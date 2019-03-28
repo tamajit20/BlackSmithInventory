@@ -303,16 +303,18 @@ namespace BlackSmithAPI.Controllers
                 Expression<Func<Sale, object>>[] exp = new Expression<Func<Sale, object>>[] { x => x.SalePayments, x => x.SaleDetails, x => x.Customer };
                 var predicate = PredicateBuilder.True<Sale>();
                 predicate = predicate.And(x => !x.IsDeleted);
-
-                if (input.FromDate != null)
-                    predicate = predicate.And(x => x.BillDate.Date >= input.FromDate.Date);
-
-                if (input.ToDate != null)
-                    predicate = predicate.And(x => x.BillDate.Date <= input.ToDate.Date);
-
+               
                 if (input.SaleIds != null && input.SaleIds.Count > 0)
                 {
                     predicate = predicate.And(x => input.SaleIds.Contains(x.Id));
+                }
+                else
+                {
+                    if (input.FromDate != null)
+                        predicate = predicate.And(x => x.BillDate.Date >= input.FromDate.Date);
+
+                    if (input.ToDate != null)
+                        predicate = predicate.And(x => x.BillDate.Date <= input.ToDate.Date);
                 }
 
                 if (!string.IsNullOrWhiteSpace(input.BillIds))
@@ -547,17 +549,6 @@ namespace BlackSmithAPI.Controllers
                 return false;
             }
             return true;
-        }
-        private void ReplacePlaceHolderInBill(ref string html, Sale saleInfo)
-        {
-            try
-            {
-
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
         }
 
         private bool HardDelete(Sale input)

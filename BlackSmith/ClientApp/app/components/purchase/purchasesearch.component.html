@@ -1,0 +1,252 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-1">
+            <label for="customer">Bill ID</label>
+        </div>
+        <div class="col-md-2">
+            <input type="text" maxlength="100" class="form-control" name="billIds" #billIds="ngModel" [(ngModel)]="model.billIds">
+        </div>
+        <div class="col-md-1">
+            <label for="customer">From</label>
+        </div>
+        <div class="col-md-2 height-30px">
+            <my-date-picker [options]="myDatePickerOptions" [(ngModel)]="fromDate"></my-date-picker>
+        </div>
+        <div class="col-md-1">
+            <label for="customer">To</label>
+        </div>
+        <div class="col-md-2 height-30px">
+            <my-date-picker [options]="myDatePickerOptions" [(ngModel)]="toDate"></my-date-picker>
+        </div>
+        <div class="col-md-1">
+            <button type="button" class="btn btn-success btn-sm" (click)="search()">
+                <span class="btn-default"></span> Search
+            </button>
+            <span *ngIf="model.isFailure" class="text-bolder  text-color-red">{{model.msg}}</span>
+        </div>
+
+
+        <div class="col-md-1">
+            <button type="button" class="btn btn-warning btn-sm" (click)="download()">
+                <span class="fa fa-download"></span>
+            </button>
+
+        </div>
+    </div>
+    <div class="row">
+        <table class="table table-responsive table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>Bill#</th>
+                    <th>Customer</th>
+                    <th> Invoice Date</th>
+                    <th>Amount (Rs)</th>
+                    <th>Paid (Rs)</th>
+                    <th>Information</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let eachSale of searchResult.sales;let i = index">
+                    <td>{{eachSale.billId}}</td>
+                    <td>{{eachSale.customer.name}}</td>
+                    <td>{{eachSale.billDate}}</td>
+                    <td>{{eachSale.finalTotal}}</td>
+                    <td>{{eachSale.totalPaid}}</td>
+                    <td>
+                        <button type="button" class="btn btn-info btn-sm" (click)="showSaleDetail(eachSale)" data-toggle="modal" data-target="#saleDetailModal">
+                            <span class="fa fa-list"></span>
+                        </button>
+
+                        <button type="button" class="btn btn-primary btn-sm" (click)="showPaymentDetail(eachSale)" data-toggle="modal" data-target="#paymentDetailModal">
+                            <span class="fa fa-credit-card"></span>
+                        </button>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm" (click)="downloadBill(eachSale.id)">
+                            <span class="fa fa-file-pdf-o"></span>
+                        </button>
+                        <button type="button" class="btn btn-primary btn-sm" (click)="showPayment(eachSale)" data-toggle="modal" data-target="#paymentModal">
+                            <span class="fa fa-credit-card"></span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div class="modal" id="paymentModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <div class="row">
+                    <h4 class="modal-title col-md-10">Payment</h4>
+                    <button type="button" class="close col-md-2" data-dismiss="modal">&times;</button>
+                </div>
+            </div>
+
+            <div class="modal-body" *ngIf="payment">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="customer">BillID:</label>
+                        <span>{{payment.sale.billId}}</span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="customer">Customer:</label>
+                        <span>{{payment.sale.customer.name}}</span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="customer">Total(Rs):</label>
+                        <span>{{payment.sale.finalTotal}}</span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="customer">Due(Rs):</label>
+                        <span>{{payment.sale.due}}</span>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-3 text-bolder">Date : </div>
+                    <div class="col-md-3">
+                        <my-date-picker [options]="myDatePickerOptions" [(ngModel)]="paymentDate"></my-date-picker>
+                    </div>
+                    <div class="col-md-3 text-bolder">Amount (Rs) : </div>
+                    <div class="col-md-3">
+                        <input type="number" maxlength="100" class="form-control" name="amount" #amount="ngModel" [(ngModel)]="payment.amount" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-default btn-sm" (click)="pay()"><span>Pay</span></button>
+                    </div>
+                    <div class="col-md-6">
+                        <span *ngIf="payment.isFailure" class="text-bolder  text-color-red">{{payment.msg}}</span>
+                        <span *ngIf="!payment.isFailure" class="text-bolder text-color-green">{{payment.msg}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal" id="saleDetailModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row">
+                    <h4 class="modal-title col-md-10">Sale Details</h4>
+                    <button type="button" class="close col-md-2" data-dismiss="modal">&times;</button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="customer">BillID:</label>
+                        <span>{{saleDetails.billId}}</span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="customer">Customer:</label>
+                        <span>{{saleDetails.customer.name}}</span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="customer">Total(Rs):</label>
+                        <span>{{saleDetails.finalTotal}}</span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="customer">Due(Rs):</label>
+                        <span>{{saleDetails.due}}</span>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <table class="table table-responsive table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Quantity</th>
+                                <th>Price (Rs)</th>
+                                <th>Total (Rs)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let each of saleDetails.saleDetails;let i = index">
+                                <td>{{each.product.name}}</td>
+                                <td>{{each.quantity}}</td>
+                                <td>{{each.price}}</td>
+                                <td>{{each.quantity * each.price}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="paymentDetailModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div class="row">
+                    <h4 class="modal-title col-md-10">Payment Details</h4>
+                    <button type="button" class="close col-md-2" data-dismiss="modal">&times;</button>
+                </div>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="customer">BillID:</label>
+                        <span>{{salePayments.billId}}</span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="customer">Customer:</label>
+                        <span>{{salePayments.customer.name}}</span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="customer">Total(Rs):</label>
+                        <span>{{salePayments.finalTotal}}</span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="customer">Due(Rs):</label>
+                        <span>{{salePayments.due}}</span>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <table class="table table-responsive table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Amount (Rs)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let each of salePayments.salePayments;let i = index">
+                                <td>{{each.paymentDate}}</td>
+                                <td>{{each.amount}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

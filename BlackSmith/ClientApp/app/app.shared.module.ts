@@ -8,7 +8,6 @@ import { AppComponent } from './components/app/app.component';
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { HomeComponent } from './components/home/home.component';
 import { CustomerComponent } from './components/customer/customer.component';
-import { PurchaseComponent } from './components/purchase/purchase.component';
 import { ReportComponent } from './components/report/report.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { SuplierComponent } from './components/suplier/suplier.component';
@@ -29,6 +28,9 @@ import { SalePaymentComponent } from './components/sale/salepayment.component';
 import { SaleBillComponent } from './components/sale/salebill.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { SaleSearchComponent } from './components/sale/salesearch.component';
+import { PurchaseBillComponent } from './components/purchase/purchasebill.component';
+import { PurchaseConfigComponent } from './components/purchase/purchaseconfig.component';
+import { PurchaseSearchComponent } from './components/purchase/purchasesearch.component';
 
 @NgModule({
     declarations: [
@@ -42,7 +44,9 @@ import { SaleSearchComponent } from './components/sale/salesearch.component';
         SaleConfigComponent,
         SalePaymentComponent,
         SaleSearchComponent,
-        PurchaseComponent,
+        PurchaseBillComponent,
+        PurchaseConfigComponent,
+        PurchaseSearchComponent,
         ReportComponent,
         DashboardComponent,
         ProductComponent,
@@ -72,8 +76,7 @@ import { SaleSearchComponent } from './components/sale/salesearch.component';
                 children: [
                     { path: 'customer', component: CustomerComponent, outlet: 'homeoutlet' },
                     { path: 'saleconfig', component: SaleConfigComponent, outlet: 'homeoutlet' },
-                    { path: 'salesearch', component: SaleSearchComponent, outlet: 'homeoutlet' },
-                    { path: 'purchase', component: PurchaseComponent, outlet: 'homeoutlet' },
+                    { path: 'purchaseconfig', component: PurchaseConfigComponent, outlet: 'homeoutlet' },
                     { path: 'report', component: ReportComponent, outlet: 'homeoutlet' },
                     { path: 'dashboard', component: DashboardComponent, outlet: 'homeoutlet' },
                     { path: 'product', component: ProductComponent, outlet: 'homeoutlet' },

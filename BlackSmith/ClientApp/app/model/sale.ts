@@ -3,7 +3,7 @@ import { Customer } from "./customer";
 import { Product } from "./product";
 
 export class Sale extends ModelBase {
-    fK_CustomerId: number
+    fK_CustomerId: number;
     note: string;
     cgstRate: number;
     cgstTax: number;

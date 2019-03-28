@@ -1,32 +1,52 @@
 ﻿import { ModelBase } from "./modelbase";
-import { Suplier } from "./suplier";
 import { InventoryItem } from "./inventoryitem";
+import { Suplier } from "./suplier";
 
 export class Purchase extends ModelBase {
-    fK_SuplierId: number;
     note: string;
-    gSTAmount: number;
-    gSTRate: number;
-
-    detail: PurchaseDetail[];
-    payment: PurchasePayment[];
+    cgstRate: number;
+    cgstTax: number;
+    sgstTax: number;
+    sgstRate: number;
+    discount: number;
+    total: number;
+    finalTotal: number;
+    totalPaid: number;
+    billDate: string;
+    finalTotalInWords: string;
+    purchaseDetails: PurchaseDetail[];
+    paymentDetails: PurchasePayment[];
+    isGenerated: boolean = false;
+    due: number;
+    paymentTerm: string;
+    dispatchThru: string;
 }
 
 export class PurchaseDetail extends ModelBase {
-    fK_InventoryItemId: number;
-    fK_PurchaseId: number;
-    quantitiy: number;
+    purchaseDetailNo: number;
+    fK_ItemId: number;
+    fK_SuplierId: number;
+    FK_PurchaseId: number;
+    quantity: number;
     price: number;
-    unit: string;
+    total: number;
+    item: InventoryItem;
+    suplier: Suplier;
 }
 
 export class PurchasePayment extends ModelBase {
     fK_PurchaseId: number;
     amount: number;
     note: number;
+    billId: string;
+    purchase: Purchase;
+    paymentDate: string;
 }
 
+export class PurchaseList extends ModelBase {
+    purchases: Purchase[] = [];
+}
 export class PurchaseLoader extends ModelBase {
-    suplier: Suplier[];
-    inventoryItem: InventoryItem[];
+    supliers: Suplier[];
+    items: InventoryItem[];
 }
