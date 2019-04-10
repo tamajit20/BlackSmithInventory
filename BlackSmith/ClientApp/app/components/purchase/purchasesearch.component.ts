@@ -2,10 +2,8 @@ import { Component, Inject } from '@angular/core';
 import { Http } from '@angular/http';
 import { BaseComponent } from '../base.component';
 import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
-import { Purchase, PurchaseLoader } from '../../model/purchase';
+import { Purchase, PurchaseLoader, PurchasePayment, PurchaseList } from '../../model/purchase';
 import { PurchaseService } from '../../services/purchaseservice';
-import { Sale, SaleLoader, SaleDetail, SaleList, SalePayment } from '../../model/sale';
-import { SaleService } from '../../services/saleservice';
 import { Product } from '../../model/product';
 import { saveAs } from 'file-saver';
 import { SearchObject } from '../../model/searchobject';
@@ -19,11 +17,11 @@ import { Customer } from '../../model/customer';
 
 export class PurchaseSearchComponent extends BaseComponent implements OnInit {
     model: SearchObject;
-    payment: SalePayment = new SalePayment();
-    searchResult: SaleList = new SaleList();
-    loader: SaleLoader = new SaleLoader();
-    saleDetails: Sale = new Sale();
-    salePayments: Sale = new Sale();
+    payment: PurchasePayment = new PurchasePayment();
+    searchResult: PurchaseList = new PurchaseList();
+    loader: PurchaseLoader = new PurchaseLoader();
+    purchaseDetails: Purchase = new Purchase();
+    purchasePayments: Purchase = new Purchase();
 
     myDatePickerOptions = {
         editableDateField: false,
@@ -37,7 +35,7 @@ export class PurchaseSearchComponent extends BaseComponent implements OnInit {
     paymentDate: any = this.today;
 
     constructor(
-        private _service: SaleService
+        private _service: PurchaseService
     ) {
         super();
         let d: Date = new Date();
@@ -45,14 +43,14 @@ export class PurchaseSearchComponent extends BaseComponent implements OnInit {
 
     ngOnInit(): void {
         this.addNew();
-        this.saleDetails.customer = new Customer();
-        this.salePayments.customer = new Customer();
-        this.payment.sale = new Sale();
-        this.payment.sale.customer = new Customer();
+       // this.purchaseDetails.customer = new Customer();
+        //this.purchasePayments.customer = new Customer();
+        this.payment.purchase = new Purchase();
+      //  this.payment.purchase.customer = new Customer();
 
-        this.getAllCustomer();
-        this.getAllProduct();
-        this.loader.products = [];
+        this.getAllSupliers();
+        this.getAllItems();
+        this.loader.items = [];
         this.search();
     }
 
@@ -62,15 +60,15 @@ export class PurchaseSearchComponent extends BaseComponent implements OnInit {
         this.toDate = this.today;
     }
 
-    getAllProduct() {
+    getAllItems() {
         this._service.getAllProduct().subscribe(data => {
-            this.loader.products = data;
+            this.loader.items = data;
         });
     }
 
-    getAllCustomer() {
-        this._service.getAllCustomer().subscribe(data => {
-            this.loader.customers = data;
+    getAllSupliers() {
+        this._service.getAllSuplier().subscribe(data => {
+            this.loader.supliers = data;
         });
     }
 
@@ -88,7 +86,7 @@ export class PurchaseSearchComponent extends BaseComponent implements OnInit {
             this.model.toDate = '01/01/2099';
         }
 
-        this._service.getSaleListOnScreen(this.model).subscribe(data => {
+        this._service.getPurchaseListOnScreen(this.model).subscribe(data => {
             this.searchResult = data;
         });
     }
@@ -106,28 +104,27 @@ export class PurchaseSearchComponent extends BaseComponent implements OnInit {
         else {
             this.model.toDate = '01/01/2099';
         }
-        this._service.getSaleListOnExcel(this.model);
+        this._service.getPurchaseListOnExcel(this.model);
     }
 
-    showSaleDetail(sale: any) {
-        this.saleDetails = sale;
-        this.saleDetails.customer = sale.customer;
+    showPurchaseDetail(purchase: any) {
+        this.purchaseDetails = purchase;
+      //  this.purchaseDetails.suplier = purchase.suplier;
     }
 
-    showPaymentDetail(sale: any) {
-        console.log(sale);
-        this.salePayments = sale;
+    showPaymentDetail(purchase: any) {
+        this.purchasePayments = purchase;
     }
 
     downloadBill(id: any) {
-        const sale = <Sale>({ id: id });
-        this._service.downloadBill(sale);
+        const purchase = <Purchase>({ id: id });
+        this._service.downloadBill(purchase);
     }
 
-    showPayment(sale: any) {
-        this.payment = <SalePayment>({});
-        this.payment.sale = sale;
-        this.payment.fK_SaleId = sale.id;
+    showPayment(purchase: any) {
+        this.payment = <PurchasePayment>({});
+        this.payment.purchase = purchase;
+        this.payment.fK_PurchaseId = purchase.id;
         this.payment.id = 0;
         this.paymentDate = this.today;
     }
@@ -153,7 +150,7 @@ export class PurchaseSearchComponent extends BaseComponent implements OnInit {
         this.payment.isFailure = true;
 
         if (this.payment) {
-            if (!this.payment.fK_SaleId || this.payment.sale.id <= 0) {
+            if (!this.payment.fK_PurchaseId || this.payment.purchase.id <= 0) {
                 this.payment.msg = "Sale not found";
                 return false;
             }
@@ -165,7 +162,7 @@ export class PurchaseSearchComponent extends BaseComponent implements OnInit {
                 this.payment.msg = "Amount can't be zero";
                 return false;
             }
-            if (this.payment.sale.due < this.payment.amount) {
+            if (this.payment.purchase.due < this.payment.amount) {
                 this.payment.msg = "Over payment";
                 return false;
             }

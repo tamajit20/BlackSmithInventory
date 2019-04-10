@@ -35,5 +35,9 @@ export class AppConfig {
     public static PURCHASE_SAVE = "Purchase/Save";
     public static PURCHASE_GETALL = "Purchase/GetAll";
     public static PURCHASE_DELETE = "Purchase/delete";
+    public static PURCHASE_LIST_ONSCREEN = "Purchase/GetPurchaseListOnScreen";
+    public static PURCHASE_LIST_ONEXCEL = "Purchase/GetPurchaseListOnExcel";
+    public static PURCHASE_DOWNLOAD = "Purchase/DownloadBill";
+    public static PURCHASE_PAYMENT = "Purchase/Payment";
 
 }

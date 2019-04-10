@@ -4,7 +4,6 @@ import { BaseComponent } from '../base.component';
 import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
 import { PurchaseService } from '../../services/purchaseservice';
 import { Purchase, PurchaseLoader, PurchaseDetail } from '../../model/purchase';
-import { SaleService } from '../../services/saleservice';
 import { Product } from '../../model/product';
 import { saveAs } from 'file-saver';
 
@@ -28,7 +27,7 @@ export class PurchaseBillComponent extends BaseComponent implements OnInit {
     paymentTerms = ['Cash','Check'];
 
     constructor(
-        private _service: SaleService
+        private _service: PurchaseService
     ) {
         super();
         let d: Date = new Date();
@@ -86,10 +85,6 @@ export class PurchaseBillComponent extends BaseComponent implements OnInit {
         return '0';
     }
 
-    download() {
-        this._service.downloadBill(this.model);
-    }
-
     validate() {
         this.model.msg = "Invalid input";
         this.model.isFailure = true;
@@ -115,11 +110,12 @@ export class PurchaseBillComponent extends BaseComponent implements OnInit {
         if (this.validate()) {
             this.model.isGenerated = false;
             this.model.billDate = this.billDate.date.month + "/" + this.billDate.date.day + "/" + this.billDate.date.year;
+            console.log(this.model);
             this._service.save(this.model).subscribe(data => {
                 this.model = data;
                 if (!this.model.isFailure) {
                     this.model.isGenerated = true;
-                    this.model.msg = "Bill Generated";
+                    this.model.msg = "Purchase added";
                 }
             });
         }
