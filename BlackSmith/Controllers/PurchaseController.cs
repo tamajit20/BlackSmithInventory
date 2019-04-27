@@ -99,15 +99,15 @@ namespace BlackSmithAPI.Controllers
                     sheetData.AppendChild(heading);
 
                     // Inserting each employee
-                    foreach (var eachSale in result.Purchases)
+                    foreach (var each in result.Purchases)
                     {
                         row = new DocumentFormat.OpenXml.Spreadsheet.Row();
 
                         row.Append(
-                            ConstructCell(eachSale.BillId, CellValues.Number),
-                            //ConstructCell(eachSale.Customer.Name, CellValues.String),
-                            ConstructCell(eachSale.FinalTotal.ToString(), CellValues.Number),
-                            ConstructCell(eachSale.BillDate.ToString("dd/MM/yyyy"), CellValues.String));
+                            ConstructCell(each.PurchaseId, CellValues.Number),
+                            //ConstructCell(each.Customer.Name, CellValues.String),
+                            ConstructCell(each.FinalTotal.ToString(), CellValues.Number),
+                            ConstructCell(each.PurchaseDate.ToString("dd/MM/yyyy"), CellValues.String));
 
                         sheetData.AppendChild(row);
                     }
@@ -140,7 +140,7 @@ namespace BlackSmithAPI.Controllers
                     predicate = predicate.And(x => !x.IsDeleted);
 
                     if (!string.IsNullOrWhiteSpace(input.BillId))
-                        predicate = predicate.And(x => x.BillId.ToUpper().Trim() == input.BillId.ToUpper().Trim());
+                        predicate = predicate.And(x => x.PurchaseId.ToUpper().Trim() == input.BillId.ToUpper().Trim());
 
                     if (input.FK_PurchaseId > 0)
                     {
@@ -213,7 +213,7 @@ namespace BlackSmithAPI.Controllers
                 {
                     var input = _purchaseOpp.GetUsingId(Convert.ToInt64(id));
 
-                    using (FileStream file = new FileStream(_configuration["Configuration:BillStorePath"] + input.Id + "_" + input.BillId + ".pdf", FileMode.Open, FileAccess.Read))
+                    using (FileStream file = new FileStream(_configuration["Configuration:BillStorePath"] + input.Id + "_" + input.PurchaseId + ".pdf", FileMode.Open, FileAccess.Read))
                     {
                         byte[] bytes = new byte[file.Length];
                         file.Read(bytes, 0, (int)file.Length);
@@ -244,7 +244,7 @@ namespace BlackSmithAPI.Controllers
                         HardDelete(input);
                     }
 
-                    input.BillDate = DateTime.Now;
+                    input.PurchaseDate = DateTime.Now;
                     if (input != null && input.PurchaseDetails != null)
                     {
 
@@ -304,19 +304,19 @@ namespace BlackSmithAPI.Controllers
                 else
                 {
                     if (input.FromDate != null)
-                        predicate = predicate.And(x => x.BillDate.Date >= input.FromDate.Date);
+                        predicate = predicate.And(x => x.PurchaseDate.Date >= input.FromDate.Date);
 
                     if (input.ToDate != null)
-                        predicate = predicate.And(x => x.BillDate.Date <= input.ToDate.Date);
+                        predicate = predicate.And(x => x.PurchaseDate.Date <= input.ToDate.Date);
                 }
 
                 if (!string.IsNullOrWhiteSpace(input.BillIds))
                 {
                     var billIds = input.BillIds.Split(',').ToList().ConvertAll(c => c.ToUpper().Trim());
-                    predicate = predicate.And(x => billIds.Contains(x.BillId.ToUpper().Trim()));
+                    predicate = predicate.And(x => billIds.Contains(x.PurchaseId.ToUpper().Trim()));
                 }
 
-                result.Purchases = _purchaseOpp.GetAllUsingExpression(out int totalCount, 1, 0, predicate, null, null, exp).OrderByDescending(x => x.BillDate).ToList();
+                result.Purchases = _purchaseOpp.GetAllUsingExpression(out int totalCount, 1, 0, predicate, null, null, exp).OrderByDescending(x => x.PurchaseDate).ToList();
 
                 var predicateProd = PredicateBuilder.True<InventoryItem>();
                 predicateProd = predicateProd.And(x => !x.IsDeleted);
@@ -332,7 +332,7 @@ namespace BlackSmithAPI.Controllers
                             x.PurchaseDetails.ForEach(y =>
                             {
                                 y.Purchase = null;
-                                y.Item = itemList.Where(p => p.Id == y.FK_ItemId).FirstOrDefault();
+                                y.Item = itemList.Where(p => p.Id == y.Fk_InventoryItemId).FirstOrDefault();
                             });
 
                         if (x.PurchasePayments != null)

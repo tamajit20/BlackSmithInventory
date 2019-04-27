@@ -37,8 +37,8 @@
         <table class="table table-responsive table-hover table-striped">
             <thead>
                 <tr>
-                    <th>Bill#</th>
-                    <th>Customer</th>
+                    <!--<th>Purchase#</th>-->
+                    <!--<th>Suplier</th>-->
                     <th> Invoice Date</th>
                     <th>Amount (Rs)</th>
                     <th>Paid (Rs)</th>
@@ -47,26 +47,26 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let eachSale of searchResult.sales;let i = index">
-                    <td>{{eachSale.billId}}</td>
-                    <td>{{eachSale.customer.name}}</td>
-                    <td>{{eachSale.billDate}}</td>
-                    <td>{{eachSale.finalTotal}}</td>
-                    <td>{{eachSale.totalPaid}}</td>
+                <tr *ngFor="let each of searchResult.purchases;let i = index">
+                    <!--<td>{{each.billId}}</td>-->
+                    <!--<td>{{each.suplier.name}}</td>-->
+                    <td>{{each.purchaseDate}}</td>
+                    <td>{{each.finalTotal}}</td>
+                    <td>{{each.totalPaid}}</td>
                     <td>
-                        <button type="button" class="btn btn-info btn-sm" (click)="showSaleDetail(eachSale)" data-toggle="modal" data-target="#saleDetailModal">
+                        <button type="button" class="btn btn-info btn-sm" (click)="showPurchaseDetail(each)" data-toggle="modal" data-target="#purchaseDetailModal">
                             <span class="fa fa-list"></span>
                         </button>
 
-                        <button type="button" class="btn btn-primary btn-sm" (click)="showPaymentDetail(eachSale)" data-toggle="modal" data-target="#paymentDetailModal">
+                        <button type="button" class="btn btn-primary btn-sm" (click)="showPaymentDetail(each)" data-toggle="modal" data-target="#paymentDetailModal">
                             <span class="fa fa-credit-card"></span>
                         </button>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-danger btn-sm" (click)="downloadBill(eachSale.id)">
+                        <button type="button" class="btn btn-danger btn-sm" (click)="downloadBill(each.id)">
                             <span class="fa fa-file-pdf-o"></span>
                         </button>
-                        <button type="button" class="btn btn-primary btn-sm" (click)="showPayment(eachSale)" data-toggle="modal" data-target="#paymentModal">
+                        <button type="button" class="btn btn-primary btn-sm" (click)="showPayment(each)" data-toggle="modal" data-target="#paymentModal">
                             <span class="fa fa-credit-card"></span>
                         </button>
                     </td>
@@ -76,12 +76,70 @@
     </div>
 </div>
 
+<div class="modal" id="purchaseDetailModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row">
+                    <h4 class="modal-title col-md-10">Purchase Details</h4>
+                    <button type="button" class="close col-md-2" data-dismiss="modal">&times;</button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <!--<div class="col-md-3">
+                        <label for="customer">BillID:</label>
+                        <span>{{saleDetails.billId}}</span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="customer">Customer:</label>
+                        <span>{{saleDetails.customer.name}}</span>
+                    </div>-->
+
+                    <div class="col-md-3">
+                        <label for="customer">Total(Rs):</label>
+                        <span>{{purchaseDetails.finalTotal}}</span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="customer">Due(Rs):</label>
+                        <span>{{purchaseDetails.due}}</span>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <table class="table table-responsive table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <!--<th>Suplier</th>-->
+                                <th>Item</th>
+                                <th>Quantity</th>
+                                <th>Price (Rs)</th>
+                                <th>Total (Rs)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let each of purchaseDetails.purchaseDetails;let i = index">
+                                <!--<td>{{each.item.name}}</td>-->
+                                <td>{{each.item.name}}</td>
+                                <td>{{each.quantity}}</td>
+                                <td>{{each.price}}</td>
+                                <td>{{each.quantity * each.price}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="modal" id="paymentModal">
     <div class="modal-dialog">
         <div class="modal-content">
 
-            <!-- Modal Header -->
             <div class="modal-header">
                 <div class="row">
                     <h4 class="modal-title col-md-10">Payment</h4>
@@ -92,23 +150,23 @@
             <div class="modal-body" *ngIf="payment">
                 <div class="row">
                     <div class="col-md-3">
-                        <label for="customer">BillID:</label>
-                        <span>{{payment.sale.billId}}</span>
+                        <label for="customer">Purchase Id:</label>
+                        <span>{{payment.purchase.purchaseId}}</span>
                     </div>
 
-                    <div class="col-md-3">
-                        <label for="customer">Customer:</label>
-                        <span>{{payment.sale.customer.name}}</span>
-                    </div>
+                    <!--<div class="col-md-3">
+                        <label for="customer">Suplier:</label>
+                        <span>{{payment.purchase.suplier.name}}</span>
+                    </div>-->
 
                     <div class="col-md-3">
                         <label for="customer">Total(Rs):</label>
-                        <span>{{payment.sale.finalTotal}}</span>
+                        <span>{{payment.purchase.finalTotal}}</span>
                     </div>
 
                     <div class="col-md-3">
                         <label for="customer">Due(Rs):</label>
-                        <span>{{payment.sale.due}}</span>
+                        <span>{{payment.purchase.due}}</span>
                     </div>
 
                 </div>
@@ -137,64 +195,6 @@
 </div>
 
 
-<div class="modal" id="saleDetailModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="row">
-                    <h4 class="modal-title col-md-10">Sale Details</h4>
-                    <button type="button" class="close col-md-2" data-dismiss="modal">&times;</button>
-                </div>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-3">
-                        <label for="customer">BillID:</label>
-                        <span>{{saleDetails.billId}}</span>
-                    </div>
-
-                    <div class="col-md-3">
-                        <label for="customer">Customer:</label>
-                        <span>{{saleDetails.customer.name}}</span>
-                    </div>
-
-                    <div class="col-md-3">
-                        <label for="customer">Total(Rs):</label>
-                        <span>{{saleDetails.finalTotal}}</span>
-                    </div>
-
-                    <div class="col-md-3">
-                        <label for="customer">Due(Rs):</label>
-                        <span>{{saleDetails.due}}</span>
-                    </div>
-
-                </div>
-
-                <div class="row">
-                    <table class="table table-responsive table-hover table-striped">
-                        <thead>
-                            <tr>
-                                <th>Item</th>
-                                <th>Quantity</th>
-                                <th>Price (Rs)</th>
-                                <th>Total (Rs)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let each of saleDetails.saleDetails;let i = index">
-                                <td>{{each.product.name}}</td>
-                                <td>{{each.quantity}}</td>
-                                <td>{{each.price}}</td>
-                                <td>{{each.quantity * each.price}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div class="modal" id="paymentDetailModal">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -206,27 +206,26 @@
                 </div>
             </div>
 
-            <!-- Modal body -->
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-3">
                         <label for="customer">BillID:</label>
-                        <span>{{salePayments.billId}}</span>
+                        <span>{{purchasePayments.purchaseId}}</span>
                     </div>
 
-                    <div class="col-md-3">
+                    <!--<div class="col-md-3">
                         <label for="customer">Customer:</label>
-                        <span>{{salePayments.customer.name}}</span>
-                    </div>
+                        <span>{{purchasePayments.suplier.name}}</span>
+                    </div>-->
 
                     <div class="col-md-3">
                         <label for="customer">Total(Rs):</label>
-                        <span>{{salePayments.finalTotal}}</span>
+                        <span>{{purchasePayments.finalTotal}}</span>
                     </div>
 
                     <div class="col-md-3">
                         <label for="customer">Due(Rs):</label>
-                        <span>{{salePayments.due}}</span>
+                        <span>{{purchasePayments.due}}</span>
                     </div>
 
                 </div>
@@ -239,7 +238,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let each of salePayments.salePayments;let i = index">
+                            <tr *ngFor="let each of purchasePayments.purchasePayments;let i = index">
                                 <td>{{each.paymentDate}}</td>
                                 <td>{{each.amount}}</td>
                             </tr>

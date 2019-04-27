@@ -109,6 +109,7 @@ export class PurchaseSearchComponent extends BaseComponent implements OnInit {
 
     showPurchaseDetail(purchase: any) {
         this.purchaseDetails = purchase;
+        console.log(this.purchaseDetails);
       //  this.purchaseDetails.suplier = purchase.suplier;
     }
 
@@ -130,7 +131,6 @@ export class PurchaseSearchComponent extends BaseComponent implements OnInit {
     }
 
     pay() {
-        console.log(this.payment);
         if (this.validate()) {
             this.payment.paymentDate = this.paymentDate.date.month + "/" + this.paymentDate.date.day + "/" + this.paymentDate.date.year;
 

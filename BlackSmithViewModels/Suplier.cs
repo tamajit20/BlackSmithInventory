@@ -6,16 +6,12 @@ using System.Threading.Tasks;
 
 namespace ViewModels
 {
-
-
-
-
-
     public class Suplier : BaseModel
     {
         public string Name { get; set; }
         public string Address { get; set; }
         public string ContactNo { get; set; }
-        public string EmailId { get; set; }       
+        public string EmailId { get; set; }
+        public List<PurchaseDetail> PurchaseDetails { get; set; }
     }
 }

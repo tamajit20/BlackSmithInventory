@@ -12,7 +12,7 @@ export class Purchase extends ModelBase {
     total: number;
     finalTotal: number;
     totalPaid: number;
-    billDate: string;
+    purchaseDate: string;
     finalTotalInWords: string;
     purchaseDetails: PurchaseDetail[];
     paymentDetails: PurchasePayment[];
@@ -20,11 +20,12 @@ export class Purchase extends ModelBase {
     due: number;
     paymentTerm: string;
     dispatchThru: string;
+    purchaseId: string;
 }
 
 export class PurchaseDetail extends ModelBase {
     purchaseDetailNo: number;
-    fK_ItemId: number;
+    fk_InventoryItemId: number;
     fK_SuplierId: number;
     FK_PurchaseId: number;
     quantity: number;

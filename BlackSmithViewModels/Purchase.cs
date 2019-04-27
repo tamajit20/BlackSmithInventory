@@ -14,8 +14,8 @@ namespace ViewModels
         public virtual double SGSTRate { get; set; }
         public virtual double SGSTTax { get; set; }
         public virtual string Note { get; set; }
-        public virtual string BillId { get; set; }
-        public virtual DateTime BillDate { get; set; }
+        public virtual string PurchaseId { get; set; }
+        public virtual DateTime PurchaseDate { get; set; }
         public virtual double Total { get; set; }
         public virtual double FinalTotal { get; set; }
         public virtual string FinalTotalInWords { get; set; }
@@ -33,7 +33,7 @@ namespace ViewModels
     {
         public virtual long FK_PurchaseId { get; set; }
         public virtual long FK_SuplierId { get; set; }
-        public virtual long FK_ItemId { get; set; }
+        public virtual long Fk_InventoryItemId { get; set; }
         public virtual double Price { get; set; }
         public virtual double Quantity { get; set; }
         public virtual Purchase Purchase { get; set; }

@@ -3,7 +3,7 @@
         <label for="customer">Date</label>
     </div>
     <div class="col-md-2 height-30px">
-        <my-date-picker [options]="myDatePickerOptions" [(ngModel)]="billDate"></my-date-picker>
+        <my-date-picker [options]="myDatePickerOptions" [(ngModel)]="purchaseDate"></my-date-picker>
     </div>
 
     <div class="col-md-1">
@@ -43,16 +43,16 @@
         <span *ngIf="model.isFailure" class="text-bolder  text-color-red">{{model.msg}}</span>
         <span *ngIf="!model.isFailure && model.isGenerated">
             <span class="text-bolder text-color-green">{{model.msg}}</span>
-            <span *ngIf="model.billId">
+            <span *ngIf="model.purchaseId">
                 <span class="vl"></span>
-                <span class="text-bolder">Bill ID : </span>
-                <span class="text-color-red text-bolder">{{model.billId}}</span>
+                <span class="text-bolder">Purchase ID : </span>
+                <span class="text-color-red text-bolder">{{model.purchaseId}}</span>
             </span>
         </span>
     </div>
 
     <div class="col-md-5">
-        <button *ngIf="model.billId && model.isGenerated" type="button" class="btn btn-warning btn-sm" (click)="download()">
+        <button *ngIf="model.purchaseId && model.isGenerated" type="button" class="btn btn-warning btn-sm" (click)="download()">
             <span class="fa fa-download"></span>
         </button>
         <button type="button" class="btn btn-info btn-sm pull-right" (click)="addNew()">
@@ -89,7 +89,7 @@
                     </select>
                 </td>
                 <td>
-                    <select class="height-30px form-control" name="fK_ItemId" #fK_ItemId="ngModel" [(ngModel)]="model.purchaseDetails[getIndexByDetailNo(eachPurchaseDetail.purchaseDetailNo)].fK_ItemId" required>
+                    <select class="height-30px form-control" name="fK_ItemId" #fk_InventoryItemId="ngModel" [(ngModel)]="model.purchaseDetails[getIndexByDetailNo(eachPurchaseDetail.purchaseDetailNo)].fK_ItemId" required>
                         <option value="" selected disabled hidden>Select</option>
                         <option *ngFor="let each of loader.items" [value]="each.id">
                             {{each.name}}

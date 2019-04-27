@@ -23,7 +23,7 @@ export class PurchaseBillComponent extends BaseComponent implements OnInit {
         dateFormat: 'dd/mm/yyyy'
     };
     today = { date: { year: (new Date()).getFullYear(), month: (new Date()).getMonth() + 1, day: (new Date()).getDate() } };
-    billDate: any = this.today;
+    purchaseDate: any = this.today;
     paymentTerms = ['Cash','Check'];
 
     constructor(
@@ -45,7 +45,7 @@ export class PurchaseBillComponent extends BaseComponent implements OnInit {
 
     addNew() {
         this.model = <Purchase>({ isFailure: false });
-        this.billDate = this.today;
+        this.purchaseDate = this.today;
         this.model.purchaseDetails = [];
     }
 
@@ -64,7 +64,7 @@ export class PurchaseBillComponent extends BaseComponent implements OnInit {
     addNewPurchaseDetail() {
         this.model.isGenerated = false;
         this.currentPurchaseDetailNo = this.currentPurchaseDetailNo + 1;
-        const newPurchaseDetail = <PurchaseDetail>({ FK_PurchaseId: 0, purchaseDetailNo: this.currentPurchaseDetailNo, price: 0, quantity: 0, fK_ItemId: 1, total: 0 });
+        const newPurchaseDetail = <PurchaseDetail>({ FK_PurchaseId: 0, purchaseDetailNo: this.currentPurchaseDetailNo, price: 0, quantity: 0, fk_InventoryItemId: 1, total: 0 });
         this.model.purchaseDetails.push(newPurchaseDetail);
     }
 
@@ -89,8 +89,8 @@ export class PurchaseBillComponent extends BaseComponent implements OnInit {
         this.model.msg = "Invalid input";
         this.model.isFailure = true;
         if (this.model) {
-            if (!this.billDate) {
-                this.model.msg = "Invalid Bill Date";
+            if (!this.purchaseDate) {
+                this.model.msg = "Invalid Purchase Date";
                 return false;
             }
            
@@ -109,7 +109,7 @@ export class PurchaseBillComponent extends BaseComponent implements OnInit {
     save() {
         if (this.validate()) {
             this.model.isGenerated = false;
-            this.model.billDate = this.billDate.date.month + "/" + this.billDate.date.day + "/" + this.billDate.date.year;
+            this.model.purchaseDate = this.purchaseDate.date.month + "/" + this.purchaseDate.date.day + "/" + this.purchaseDate.date.year;
             console.log(this.model);
             this._service.save(this.model).subscribe(data => {
                 this.model = data;
