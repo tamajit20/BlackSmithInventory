@@ -21,9 +21,11 @@ namespace ViewModels
         public virtual string FinalTotalInWords { get; set; }
         public string PaymentTerm { get; set; }
         public string DispatchThru { get; set; }
+        public virtual long FK_SuplierId { get; set; }
 
         public virtual List<PurchaseDetail> PurchaseDetails { get; set; }
         public virtual List<PurchasePayment> PurchasePayments { get; set; }
+        public virtual Suplier Suplier { get; set; }
 
         public virtual double TotalPaid { get; set; }
         public virtual double Due { get; set; }
@@ -32,7 +34,6 @@ namespace ViewModels
     public class PurchaseDetail : BaseModel
     {
         public virtual long FK_PurchaseId { get; set; }
-        public virtual long FK_SuplierId { get; set; }
         public virtual long Fk_InventoryItemId { get; set; }
         public virtual double Price { get; set; }
         public virtual double Quantity { get; set; }
@@ -40,7 +41,6 @@ namespace ViewModels
         public virtual long PurchaseDetailNo { get; set; }
         public virtual double Total { get; set; }
         public virtual InventoryItem Item { get; set; }
-        public virtual Suplier Suplier { get; set; }
     }
 
     public class PurchasePayment : BaseModel

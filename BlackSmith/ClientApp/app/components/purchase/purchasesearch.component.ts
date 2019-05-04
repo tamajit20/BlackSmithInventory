@@ -7,7 +7,7 @@ import { PurchaseService } from '../../services/purchaseservice';
 import { Product } from '../../model/product';
 import { saveAs } from 'file-saver';
 import { SearchObject } from '../../model/searchobject';
-import { Customer } from '../../model/customer';
+import { Suplier } from '../../model/suplier';
 
 @Component({
     selector: 'purchasesearch',
@@ -43,10 +43,10 @@ export class PurchaseSearchComponent extends BaseComponent implements OnInit {
 
     ngOnInit(): void {
         this.addNew();
-       // this.purchaseDetails.customer = new Customer();
-        //this.purchasePayments.customer = new Customer();
+        this.purchaseDetails.suplier = new Suplier();
+        this.purchasePayments.suplier = new Suplier();
         this.payment.purchase = new Purchase();
-      //  this.payment.purchase.customer = new Customer();
+        this.payment.purchase.suplier = new Suplier();
 
         this.getAllSupliers();
         this.getAllItems();
@@ -109,8 +109,7 @@ export class PurchaseSearchComponent extends BaseComponent implements OnInit {
 
     showPurchaseDetail(purchase: any) {
         this.purchaseDetails = purchase;
-        console.log(this.purchaseDetails);
-      //  this.purchaseDetails.suplier = purchase.suplier;
+        this.purchaseDetails.suplier = purchase.suplier;
     }
 
     showPaymentDetail(purchase: any) {
@@ -140,6 +139,7 @@ export class PurchaseSearchComponent extends BaseComponent implements OnInit {
                 if (!this.payment.isFailure) {
                     this.payment.msg = "Payment Successful";
                     this.search();
+                    console.log(this.payment);
                 }
             });
         }

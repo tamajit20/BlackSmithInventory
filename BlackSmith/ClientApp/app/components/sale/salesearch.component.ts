@@ -115,7 +115,6 @@ export class SaleSearchComponent extends BaseComponent implements OnInit {
     }
 
     showPaymentDetail(sale: any) {
-        console.log(sale);
         this.salePayments = sale;
     }
 
@@ -127,13 +126,13 @@ export class SaleSearchComponent extends BaseComponent implements OnInit {
     showPayment(sale: any) {
         this.payment = <SalePayment>({});
         this.payment.sale = sale;
+        console.log(this.payment);
         this.payment.fK_SaleId = sale.id;
         this.payment.id = 0;
         this.paymentDate = this.today;
     }
 
     pay() {
-        console.log(this.payment);
         if (this.validate()) {
             this.payment.paymentDate = this.paymentDate.date.month + "/" + this.paymentDate.date.day + "/" + this.paymentDate.date.year;
 

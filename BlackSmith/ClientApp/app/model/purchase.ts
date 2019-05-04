@@ -21,12 +21,13 @@ export class Purchase extends ModelBase {
     paymentTerm: string;
     dispatchThru: string;
     purchaseId: string;
+    fK_SuplierId: number;
+    suplier: Suplier;
 }
 
 export class PurchaseDetail extends ModelBase {
     purchaseDetailNo: number;
     fk_InventoryItemId: number;
-    fK_SuplierId: number;
     FK_PurchaseId: number;
     quantity: number;
     price: number;

@@ -135,7 +135,7 @@ namespace BlackSmithAPI.Controllers
             {
                 if (input != null)
                 {
-                    Expression<Func<Purchase, object>>[] exp = new Expression<Func<Purchase, object>>[] { x => x.PurchasePayments, x => x.PurchaseDetails };
+                    Expression<Func<Purchase, object>>[] exp = new Expression<Func<Purchase, object>>[] { x => x.PurchasePayments, x => x.PurchaseDetails , x=>x.Suplier};
                     var predicate = PredicateBuilder.True<Purchase>();
                     predicate = predicate.And(x => !x.IsDeleted);
 
@@ -163,6 +163,9 @@ namespace BlackSmithAPI.Controllers
                         //nullifying to avoid object chain
                         if (result.PurchasePayments != null)
                             result.PurchasePayments.ForEach(x => x.Purchase = null);
+
+                        if (result.Suplier != null)
+                            result.Suplier.Purchases = null;
 
                         if (result.PurchaseDetails != null)
                             result.PurchaseDetails.ForEach(x => x.Purchase = null);
@@ -292,7 +295,7 @@ namespace BlackSmithAPI.Controllers
             PurchaseList result = new PurchaseList();
             try
             {
-                Expression<Func<Purchase, object>>[] exp = new Expression<Func<Purchase, object>>[] { x => x.PurchasePayments, x => x.PurchaseDetails };
+                Expression<Func<Purchase, object>>[] exp = new Expression<Func<Purchase, object>>[] { x => x.PurchasePayments, x => x.PurchaseDetails,x=>x.Suplier };
                 var predicate = PredicateBuilder.True<Purchase>();
                 predicate = predicate.And(x => !x.IsDeleted);
 
@@ -337,6 +340,9 @@ namespace BlackSmithAPI.Controllers
 
                         if (x.PurchasePayments != null)
                             x.PurchasePayments.ForEach(y => { y.Purchase = null; x.TotalPaid = x.TotalPaid + y.Amount; });
+
+                        if (x.Suplier != null)
+                            x.Suplier.Purchases = null;
 
                         x.Due = Math.Round(x.FinalTotal - x.TotalPaid, 2);
 

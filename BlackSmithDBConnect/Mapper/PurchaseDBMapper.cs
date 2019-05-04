@@ -26,6 +26,7 @@ namespace BlackSmithDBConnect
             builder.Property(c => c.FinalTotal);
             builder.Property(c => c.DispatchThru);
             builder.Property(c => c.PaymentTerm);
+            builder.Property(c => c.FK_SuplierId);
 
             builder.Property(c => c.CreatedOn);
             builder.Property(c => c.CreatedBy);
@@ -35,6 +36,8 @@ namespace BlackSmithDBConnect
             builder.Ignore(c=>c.FinalTotalInWords);
             builder.Ignore(c => c.TotalPaid);
             builder.Ignore(c => c.Due);
+
+            builder.HasOne(p => p.Suplier).WithMany(f => f.Purchases).HasForeignKey(k => k.FK_SuplierId);
 
             builder.ToTable("tPurchase");
         }
@@ -49,7 +52,6 @@ namespace BlackSmithDBConnect
             builder.Property(c => c.FK_PurchaseId);
             builder.Property(c => c.Price);
             builder.Property(c => c.Quantity);
-            builder.Property(c => c.FK_SuplierId);
 
             builder.Property(c => c.CreatedOn);
             builder.Property(c => c.CreatedBy);
@@ -61,7 +63,6 @@ namespace BlackSmithDBConnect
 
             builder.HasOne(p => p.Purchase).WithMany(f => f.PurchaseDetails).HasForeignKey(k => k.FK_PurchaseId);
             builder.HasOne(p => p.Item).WithMany(f => f.PurchaseDetails).HasForeignKey(k => k.Fk_InventoryItemId);
-            builder.HasOne(p => p.Suplier).WithMany(f => f.PurchaseDetails).HasForeignKey(k => k.FK_SuplierId);
 
             builder.ToTable("tPurchaseDetail");
         }

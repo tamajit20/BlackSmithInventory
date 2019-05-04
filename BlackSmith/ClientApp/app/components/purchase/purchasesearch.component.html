@@ -90,12 +90,12 @@
                     <!--<div class="col-md-3">
                         <label for="customer">BillID:</label>
                         <span>{{saleDetails.billId}}</span>
-                    </div>
+                    </div>-->
 
                     <div class="col-md-3">
-                        <label for="customer">Customer:</label>
-                        <span>{{saleDetails.customer.name}}</span>
-                    </div>-->
+                        <label for="customer">Suplier:</label>
+                        <span>{{purchaseDetails.suplier.name}}</span>
+                    </div>
 
                     <div class="col-md-3">
                         <label for="customer">Total(Rs):</label>
@@ -113,7 +113,6 @@
                     <table class="table table-responsive table-hover table-striped">
                         <thead>
                             <tr>
-                                <!--<th>Suplier</th>-->
                                 <th>Item</th>
                                 <th>Quantity</th>
                                 <th>Price (Rs)</th>
@@ -122,7 +121,6 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let each of purchaseDetails.purchaseDetails;let i = index">
-                                <!--<td>{{each.item.name}}</td>-->
                                 <td>{{each.item.name}}</td>
                                 <td>{{each.quantity}}</td>
                                 <td>{{each.price}}</td>
@@ -149,15 +147,15 @@
 
             <div class="modal-body" *ngIf="payment">
                 <div class="row">
-                    <div class="col-md-3">
+                    <!--<div class="col-md-3">
                         <label for="customer">Purchase Id:</label>
                         <span>{{payment.purchase.purchaseId}}</span>
-                    </div>
+                    </div>-->
 
-                    <!--<div class="col-md-3">
+                    <div class="col-md-3">
                         <label for="customer">Suplier:</label>
                         <span>{{payment.purchase.suplier.name}}</span>
-                    </div>-->
+                    </div>
 
                     <div class="col-md-3">
                         <label for="customer">Total(Rs):</label>
@@ -208,15 +206,15 @@
 
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-3">
+                    <!--<div class="col-md-3">
                         <label for="customer">BillID:</label>
                         <span>{{purchasePayments.purchaseId}}</span>
-                    </div>
-
-                    <!--<div class="col-md-3">
-                        <label for="customer">Customer:</label>
-                        <span>{{purchasePayments.suplier.name}}</span>
                     </div>-->
+
+                    <div class="col-md-3">
+                        <label for="customer">Suplier:</label>
+                        <span>{{purchasePayments.suplier.name}}</span>
+                    </div>
 
                     <div class="col-md-3">
                         <label for="customer">Total(Rs):</label>

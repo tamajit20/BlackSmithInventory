@@ -1,5 +1,17 @@
 <div class="row">
     <div class="col-md-1">
+        <label for="customer">Suplier</label>
+    </div>
+    <div class="col-md-2">
+        <select class="height-30px form-control" name="fK_SuplierId" #fK_SuplierId="ngModel" [(ngModel)]="model.fK_SuplierId" required>
+            <option value="" selected disabled hidden>Select</option>
+            <option *ngFor="let each of loader.supliers" [value]="each.id">
+                {{each.name}}
+            </option>
+        </select>
+    </div>    
+
+    <div class="col-md-1">
         <label for="customer">Date</label>
     </div>
     <div class="col-md-2 height-30px">
@@ -43,11 +55,11 @@
         <span *ngIf="model.isFailure" class="text-bolder  text-color-red">{{model.msg}}</span>
         <span *ngIf="!model.isFailure && model.isGenerated">
             <span class="text-bolder text-color-green">{{model.msg}}</span>
-            <span *ngIf="model.purchaseId">
+            <!--<span *ngIf="model.purchaseId">
                 <span class="vl"></span>
                 <span class="text-bolder">Purchase ID : </span>
                 <span class="text-color-red text-bolder">{{model.purchaseId}}</span>
-            </span>
+            </span>-->
         </span>
     </div>
 
@@ -65,7 +77,6 @@
         <thead>
             <tr>
                 <th class="width-5em">SL#</th>
-                <th>Suplier</th>
                 <th>Item</th>
                 <th>Quantity</th>
                 <th>Price (Rs)</th>
@@ -79,15 +90,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let eachPurchaseDetail of model.purchaseDetails;let i = index">
-                <td class="width-5em">{{i+1}}</td>
-                <td>
-                    <select class="height-30px form-control" name="fK_ItemId" #fK_SuplierId="ngModel" [(ngModel)]="model.purchaseDetails[getIndexByDetailNo(eachPurchaseDetail.purchaseDetailNo)].fK_SuplierId" required>
-                        <option value="" selected disabled hidden>Select</option>
-                        <option *ngFor="let each of loader.supliers" [value]="each.id">
-                            {{each.name}}
-                        </option>
-                    </select>
-                </td>
+                <td class="width-5em">{{i+1}}</td>                
                 <td>
                     <select class="height-30px form-control" name="fK_ItemId" #fk_InventoryItemId="ngModel" [(ngModel)]="model.purchaseDetails[getIndexByDetailNo(eachPurchaseDetail.purchaseDetailNo)].fK_ItemId" required>
                         <option value="" selected disabled hidden>Select</option>
