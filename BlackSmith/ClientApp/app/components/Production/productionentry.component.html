@@ -1,0 +1,88 @@
+<div class="row">
+    <div class="col-md-1">
+        <label for="customer">Date</label>
+    </div>
+    <div class="col-md-2 height-30px">
+        <my-date-picker [options]="myDatePickerOptions" [(ngModel)]="productionDate"></my-date-picker>
+    </div>
+
+    <div class="col-md-4">
+        <button type="button" class="btn btn-success btn-sm" (click)="save()">
+            <span class="btn-default"></span> Save
+        </button>
+        <span *ngIf="model.isFailure" class="text-bolder  text-color-red">{{model.msg}}</span>
+
+    </div>
+
+    <div class="col-md-5">
+        <button type="button" class="btn btn-info btn-sm pull-right" (click)="addNew()">
+            <span class="btn-info"></span> New
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <table class="table table-responsive table-hover table-striped">
+            <thead>
+                <tr>
+                    <th class="width-5em">SL#</th>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>
+                        <button type="button" class="btn btn-default btn-sm" (click)="addNewProduct()">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let eachProduct of model.productionProducts;let i = index">
+                    <td class="width-5em">{{i+1}}</td>
+                    <td>
+                        <select class="height-30px form-control" name="fK_ProductId" #fK_ProductId="ngModel" [(ngModel)]="model.productionProducts[getProductIndexByDetailNo(eachProduct.detailNo)].fK_ProductId" required>
+                            <option value="" selected disabled hidden>Select</option>
+                            <option *ngFor="let each of loader.products" [value]="each.id">
+                                {{each.name}}
+                            </option>
+                        </select>
+                    </td>
+                    <td><input class="inputText" type="number" max="999999" name="productquantity_{{i}}" #productquantity="ngModel" [(ngModel)]="model.productionProducts[getProductIndexByDetailNo(eachProduct.detailNo)].quantity" required></td>
+                    <td><a href="javascript:void(0)" (click)="deleteProduct(eachProduct.detailNo)"><span class="glyphicon glyphicon-remove"></span></a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-6">
+        <table class="table table-responsive table-hover table-striped">
+            <thead>
+                <tr>
+                    <th class="width-5em">SL#</th>
+                    <th>Inventory</th>
+                    <th>Quantity</th>
+                    <th>
+                        <button type="button" class="btn btn-default btn-sm" (click)="addNewItem()">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let eachItem of model.productionItems;let i = index">
+                    <td class="width-5em">{{i+1}}</td>
+                    <td>
+                        <select class="height-30px form-control" name="fK_inventoryItemId" #fK_inventoryItemId="ngModel" [(ngModel)]="model.productionItems[getItemIndexByDetailNo(eachItem.detailNo)].fK_inventoryItemId" required>
+                            <option value="" selected disabled hidden>Select</option>
+                            <option *ngFor="let each of loader.items" [value]="each.id">
+                                {{each.name}}
+                            </option>
+                        </select>
+                    </td>
+                    <td><input class="inputText" type="number" max="999999" name="itemquantity_{{i}}" #itemquantity="ngModel" [(ngModel)]="model.productionItems[getItemIndexByDetailNo(eachItem.detailNo)].quantity" required></td>
+                    <td><a href="javascript:void(0)" (click)="deleteItem(eachItem.detailNo)"><span class="glyphicon glyphicon-remove"></span></a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

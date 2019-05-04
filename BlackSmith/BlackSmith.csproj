@@ -31,6 +31,7 @@
     <None Remove="ClientApp\app\model\inventoryitem.ts" />
     <None Remove="ClientApp\app\model\modelbase.ts" />
     <None Remove="ClientApp\app\model\product.ts" />
+    <None Remove="ClientApp\app\model\production.ts" />
     <None Remove="ClientApp\app\model\purchase.ts" />
     <None Remove="ClientApp\app\model\sale.ts" />
     <None Remove="ClientApp\app\model\searchobject.ts" />
@@ -38,6 +39,7 @@
     <None Remove="ClientApp\app\model\user.ts" />
     <None Remove="ClientApp\app\services\customerservice.ts" />
     <None Remove="ClientApp\app\services\inventoryitemservice.ts" />
+    <None Remove="ClientApp\app\services\productionservice.ts" />
     <None Remove="ClientApp\app\services\productservice.ts" />
     <None Remove="ClientApp\app\services\purchaseservice.ts" />
     <None Remove="ClientApp\app\services\reportservice.ts" />
@@ -54,6 +56,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\app\model\production.ts" />
     <TypeScriptCompile Include="ClientApp\app\model\searchobject.ts" />
     <TypeScriptCompile Include="ClientApp\app\model\modelbase.ts" />
     <TypeScriptCompile Include="ClientApp\app\model\user.ts" />
@@ -63,6 +66,7 @@
     <TypeScriptCompile Include="ClientApp\app\model\product.ts" />
     <TypeScriptCompile Include="ClientApp\app\model\inventoryitem.ts" />
     <TypeScriptCompile Include="ClientApp\app\model\customer.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\productionservice.ts" />
     <TypeScriptCompile Include="ClientApp\app\services\userservice.ts" />
     <TypeScriptCompile Include="ClientApp\app\services\sharedservice.ts" />
     <TypeScriptCompile Include="ClientApp\app\services\reportservice.ts" />

@@ -31,6 +31,9 @@ import { SaleSearchComponent } from './components/sale/salesearch.component';
 import { PurchaseBillComponent } from './components/purchase/purchasebill.component';
 import { PurchaseConfigComponent } from './components/purchase/purchaseconfig.component';
 import { PurchaseSearchComponent } from './components/purchase/purchasesearch.component';
+import { ProductionEntryComponent } from './components/Production/productionentry.component';
+import { ProductionConfigComponent } from './components/Production/productionconfig.component';
+import { ProductionService } from './services/productionservice';
 
 @NgModule({
     declarations: [
@@ -42,6 +45,8 @@ import { PurchaseSearchComponent } from './components/purchase/purchasesearch.co
         CustomerComponent,
         SaleBillComponent,
         SaleConfigComponent,
+        ProductionConfigComponent,
+        ProductionEntryComponent,
         SalePaymentComponent,
         SaleSearchComponent,
         PurchaseBillComponent,
@@ -60,7 +65,8 @@ import { PurchaseSearchComponent } from './components/purchase/purchasesearch.co
         ProductSerivce,
         UserService,
         PurchaseService,
-        SaleService
+        SaleService,
+        ProductionService
     ],
     imports: [
        // CommonModule,
@@ -76,6 +82,7 @@ import { PurchaseSearchComponent } from './components/purchase/purchasesearch.co
                 children: [
                     { path: 'customer', component: CustomerComponent, outlet: 'homeoutlet' },
                     { path: 'saleconfig', component: SaleConfigComponent, outlet: 'homeoutlet' },
+                    { path: 'productionconfig', component: ProductionConfigComponent, outlet: 'homeoutlet' },
                     { path: 'purchaseconfig', component: PurchaseConfigComponent, outlet: 'homeoutlet' },
                     { path: 'report', component: ReportComponent, outlet: 'homeoutlet' },
                     { path: 'dashboard', component: DashboardComponent, outlet: 'homeoutlet' },

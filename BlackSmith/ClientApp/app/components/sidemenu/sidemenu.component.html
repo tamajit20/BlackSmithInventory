@@ -23,7 +23,7 @@
                     <a [routerLink]="['/home', { outlets: {homeoutlet:['saleconfig']}}]">
                         <span class='glyphicon glyphicon-th-list'></span> Sale
                     </a>
-                </li>                
+                </li>
             </ul>
 
 
@@ -46,6 +46,17 @@
                         <span class='glyphicon glyphicon-th-list'></span> Purchase
                     </a>
                 </li>
+            </ul>
+
+            <li data-toggle="collapse" data-target="#production" class="collapsed active">
+                <a><i class="fa fa-gift fa-lg"></i>Production <span class="arrow"></span></a>
+            </li>
+            <ul class="sub-menu collapse" id="production">
+                <li [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/home', { outlets: {homeoutlet:['productionconfig']}}]">
+                        <span class='glyphicon glyphicon-th-list'></span> Production
+                    </a>
+                </li>               
             </ul>
         </ul>
     </div>

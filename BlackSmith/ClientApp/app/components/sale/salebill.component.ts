@@ -32,7 +32,6 @@ export class SaleBillComponent extends BaseComponent implements OnInit {
         private _service: SaleService
     ) {
         super();
-        let d: Date = new Date();
     }
 
     ngOnInit(): void {
@@ -66,7 +65,7 @@ export class SaleBillComponent extends BaseComponent implements OnInit {
     addNewSaleDetail() {
         this.model.isGenerated = false;
         this.currentSaleDetailNo = this.currentSaleDetailNo + 1;
-        const newSaleDetail = <SaleDetail>({ FK_SaleId: 0, saleDetailNo: this.currentSaleDetailNo, price: 0, quantity: 0, fK_ProductId: 1, total: 0 });
+        const newSaleDetail = <SaleDetail>({  saleDetailNo: this.currentSaleDetailNo });
         this.model.saleDetails.push(newSaleDetail);
     }
 

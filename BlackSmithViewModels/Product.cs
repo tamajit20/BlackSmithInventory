@@ -13,5 +13,6 @@ namespace ViewModels
         public virtual string Image { get; set; }
         public virtual double Price { get; set; }
         public virtual List<SaleDetail> SaleDetails { get; set; }
+        public virtual double Availibility { get; set; }
     }
 }

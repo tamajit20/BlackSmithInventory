@@ -5,4 +5,5 @@ export class Product extends ModelBase {
     description: string;
   //  image: FileList;
     price: number;
+    availibility: number;
 }
