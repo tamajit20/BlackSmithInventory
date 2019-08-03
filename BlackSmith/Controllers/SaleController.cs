@@ -267,6 +267,14 @@ namespace BlackSmithAPI.Controllers
                             each.CreatedBy = input.CreatedBy;
                             each.Id = 0;
                             _saleDetailOpp.Add(each);
+
+                            var product = _productOpp.GetUsingId(each.FK_ProductId);
+
+                            Expression<Func<Product, object>>[] properties =
+                                new Expression<Func<Product, object>>[] { x => x.Availibility };
+
+                            product.Availibility = product.Availibility - each.Quantity;
+                            _productOpp.UpdateColumn(product, properties);
                         }
                         input.SaleDetails = saleDetails;
                     }

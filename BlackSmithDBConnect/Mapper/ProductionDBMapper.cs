@@ -38,7 +38,10 @@ namespace BlackSmithDBConnect
                 builder.Property(c => c.ModifiedOn);
                 builder.Property(c => c.ModifiedBy);
 
+                builder.Ignore(c=>c.DetailNo);
+
                 builder.HasOne(p => p.Production).WithMany(f => f.ProductionInventoryItems).HasForeignKey(k => k.FK_ProductionId);
+                builder.HasOne(p => p.InventoryItem).WithMany(f => f.ProductionInventoryItems).HasForeignKey(k => k.FK_InventoryItemId);
 
 
                 builder.ToTable("tProductionInventoryItem");
@@ -58,7 +61,10 @@ namespace BlackSmithDBConnect
                     builder.Property(c => c.ModifiedOn);
                     builder.Property(c => c.ModifiedBy);
 
+                    builder.Ignore(c => c.DetailNo);
+
                     builder.HasOne(p => p.Production).WithMany(f => f.ProductionProducts).HasForeignKey(k => k.FK_ProductionId);
+                    builder.HasOne(p => p.Product).WithMany(f => f.ProductionProducts).HasForeignKey(k => k.FK_ProductId);
 
                     builder.ToTable("tProductionProduct");
                 }

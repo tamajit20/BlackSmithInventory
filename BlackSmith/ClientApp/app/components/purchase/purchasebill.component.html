@@ -92,7 +92,7 @@
             <tr *ngFor="let eachPurchaseDetail of model.purchaseDetails;let i = index">
                 <td class="width-5em">{{i+1}}</td>                
                 <td>
-                    <select class="height-30px form-control" name="fK_ItemId" #fk_InventoryItemId="ngModel" [(ngModel)]="model.purchaseDetails[getIndexByDetailNo(eachPurchaseDetail.purchaseDetailNo)].fK_ItemId" required>
+                    <select class="height-30px form-control" name="fK_InventoryItemId" #fK_InventoryItemId="ngModel" [(ngModel)]="model.purchaseDetails[getIndexByDetailNo(eachPurchaseDetail.purchaseDetailNo)].fK_InventoryItemId" required>
                         <option value="" selected disabled hidden>Select</option>
                         <option *ngFor="let each of loader.items" [value]="each.id">
                             {{each.name}}

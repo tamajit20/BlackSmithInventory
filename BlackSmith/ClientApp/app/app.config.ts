@@ -17,6 +17,8 @@ export class AppConfig {
     public static PRODUCTION_SAVE = "Production/Save";
     public static PRODUCTION_GETALL = "Production/GetAll";
     public static PRODUCTION_DELETE = "Production/delete";
+    public static PRODUCTION_LIST_ONSCREEN = "Production/GetProductionListOnScreen";
+    public static PRODUCTION_LIST_ONEXCEL = "Production/GetProductionListOnExcel";
 
     public static SALE_DOWNLOAD = "Sale/DownloadBill";
     public static SALE_SAVE = "Sale/Save";

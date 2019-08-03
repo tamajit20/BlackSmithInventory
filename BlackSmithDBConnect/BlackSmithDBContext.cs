@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using ViewModels;
 using Microsoft.EntityFrameworkCore;
+using static BlackSmithDBConnect.ProductionDBMapper;
+using static BlackSmithDBConnect.ProductionDBMapper.ProductionInventoryItemDBMapper;
 
 namespace BlackSmithDBConnect
 {
@@ -29,16 +31,9 @@ namespace BlackSmithDBConnect
             modelBuilder.ApplyConfiguration(new PurchaseDBMapper());
             modelBuilder.ApplyConfiguration(new PurchaseDetailDBMapper());
             modelBuilder.ApplyConfiguration(new PurchasePaymentDBMapper());
-        }
-
-        public virtual DbSet<Customer> Customer { get; set; }
-        public virtual DbSet<Suplier> Suplier { get; set; }
-        public virtual DbSet<InventoryItem> InventoryItem { get; set; }
-        public virtual DbSet<Sale> Sale { get; set; }
-        public virtual DbSet<SaleDetail> SaleDetail { get; set; }
-        public virtual DbSet<SalePayment> SalePayment { get; set; }
-        public virtual DbSet<Purchase> Purchase { get; set; }
-        public virtual DbSet<PurchaseDetail> PurchaseDetail { get; set; }
-        public virtual DbSet<PurchasePayment> PurchasePayment { get; set; }
+            modelBuilder.ApplyConfiguration(new ProductionDBMapper());
+            modelBuilder.ApplyConfiguration(new ProductionInventoryItemDBMapper());
+            modelBuilder.ApplyConfiguration(new ProductionProductDBMapper());
+        }      
     }
 }

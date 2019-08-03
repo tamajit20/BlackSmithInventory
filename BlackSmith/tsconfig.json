@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-      "baseUrl": ".",
-      "paths": { "*": ["types/*"] },
+    "baseUrl": ".",
+    "paths": { "*": [ "types/*" ] },
     "module": "es2015",
     "moduleResolution": "node",
     "target": "es5",
@@ -13,8 +13,9 @@
     "strict": true,
     "lib": [ "es6", "dom" ],
     "types": [ "webpack-env" ],
-    "strictPropertyInitialization" :  false
-   },
+    "strictPropertyInitialization": false,
+    "strictNullChecks": false
+  },
   "exclude": [ "bin", "node_modules" ],
   "atom": { "rewriteTsconfig": false }
 }

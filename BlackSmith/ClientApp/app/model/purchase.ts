@@ -27,8 +27,8 @@ export class Purchase extends ModelBase {
 
 export class PurchaseDetail extends ModelBase {
     purchaseDetailNo: number;
-    fk_InventoryItemId: number;
-    FK_PurchaseId: number;
+    fK_InventoryItemId: number;
+    fK_PurchaseId: number;
     quantity: number;
     price: number;
     total: number;

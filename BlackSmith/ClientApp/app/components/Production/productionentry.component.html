@@ -11,7 +11,7 @@
             <span class="btn-default"></span> Save
         </button>
         <span *ngIf="model.isFailure" class="text-bolder  text-color-red">{{model.msg}}</span>
-
+        <span *ngIf="!model.isFailure" class="text-bolder  text-color-green">{{model.msg}}</span>
     </div>
 
     <div class="col-md-5">
@@ -60,6 +60,7 @@
                 <tr>
                     <th class="width-5em">SL#</th>
                     <th>Inventory</th>
+                    <th>Availability</th>
                     <th>Quantity</th>
                     <th>
                         <button type="button" class="btn btn-default btn-sm" (click)="addNewItem()">
@@ -69,17 +70,18 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let eachItem of model.productionItems;let i = index">
-                    <td class="width-5em">{{i+1}}</td>
+                <tr *ngFor="let eachItem of model.productionInventoryItems;let j = index">
+                    <td class="width-5em">{{j+1}}</td>
                     <td>
-                        <select class="height-30px form-control" name="fK_inventoryItemId" #fK_inventoryItemId="ngModel" [(ngModel)]="model.productionItems[getItemIndexByDetailNo(eachItem.detailNo)].fK_inventoryItemId" required>
+                        <select (change)="calculateAvailability(eachItem.detailNo,eachItem.fK_InventoryItemId)" class="height-30px form-control" name="fK_InventoryItemId" #fK_InventoryItemId="ngModel" [(ngModel)]="model.productionInventoryItems[getItemIndexByDetailNo(eachItem.detailNo)].fK_InventoryItemId" required>
                             <option value="" selected disabled hidden>Select</option>
                             <option *ngFor="let each of loader.items" [value]="each.id">
                                 {{each.name}}
                             </option>
                         </select>
                     </td>
-                    <td><input class="inputText" type="number" max="999999" name="itemquantity_{{i}}" #itemquantity="ngModel" [(ngModel)]="model.productionItems[getItemIndexByDetailNo(eachItem.detailNo)].quantity" required></td>
+                    <td>{{eachItem.availableQuantity}}</td>
+                    <td><input (input)="checkAvailability(eachItem.detailNo)" class="inputText" type="number" max="999999" name="itemquantity_{{j}}" #itemquantity="ngModel" [(ngModel)]="model.productionInventoryItems[getItemIndexByDetailNo(eachItem.detailNo)].quantity" required></td>
                     <td><a href="javascript:void(0)" (click)="deleteItem(eachItem.detailNo)"><span class="glyphicon glyphicon-remove"></span></a></td>
                 </tr>
             </tbody>

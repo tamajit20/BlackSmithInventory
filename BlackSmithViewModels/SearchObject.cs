@@ -15,5 +15,6 @@ namespace ViewModels
         public List<long> ProductIds { get; set; }
         public List<long> SaleIds { get; set; }
         public List<long> PurchaseIds { get; set; }
+        public List<long> ProductionIds { get; set; }
     }
 }

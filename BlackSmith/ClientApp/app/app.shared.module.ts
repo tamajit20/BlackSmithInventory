@@ -34,6 +34,7 @@ import { PurchaseSearchComponent } from './components/purchase/purchasesearch.co
 import { ProductionEntryComponent } from './components/Production/productionentry.component';
 import { ProductionConfigComponent } from './components/Production/productionconfig.component';
 import { ProductionService } from './services/productionservice';
+import { ProductionSearchComponent } from './components/production/productionsearch.component';
 
 @NgModule({
     declarations: [
@@ -47,6 +48,7 @@ import { ProductionService } from './services/productionservice';
         SaleConfigComponent,
         ProductionConfigComponent,
         ProductionEntryComponent,
+        ProductionSearchComponent,
         SalePaymentComponent,
         SaleSearchComponent,
         PurchaseBillComponent,

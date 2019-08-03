@@ -12,5 +12,6 @@ namespace ViewModels
         public string Description { get; set; }
         public virtual double Availibility { get; set; }
         public virtual List<PurchaseDetail> PurchaseDetails { get; set; }
+        public virtual List<ProductionInventoryItem> ProductionInventoryItems { get; set; }
     }
 }

@@ -78,6 +78,7 @@
             <tr>
                 <th class="width-5em">SL#</th>
                 <th>Product</th>
+                <th>Availability</th>
                 <th>Quantity</th>
                 <th>Price (Rs)</th>
                 <th>Total (Rs)</th>
@@ -92,13 +93,14 @@
             <tr *ngFor="let eachSaleDetail of model.saleDetails;let i = index">
                 <td class="width-5em">{{i+1}}</td>
                 <td>
-                    <select class="height-30px form-control" name="fK_ProductId" #fK_ProductId="ngModel" [(ngModel)]="model.saleDetails[getIndexByDetailNo(eachSaleDetail.saleDetailNo)].fK_ProductId" required>
+                    <select (change)="calculateAvailibility(eachSaleDetail.saleDetailNo,eachSaleDetail.fK_ProductId)" class="height-30px form-control" name="fK_ProductId" #fK_ProductId="ngModel" [(ngModel)]="model.saleDetails[getIndexByDetailNo(eachSaleDetail.saleDetailNo)].fK_ProductId" required>
                         <option value="" selected disabled hidden>Select</option>
                         <option *ngFor="let each of loader.products" [value]="each.id">
                             {{each.name}}
                         </option>
                     </select>
                 </td>
+                <td>{{eachSaleDetail.availableQuantity}}</td>
                 <td><input (input)="calculateTotalPerProduct(eachSaleDetail.saleDetailNo)" class="inputText" type="number" max="999999" name="quantity_{{i}}" #quantity="ngModel" [(ngModel)]="model.saleDetails[getIndexByDetailNo(eachSaleDetail.saleDetailNo)].quantity" required></td>
                 <td><input (input)="calculateTotalPerProduct(eachSaleDetail.saleDetailNo)" class="inputText" type="number" max="999999" name="price_{{i}}" #price="ngModel" [(ngModel)]="model.saleDetails[getIndexByDetailNo(eachSaleDetail.saleDetailNo)].price" required></td>
                 <td>{{ eachSaleDetail.total}}</td>

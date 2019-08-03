@@ -263,6 +263,14 @@ namespace BlackSmithAPI.Controllers
                             each.CreatedBy = input.CreatedBy;
                             each.Id = 0;
                             _purchaseDetailOpp.Add(each);
+
+                            var inventoryItem = _itemOpp.GetUsingId(each.Fk_InventoryItemId);
+
+                            Expression<Func<InventoryItem, object>>[] properties =
+                                new Expression<Func<InventoryItem, object>>[] { x => x.Availibility };
+
+                            inventoryItem.Availibility = inventoryItem.Availibility + each.Quantity;
+                            _itemOpp.UpdateColumn(inventoryItem, properties);
                         }
                         input.PurchaseDetails = purchaseDetails;
                     }

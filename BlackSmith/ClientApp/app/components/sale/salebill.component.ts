@@ -26,7 +26,7 @@ export class SaleBillComponent extends BaseComponent implements OnInit {
     };
     today = { date: { year: (new Date()).getFullYear(), month: (new Date()).getMonth() + 1, day: (new Date()).getDate() } };
     billDate: any = this.today;
-    paymentTerms = ['Cash','Check'];
+    paymentTerms = ['Cash', 'Check'];
 
     constructor(
         private _service: SaleService
@@ -65,7 +65,7 @@ export class SaleBillComponent extends BaseComponent implements OnInit {
     addNewSaleDetail() {
         this.model.isGenerated = false;
         this.currentSaleDetailNo = this.currentSaleDetailNo + 1;
-        const newSaleDetail = <SaleDetail>({  saleDetailNo: this.currentSaleDetailNo });
+        const newSaleDetail = <SaleDetail>({ saleDetailNo: this.currentSaleDetailNo });
         this.model.saleDetails.push(newSaleDetail);
     }
 
@@ -80,8 +80,15 @@ export class SaleBillComponent extends BaseComponent implements OnInit {
     calculateTotalPerProduct(saleDetailNo: number) {
         this.model.isGenerated = false;
         var obj = this.model.saleDetails.find(x => x.saleDetailNo === saleDetailNo);
-        if (obj) {
-            obj.total = obj.price * obj.quantity;
+
+        if (obj.availableQuantity >= obj.quantity) {
+            if (obj) {
+                obj.total = obj.price * obj.quantity;
+            }
+        }
+        else {
+            obj.quantity = 0;
+            alert("Available : " + obj.availableQuantity);
         }
         return '0';
     }
@@ -111,6 +118,15 @@ export class SaleBillComponent extends BaseComponent implements OnInit {
             return true;
         }
         return false;
+    }
+
+    calculateAvailibility(saleDetailNo: number, productId: number) {
+        var obj = this.loader.products.find(x => x.id == productId);
+        var saleDetail = this.model.saleDetails.find(x => x.saleDetailNo === saleDetailNo);
+
+        if (obj && saleDetail) {
+            saleDetail.availableQuantity = obj.availibility;
+        }
     }
 
     save() {

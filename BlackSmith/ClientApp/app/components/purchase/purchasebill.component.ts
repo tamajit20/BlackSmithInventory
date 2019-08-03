@@ -64,7 +64,7 @@ export class PurchaseBillComponent extends BaseComponent implements OnInit {
     addNewPurchaseDetail() {
         this.model.isGenerated = false;
         this.currentPurchaseDetailNo = this.currentPurchaseDetailNo + 1;
-        const newPurchaseDetail = <PurchaseDetail>({ FK_PurchaseId: 0, purchaseDetailNo: this.currentPurchaseDetailNo, price: 0, quantity: 0, fk_InventoryItemId: 1, total: 0 });
+        const newPurchaseDetail = <PurchaseDetail>({ purchaseDetailNo: this.currentPurchaseDetailNo });
         this.model.purchaseDetails.push(newPurchaseDetail);
     }
 
@@ -112,8 +112,8 @@ export class PurchaseBillComponent extends BaseComponent implements OnInit {
             this.model.purchaseDate = this.purchaseDate.date.month + "/" + this.purchaseDate.date.day + "/" + this.purchaseDate.date.year;
             console.log(this.model);
             this._service.save(this.model).subscribe(data => {
-                this.model = data;
-                if (!this.model.isFailure) {
+              //  this.model = data;
+                if (!data.isFailure) {
                     this.model.isGenerated = true;
                     this.model.msg = "Purchase added";
                 }

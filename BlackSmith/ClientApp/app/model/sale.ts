@@ -32,6 +32,7 @@ export class SaleDetail extends ModelBase {
     price: number;
     total: number;
     product: Product;
+    availableQuantity: number;
 }
 
 export class SalePayment extends ModelBase {

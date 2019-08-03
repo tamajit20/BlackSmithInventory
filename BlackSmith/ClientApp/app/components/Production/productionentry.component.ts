@@ -10,6 +10,7 @@ import { Production, ProductionLoader, ProductionProduct, ProductionInventoryIte
 import { saveAs } from 'file-saver';
 import { ProductionService } from '../../services/productionservice';
 import { Product } from '../../model/product';
+import { Console } from '@angular/core/src/console';
 
 @Component({
     selector: 'productionentry',
@@ -39,7 +40,7 @@ export class ProductionEntryComponent extends BaseComponent implements OnInit {
 
     ngOnInit(): void {
         this.addNew();
-        
+
         this.getAllInventoryItem();
         this.getAllProduct();
 
@@ -49,7 +50,7 @@ export class ProductionEntryComponent extends BaseComponent implements OnInit {
     addNew() {
         this.model = <Production>({ isFailure: false });
         this.productionDate = this.today;
-        this.model.productionItems = [];
+        this.model.productionInventoryItems = [];
         this.model.productionProducts = [];
     }
 
@@ -65,11 +66,10 @@ export class ProductionEntryComponent extends BaseComponent implements OnInit {
         });
     }
 
-
     addNewProduct() {
         this.model.isGenerated = false;
         this.currentProductNo = this.currentProductNo + 1;
-        const newDetail = <ProductionProduct>({ detailNo : this.currentProductNo });
+        const newDetail = <ProductionProduct>({ detailNo: this.currentProductNo });
         this.model.productionProducts.push(newDetail);
     }
 
@@ -81,21 +81,22 @@ export class ProductionEntryComponent extends BaseComponent implements OnInit {
         return this.model.productionProducts.findIndex(item => item.detailNo === detailNo);
     }
 
-
-
     addNewItem() {
         this.model.isGenerated = false;
         this.currentItemNo = this.currentItemNo + 1;
-        const newDetail = <ProductionInventoryItem>({detailNo : this.currentItemNo});
-        this.model.productionItems.push(newDetail);
+        const newDetail = <ProductionInventoryItem>({ detailNo: this.currentItemNo });
+        this.model.productionInventoryItems.push(newDetail);
     }
 
     deleteItem(detailNo: number) {
-        this.model.productionItems.splice(this.model.productionItems.findIndex(item => item.detailNo === detailNo), 1);
+        this.model.productionInventoryItems.splice(this.model.productionInventoryItems.findIndex(item => item.detailNo === detailNo), 1);
     }
 
     getItemIndexByDetailNo(detailNo: number) {
-        return this.model.productionItems.findIndex(item => item.detailNo === detailNo);
+        var x =
+            this.model.productionInventoryItems.findIndex(item => item.detailNo === detailNo);
+
+        return x;
     }
 
 
@@ -107,15 +108,30 @@ export class ProductionEntryComponent extends BaseComponent implements OnInit {
                 this.model.msg = "Invalid Production Date";
                 return false;
             }
-           
-            if (!this.model.productionItems || this.model.productionItems.length === 0) {
+
+            if (!this.model.productionInventoryItems || this.model.productionInventoryItems.length === 0) {
                 this.model.msg = "No Inventory Item";
                 return false;
+            }
+            else {
+                this.model.productionInventoryItems.forEach(each => {
+                    if (!each.quantity || each.quantity == 0) {
+                        this.model.msg = "Quantity not selected for inventory item";
+                        return false;
+                    }
+                });
             }
 
             if (!this.model.productionProducts || this.model.productionProducts.length === 0) {
                 this.model.msg = "No Product";
                 return false;
+            } else {
+                this.model.productionProducts.forEach(each => {
+                    if (!each.quantity || each.quantity == 0) {
+                        this.model.msg = "Quantity not selected for product";
+                        return false;
+                    }
+                });
             }
 
             this.model.msg = "";
@@ -125,18 +141,39 @@ export class ProductionEntryComponent extends BaseComponent implements OnInit {
         return false;
     }
 
+
+    calculateAvailability(detailNo: number, invId: number) {
+        var obj = this.loader.items.find(x => x.id == invId);
+        var invDetail = this.model.productionInventoryItems.find(x => x.detailNo === detailNo);
+
+        if (obj && invDetail) {
+            invDetail.availableQuantity = obj.quantity;
+        }
+    }
+
+    checkAvailability(detailNo: number) {
+        var obj = this.model.productionInventoryItems.find(x => x.detailNo === detailNo);
+
+        if (obj.availableQuantity < obj.quantity) {
+            obj.quantity = 0;
+            alert("Available : " + obj.availableQuantity);
+        }
+    }
+
     save() {
         if (this.validate()) {
             this.model.isGenerated = false;
             this.model.date = this.productionDate.date.month + "/" + this.productionDate.date.day + "/" + this.productionDate.date.year;
-            console.log(this.model);
-            //this._service.save(this.model).subscribe(data => {
-            //    this.model = data;
-            //    if (!this.model.isFailure) {
-            //        this.model.isGenerated = true;
-            //        this.model.msg = "Saved";
-            //    }
-            //});
+
+            this._service.save(this.model).subscribe(data => {
+                this.model = data;
+              //  if (!data.isFailure) {
+                if (!this.model.isFailure) {
+                    console.log(this.model);
+                    this.model.isGenerated = true;
+                    this.model.msg = "Saved";
+                }
+            });
         }
     }
 }
