@@ -46,9 +46,8 @@ export class SaleService extends SharedService {
 
 
     downloadBill(input: any) {
-        this.http.get(AppConfig.API_ENDPOINT + AppConfig.SALE_DOWNLOAD, new RequestOptions({ params: { id: input.id }, responseType: ResponseContentType.Blob })).subscribe(res => {
-            //  saveAs(res.blob(), "bill.pdf");
-            saveAs(res.blob(), "C:/bill.pdf");
+        this.http.get(AppConfig.API_ENDPOINT + AppConfig.SALE_DOWNLOAD, new RequestOptions({ params: { id: input }, responseType: ResponseContentType.Blob })).subscribe(res => {
+            saveAs(res.blob(), "bill.pdf");
             this.print(res.blob());
 
         });

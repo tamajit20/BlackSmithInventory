@@ -27,8 +27,8 @@ export class ProductionInventoryItem extends ModelBase {
 }
 
 export class ProductionLoader extends ModelBase {
-    items: ProductionInventoryItem[];
-    products: ProductionProduct[];
+    items: InventoryItem[];
+    products: Product[];
 }
 
 export class ProductionList extends ModelBase {

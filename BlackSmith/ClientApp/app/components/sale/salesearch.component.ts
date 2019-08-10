@@ -119,8 +119,18 @@ export class SaleSearchComponent extends BaseComponent implements OnInit {
     }
 
     downloadBill(id: any) {
-        const sale = <Sale>({ id: id });
-        this._service.downloadBill(sale);
+        this._service.downloadBill(id);
+    }
+
+    downloadMultipleBill() {
+        var ids = '';
+        if (this.searchResult && this.searchResult.sales) {
+            this.searchResult.sales.forEach(e => {
+                ids = ids + ',' + e.id;
+            });
+        }
+        
+        this._service.downloadBill(ids);
     }
 
     showPayment(sale: any) {

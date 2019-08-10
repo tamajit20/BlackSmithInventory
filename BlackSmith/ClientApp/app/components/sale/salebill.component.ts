@@ -121,11 +121,23 @@ export class SaleBillComponent extends BaseComponent implements OnInit {
     }
 
     calculateAvailibility(saleDetailNo: number, productId: number) {
-        var obj = this.loader.products.find(x => x.id == productId);
-        var saleDetail = this.model.saleDetails.find(x => x.saleDetailNo === saleDetailNo);
 
-        if (obj && saleDetail) {
-            saleDetail.availableQuantity = obj.availibility;
+        var alreadyTaken = this.model.saleDetails.filter(x => x.fK_ProductId === productId);
+
+        if (alreadyTaken && alreadyTaken.length > 1) {
+            this.model.saleDetails = this.model.saleDetails.filter(x=>x.saleDetailNo != saleDetailNo);
+            alert("The item is already selected");
+            return;
+        }
+
+        var obj = this.loader.products.find(x => x.id == productId);
+
+        if (obj) {
+            var saleDetail = this.model.saleDetails.find(x => x.saleDetailNo === saleDetailNo);
+
+            if (saleDetail) {
+                saleDetail.availableQuantity = obj.availibility;
+            }
         }
     }
 

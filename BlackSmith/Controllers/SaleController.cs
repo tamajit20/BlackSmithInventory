@@ -207,33 +207,6 @@ namespace BlackSmithAPI.Controllers
             return input;
         }
 
-        public FileStreamResult DownloadBill([FromQuery] string id)
-        {
-            try
-            {
-                MemoryStream memoryStream = new MemoryStream();
-                if (!string.IsNullOrWhiteSpace(id))
-                {
-                    var input = _saleOpp.GetUsingId(Convert.ToInt64(id));
-
-                    using (FileStream file = new FileStream(_configuration["Configuration:BillStorePath"] + input.Id + "_" + input.BillId + ".pdf", FileMode.Open, FileAccess.Read))
-                    {
-                        byte[] bytes = new byte[file.Length];
-                        file.Read(bytes, 0, (int)file.Length);
-                        memoryStream.Write(bytes, 0, (int)file.Length);
-                    }
-                    memoryStream.Position = 0;
-                    return new FileStreamResult(memoryStream, "application/pdf");
-                }
-            }
-            catch (Exception ex)
-            {
-
-            }
-            return null;
-        }
-
-
         public Sale Save([FromBody] Sale input)
         {
             try
@@ -311,7 +284,7 @@ namespace BlackSmithAPI.Controllers
                 Expression<Func<Sale, object>>[] exp = new Expression<Func<Sale, object>>[] { x => x.SalePayments, x => x.SaleDetails, x => x.Customer };
                 var predicate = PredicateBuilder.True<Sale>();
                 predicate = predicate.And(x => !x.IsDeleted);
-               
+
                 if (input.SaleIds != null && input.SaleIds.Count > 0)
                 {
                     predicate = predicate.And(x => input.SaleIds.Contains(x.Id));
@@ -327,8 +300,34 @@ namespace BlackSmithAPI.Controllers
 
                 if (!string.IsNullOrWhiteSpace(input.BillIds))
                 {
-                    var billIds = input.BillIds.Split(',').ToList().ConvertAll(c => c.ToUpper().Trim());
-                    predicate = predicate.And(x => billIds.Contains(x.BillId.ToUpper().Trim()));
+                    try
+                    {
+                        var billIds = input.BillIds.Split(',').ToList().ConvertAll(c => c.ToUpper().Trim());
+                        if (billIds.Count == 1)
+                        {
+                            billIds = input.BillIds.Split(':').ToList().ConvertAll(c => c.ToUpper().Trim());
+
+                            if (billIds.Count == 2)
+                            {
+                                long billStart = Convert.ToInt64(billIds[0].Split('-')[1]);
+                                long billEnd = Convert.ToInt64(billIds[1].Split('-')[1]);
+                                billIds.Clear();
+
+                                string billInitial = _configuration["Configuration:BillInitial"];
+                                string billSeperator = _configuration["Configuration:BillSeperator"];
+
+                                while (billStart <= billEnd)
+                                {
+                                    billIds.Add(billInitial + billSeperator + billStart);
+                                    billStart++;
+                                }
+                            }
+                        }
+                        predicate = predicate.And(x => billIds.Contains(x.BillId.ToUpper().Trim()));
+                    }
+                    catch (Exception)
+                    {
+                    }
                 }
                 if (input.CustomerIds != null && input.CustomerIds.Count > 0)
                     predicate = predicate.And(x => input.CustomerIds.Contains(x.FK_CustomerId));
@@ -535,7 +534,7 @@ namespace BlackSmithAPI.Controllers
                                 var amount = fieldKeys.Find(x => x.ToUpper() == "AMT" + (i + 1));
                                 if (amount != null)
                                 {
-                                    double amt = Math.Round((input.SaleDetails[i].Price * input.SaleDetails[i].Quantity),2);
+                                    double amt = Math.Round((input.SaleDetails[i].Price * input.SaleDetails[i].Quantity), 2);
                                     form.SetField(amount, amt.ToString());
                                 }
                             }
@@ -915,6 +914,102 @@ namespace BlackSmithAPI.Controllers
             }
             return cd;
         }
+
+
+        public FileStreamResult DownloadBill([FromQuery] string id)
+        {
+            try
+            {
+                MemoryStream memoryStream = new MemoryStream();
+                if (!string.IsNullOrWhiteSpace(id))
+                {
+                    id.Replace(" ", string.Empty);
+                    List<string> ids = id.Split(',').ToList().ConvertAll(c => c.ToUpper().Trim());
+                    List<string> paths = new List<string>();
+                    string tempOutPath = _configuration["Configuration:BillStorePath"] + "temp.pdf";
+
+                    System.IO.File.Delete(tempOutPath);
+
+                    foreach (var each in ids)
+                    {
+                        if (!string.IsNullOrWhiteSpace(each))
+                        {
+                            var input = _saleOpp.GetUsingId(Convert.ToInt64(each));
+
+                            paths.Add(_configuration["Configuration:BillStorePath"] + input.Id + "_" + input.BillId + ".pdf");
+                        }
+                    }
+
+                    CombineMultiplePDFs(paths, tempOutPath);
+
+                    using (FileStream file = new FileStream(tempOutPath, FileMode.Open, FileAccess.Read))
+                    {
+                        byte[] bytes = new byte[file.Length];
+                        file.Read(bytes, 0, (int)file.Length);
+                        memoryStream.Write(bytes, 0, (int)file.Length);
+                    }
+
+                    System.IO.File.Delete(tempOutPath);
+
+                    memoryStream.Position = 0;
+                    return new FileStreamResult(memoryStream, "application/pdf");
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return null;
+        }
+
+
+        private void CombineMultiplePDFs(List<string> fileNames, string outFile)
+        {
+            // step 1: creation of a document-object
+            Document document = new Document();
+            //create newFileStream object which will be disposed at the end
+            using (FileStream newFileStream = new FileStream(outFile, FileMode.Create))
+            {
+                // step 2: we create a writer that listens to the document
+                PdfCopy writer = new PdfCopy(document, newFileStream);
+                if (writer == null)
+                {
+                    return;
+                }
+
+                // step 3: we open the document
+                document.Open();
+
+                foreach (string fileName in fileNames)
+                {
+                    // we create a reader for a certain document
+                    PdfReader reader = new PdfReader(fileName);
+                    reader.ConsolidateNamedDestinations();
+
+                    // step 4: we add content
+                    for (int i = 1; i <= reader.NumberOfPages; i++)
+                    {
+                        PdfImportedPage page = writer.GetImportedPage(reader, i);
+                        writer.AddPage(page);
+                    }
+
+                    PrAcroForm form = reader.AcroForm;
+                    if (form != null)
+                    {
+                        writer.CopyAcroForm(reader);
+                    }
+
+                    reader.Close();
+                }
+
+                // step 5: we close the document and writer
+                writer.Close();
+                document.Close();
+            }//disposes the newFileStream object
+        }
+
+
+
         #endregion
     }
 }

@@ -4,6 +4,7 @@ import { Product } from "./product";
 
 export class Sale extends ModelBase {
     fK_CustomerId: number;
+    billId: string;
     note: string;
     cgstRate: number;
     cgstTax: number;

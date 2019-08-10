@@ -143,11 +143,21 @@ export class ProductionEntryComponent extends BaseComponent implements OnInit {
 
 
     calculateAvailability(detailNo: number, invId: number) {
+
+        var alreadyTaken = this.model.productionInventoryItems.filter(x => x.fK_InventoryItemId === invId);
+
+        if (alreadyTaken && alreadyTaken.length > 1) {
+            this.model.productionInventoryItems = this.model.productionInventoryItems.filter(x => x.detailNo != detailNo);
+            alert("The item is already selected");
+            return;
+        }
+
+
         var obj = this.loader.items.find(x => x.id == invId);
         var invDetail = this.model.productionInventoryItems.find(x => x.detailNo === detailNo);
 
         if (obj && invDetail) {
-            invDetail.availableQuantity = obj.quantity;
+            invDetail.availableQuantity = obj.availibility;
         }
     }
 
