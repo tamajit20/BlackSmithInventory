@@ -1,0 +1,13 @@
+truncate table tPurchasePayment;
+truncate table tPurchaseDetail;
+truncate table tSaleDetail;
+truncate table tSalePayment;
+truncate table tProductionProduct;
+truncate table tProductionInventoryItem;
+truncate table tSuplier;
+truncate table tSale;
+truncate table tPurchase;
+truncate table tProduction;
+truncate table tProduct;
+truncate table tInventoryItem;
+truncate table tCustomer;
