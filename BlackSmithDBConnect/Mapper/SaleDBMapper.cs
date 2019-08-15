@@ -60,6 +60,7 @@ namespace BlackSmithDBConnect
 
             builder.Ignore(c => c.SaleDetailNo);
             builder.Ignore(c => c.Total);
+            builder.Ignore(c => c.AvailableQuantity);
 
             builder.HasOne(p => p.Sale).WithMany(f => f.SaleDetails).HasForeignKey(k => k.FK_SaleId);
             builder.HasOne(p => p.Product).WithMany(f => f.SaleDetails).HasForeignKey(k => k.FK_ProductId);

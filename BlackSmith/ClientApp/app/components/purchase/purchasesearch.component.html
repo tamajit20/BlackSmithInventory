@@ -86,13 +86,8 @@
                 </div>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <!--<div class="col-md-3">
-                        <label for="customer">BillID:</label>
-                        <span>{{saleDetails.billId}}</span>
-                    </div>-->
-
-                    <div class="col-md-3">
+                <div class="row">                  
+                    <div class="col-md-6">
                         <label for="customer">Suplier:</label>
                         <span>{{purchaseDetails.suplier.name}}</span>
                     </div>
@@ -146,13 +141,8 @@
             </div>
 
             <div class="modal-body" *ngIf="payment">
-                <div class="row">
-                    <!--<div class="col-md-3">
-                        <label for="customer">Purchase Id:</label>
-                        <span>{{payment.purchase.purchaseId}}</span>
-                    </div>-->
-
-                    <div class="col-md-3">
+                <div class="row">                
+                    <div class="col-md-6">
                         <label for="customer">Suplier:</label>
                         <span>{{payment.purchase.suplier.name}}</span>
                     </div>
@@ -175,7 +165,7 @@
                     </div>
                     <div class="col-md-3 text-bolder">Amount (Rs) : </div>
                     <div class="col-md-3">
-                        <input type="number" maxlength="100" class="form-control" name="amount" #amount="ngModel" [(ngModel)]="payment.amount" required>
+                        <input type="number" maxlength="100" min="0" max="99999" class="form-control" name="amount" #amount="ngModel" [(ngModel)]="payment.amount" required>
                     </div>
                 </div>
                 <div class="row">
@@ -206,12 +196,8 @@
 
             <div class="modal-body">
                 <div class="row">
-                    <!--<div class="col-md-3">
-                        <label for="customer">BillID:</label>
-                        <span>{{purchasePayments.purchaseId}}</span>
-                    </div>-->
-
-                    <div class="col-md-3">
+                 
+                    <div class="col-md-6">
                         <label for="customer">Suplier:</label>
                         <span>{{purchasePayments.suplier.name}}</span>
                     </div>

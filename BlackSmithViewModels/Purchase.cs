@@ -41,6 +41,7 @@ namespace ViewModels
         public virtual long PurchaseDetailNo { get; set; }
         public virtual double Total { get; set; }
         public virtual InventoryItem Item { get; set; }
+        public virtual double AvailableQuantity { get; set; }
     }
 
     public class PurchasePayment : BaseModel

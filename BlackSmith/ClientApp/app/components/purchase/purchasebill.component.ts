@@ -110,9 +110,10 @@ export class PurchaseBillComponent extends BaseComponent implements OnInit {
         if (this.validate()) {
             this.model.isGenerated = false;
             this.model.purchaseDate = this.purchaseDate.date.month + "/" + this.purchaseDate.date.day + "/" + this.purchaseDate.date.year;
-            console.log(this.model);
             this._service.save(this.model).subscribe(data => {
-              //  this.model = data;
+                var purchaseDetails = this.model.purchaseDetails;
+                this.model = data;
+                this.model.purchaseDetails = purchaseDetails;
                 if (!data.isFailure) {
                     this.model.isGenerated = true;
                     this.model.msg = "Purchase added";

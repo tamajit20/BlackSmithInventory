@@ -47,7 +47,7 @@
                             </option>
                         </select>
                     </td>
-                    <td><input class="inputText" type="number" max="999999" name="productquantity_{{i}}" #productquantity="ngModel" [(ngModel)]="model.productionProducts[getProductIndexByDetailNo(eachProduct.detailNo)].quantity" required></td>
+                    <td><input class="inputText" min="0" type="number" max="999999" name="productquantity_{{i}}" #productquantity="ngModel" [(ngModel)]="model.productionProducts[getProductIndexByDetailNo(eachProduct.detailNo)].quantity" required></td>
                     <td><a href="javascript:void(0)" (click)="deleteProduct(eachProduct.detailNo)"><span class="glyphicon glyphicon-remove"></span></a></td>
                 </tr>
             </tbody>
@@ -81,7 +81,7 @@
                         </select>
                     </td>
                     <td>{{eachItem.availableQuantity}}</td>
-                    <td><input (input)="checkAvailability(eachItem.detailNo)" class="inputText" type="number" max="999999" name="itemquantity_{{j}}" #itemquantity="ngModel" [(ngModel)]="model.productionInventoryItems[getItemIndexByDetailNo(eachItem.detailNo)].quantity" required></td>
+                    <td><input (input)="checkAvailability(eachItem.detailNo)" class="inputText" min="0" type="number" min="0" max="999999" name="itemquantity_{{j}}" #itemquantity="ngModel" [(ngModel)]="model.productionInventoryItems[getItemIndexByDetailNo(eachItem.detailNo)].quantity" required></td>
                     <td><a href="javascript:void(0)" (click)="deleteItem(eachItem.detailNo)"><span class="glyphicon glyphicon-remove"></span></a></td>
                 </tr>
             </tbody>

@@ -41,6 +41,11 @@ export class ProductionEntryComponent extends BaseComponent implements OnInit {
     ngOnInit(): void {
         this.addNew();
 
+        this.PageLoadActivity();
+    }
+
+    PageLoadActivity() {
+
         this.getAllInventoryItem();
         this.getAllProduct();
 
@@ -164,6 +169,11 @@ export class ProductionEntryComponent extends BaseComponent implements OnInit {
     checkAvailability(detailNo: number) {
         var obj = this.model.productionInventoryItems.find(x => x.detailNo === detailNo);
 
+        if (obj.quantity < 0) {
+            obj.quantity = 0;
+            alert("Quantity cannot be less than 0");
+        }
+
         if (obj.availableQuantity < obj.quantity) {
             obj.quantity = 0;
             alert("Available : " + obj.availableQuantity);
@@ -177,11 +187,10 @@ export class ProductionEntryComponent extends BaseComponent implements OnInit {
 
             this._service.save(this.model).subscribe(data => {
                 this.model = data;
-              //  if (!data.isFailure) {
                 if (!this.model.isFailure) {
-                    console.log(this.model);
                     this.model.isGenerated = true;
                     this.model.msg = "Saved";
+                    this.PageLoadActivity();
                 }
             });
         }

@@ -45,6 +45,40 @@ namespace BlackSmithAPI.Controllers
             _salePaymentOpp = salePaymentOpp;
             _configuration = configuration;
             _productOpp = productOpp;
+
+        }
+
+        public void DeleteBill([FromQuery]string id)
+        {
+            try
+            {
+                var predicate = PredicateBuilder.True<Sale>();
+
+                if (string.IsNullOrWhiteSpace(id))
+                {
+                    if (_configuration["Configuration:IgnoreDeleted"].ToLower().Trim() == "false")
+                    {
+                        predicate = predicate.And(x => !x.IsDeleted);
+                    }
+                    id = _saleOpp.GetAllUsingExpression(out int totalCount, 1, 0, predicate).FirstOrDefault().BillId;
+                }
+
+                predicate = predicate.And(X => X.BillId == id);
+
+                var result = _saleOpp.GetAllUsingExpression(out int total, 1, 0, predicate).FirstOrDefault();
+
+                Expression<Func<Sale, object>>[] properties =
+                              new Expression<Func<Sale, object>>[] { x => x.IsDeleted };
+
+                result.IsDeleted = true;
+
+                _saleOpp.UpdateColumn(result, properties);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public IActionResult GetSaleListOnExcel([FromQuery]string searchObject)
@@ -382,7 +416,7 @@ namespace BlackSmithAPI.Controllers
                 }
                 if (input != null)
                 {
-                    input.FinalTotalInWords = input.FinalTotalInWords = "Rupees " + GetNumberInWords(input.FinalTotal) + " Only";
+                    input.FinalTotalInWords = "Rupees " + GetNumberInWords(input.FinalTotal) + " Only";
 
                     string fileNameExisting = @_configuration["Configuration:BillFormatTemplatePath"];
                     string fileNameNew = @_configuration["Configuration:BillStorePath"] + input.Id + "_" + input.BillId + ".pdf";
@@ -574,7 +608,18 @@ namespace BlackSmithAPI.Controllers
                         foreach (var each in saleDetails)
                         {
                             if (each.Id > 0)
+                            {
                                 _saleDetailOpp.Delete(each.Id);
+
+                                //reversing available total amout
+                                var product = _productOpp.GetUsingId(each.FK_ProductId);
+
+                                Expression<Func<Product, object>>[] properties =
+                                                                new Expression<Func<Product, object>>[] { x => x.Availibility };
+
+                                product.Availibility = product.Availibility + each.Quantity;
+                                _productOpp.UpdateColumn(product, properties);
+                            }
                         }
                     }
                     _saleOpp.Delete(input.Id);
@@ -621,6 +666,7 @@ namespace BlackSmithAPI.Controllers
             }
             return input;
         }
+
 
         private string GenerateBillId()
         {

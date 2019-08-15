@@ -125,7 +125,7 @@
                     </div>
                     <div class="col-md-3 text-bolder">Amount (Rs) : </div>
                     <div class="col-md-3">
-                        <input type="number" maxlength="100" class="form-control" name="amount" #amount="ngModel" [(ngModel)]="payment.amount" required>
+                        <input type="number" min="0" max="99999" maxlength="100" class="form-control" name="amount" #amount="ngModel" [(ngModel)]="payment.amount" required>
                     </div>
                 </div>
                 <div class="row">

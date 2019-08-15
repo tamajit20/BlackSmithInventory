@@ -45,21 +45,32 @@
         <label for="discount">Discount (Rs)</label>
     </div>
     <div class="col-md-2">
-        <input type="number" max="999999" maxlength="100" class="form-control" name="discount" #discount="ngModel" [(ngModel)]="model.discount">
+        <input type="number" min="0"  max="999999" maxlength="100" class="form-control" name="discount" #discount="ngModel" [(ngModel)]="model.discount">
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-1">
+        <label for="discount">CGST (Rs)</label>
+    </div>
+
+    <div class="col-md-2">
+        <input type="number" min="0" max="999999" maxlength="100" class="form-control" name="cgstTax" #cgstTax="ngModel" [(ngModel)]="model.cgstTax">
+    </div>
+
+    <div class="col-md-1">
+        <label for="discount">SGST (Rs)</label>
+    </div>
+    <div class="col-md-2">
+        <input type="number" min="0" max="999999" maxlength="100" class="form-control" name="sgstTax" #sgstTax="ngModel" [(ngModel)]="model.sgstTax">
+    </div>
+
+    <div class="col-md-3">
         <button type="button" class="btn btn-success btn-sm" (click)="save()">
             <span class="btn-default"></span> Generate
         </button>
         <span *ngIf="model.isFailure" class="text-bolder  text-color-red">{{model.msg}}</span>
         <span *ngIf="!model.isFailure && model.isGenerated">
             <span class="text-bolder text-color-green">{{model.msg}}</span>
-            <!--<span *ngIf="model.purchaseId">
-                <span class="vl"></span>
-                <span class="text-bolder">Purchase ID : </span>
-                <span class="text-color-red text-bolder">{{model.purchaseId}}</span>
-            </span>-->
+
         </span>
     </div>
 
@@ -99,8 +110,8 @@
                         </option>
                     </select>
                 </td>
-                <td><input (input)="calculateTotalPerProduct(eachPurchaseDetail.purchaseDetailNo)" class="inputText" type="number" max="999999" name="quantity_{{i}}" #quantity="ngModel" [(ngModel)]="model.purchaseDetails[getIndexByDetailNo(eachPurchaseDetail.purchaseDetailNo)].quantity" required></td>
-                <td><input (input)="calculateTotalPerProduct(eachPurchaseDetail.purchaseDetailNo)" class="inputText" type="number" max="999999" name="price_{{i}}" #price="ngModel" [(ngModel)]="model.purchaseDetails[getIndexByDetailNo(eachPurchaseDetail.purchaseDetailNo)].price" required></td>
+                <td><input (input)="calculateTotalPerProduct(eachPurchaseDetail.purchaseDetailNo)" class="inputText" type="number" min="0" max="999999" name="quantity_{{i}}" #quantity="ngModel" [(ngModel)]="model.purchaseDetails[getIndexByDetailNo(eachPurchaseDetail.purchaseDetailNo)].quantity" required></td>
+                <td><input (input)="calculateTotalPerProduct(eachPurchaseDetail.purchaseDetailNo)" class="inputText" type="number" min="0" max="999999" name="price_{{i}}" #price="ngModel" [(ngModel)]="model.purchaseDetails[getIndexByDetailNo(eachPurchaseDetail.purchaseDetailNo)].price" required></td>
                 <td>{{ eachPurchaseDetail.total}}</td>
                 <td><a href="javascript:void(0)" (click)="deletePurchaseDetail(eachPurchaseDetail.purchaseDetailNo)"><span class="glyphicon glyphicon-remove"></span></a></td>
             </tr>
@@ -110,7 +121,7 @@
 <div class="row" *ngIf="model.isGenerated && !model.isFailure">
     <span>
         <span class="text-bolder">Total :</span>
-        <span>Price : {{model.total}} + CGST({{model.cgstRate}}%) : {{model.cgstTax}} + SGST ({{model.sgstRate}}%) : {{model.sgstTax}} - Discount : {{model.discount}} = Rs- </span>
+        <span>Price : {{model.total}} + CGST : {{model.cgstTax}} + SGST : {{model.sgstTax}} - Discount : {{model.discount}} = Rs- </span>
         <span class="text-color-green text-bolder">{{model.finalTotal}} /-</span>
     </span>
     <span class="vl"></span>

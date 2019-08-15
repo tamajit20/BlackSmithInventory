@@ -41,7 +41,7 @@ namespace ViewModels
         public virtual long SaleDetailNo { get; set; }
         public virtual double Total { get; set; }
         public virtual Product Product { get; set; }
-
+        public virtual double AvailableQuantity { get; set; }
     }
 
     public class SalePayment : BaseModel

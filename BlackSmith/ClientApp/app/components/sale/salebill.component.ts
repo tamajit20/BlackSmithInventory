@@ -36,9 +36,7 @@ export class SaleBillComponent extends BaseComponent implements OnInit {
 
     ngOnInit(): void {
         this.addNew();
-        this.model.cgstRate = 9;
-        this.model.sgstRate = 9;
-
+       
         this.getAllCustomer();
         this.getAllProduct();
         this.loader.products = [];
@@ -80,6 +78,11 @@ export class SaleBillComponent extends BaseComponent implements OnInit {
     calculateTotalPerProduct(saleDetailNo: number) {
         this.model.isGenerated = false;
         var obj = this.model.saleDetails.find(x => x.saleDetailNo === saleDetailNo);
+
+        if (obj.quantity < 0) {
+            alert("Quantity cannot be less than 0");
+            obj.quantity = 0;
+        }
 
         if (obj.availableQuantity >= obj.quantity) {
             if (obj) {
@@ -143,6 +146,9 @@ export class SaleBillComponent extends BaseComponent implements OnInit {
 
     save() {
         if (this.validate()) {
+            this.model.cgstRate = 9;
+            this.model.sgstRate = 9;
+
             this.model.isGenerated = false;
             this.model.billDate = this.billDate.date.month + "/" + this.billDate.date.day + "/" + this.billDate.date.year;
             this._service.save(this.model).subscribe(data => {

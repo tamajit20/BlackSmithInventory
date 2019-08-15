@@ -17,7 +17,7 @@
         </div>
         <div class="col-md-1 text-bolder">Pay : </div>
         <div class="col-md-2">
-            <input type="number" maxlength="100" class="form-control" name="amount" #amount="ngModel" [(ngModel)]="model.amount" required>
+            <input type="number" min="0" max="99999" maxlength="100" class="form-control" name="amount" #amount="ngModel" [(ngModel)]="model.amount" required>
         </div>
         <div class="col-md-1">
             <button type="button" class="btn btn-default btn-sm" (click)="pay()"><span>Update</span></button>

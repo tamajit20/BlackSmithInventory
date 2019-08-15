@@ -45,7 +45,7 @@
         <label for="discount">Discount (Rs)</label>
     </div>
     <div class="col-md-2">
-        <input type="number" max="999999" maxlength="100" class="form-control" name="discount" #discount="ngModel" [(ngModel)]="model.discount">
+        <input type="number" min="0" max="999999" maxlength="100" class="form-control" name="discount" #discount="ngModel" [(ngModel)]="model.discount">
     </div>
 
     <div class="col-md-4">
@@ -101,8 +101,8 @@
                     </select>
                 </td>
                 <td>{{eachSaleDetail.availableQuantity}}</td>
-                <td><input (input)="calculateTotalPerProduct(eachSaleDetail.saleDetailNo)" class="inputText" type="number" max="999999" name="quantity_{{i}}" #quantity="ngModel" [(ngModel)]="model.saleDetails[getIndexByDetailNo(eachSaleDetail.saleDetailNo)].quantity" required></td>
-                <td><input (input)="calculateTotalPerProduct(eachSaleDetail.saleDetailNo)" class="inputText" type="number" max="999999" name="price_{{i}}" #price="ngModel" [(ngModel)]="model.saleDetails[getIndexByDetailNo(eachSaleDetail.saleDetailNo)].price" required></td>
+                <td><input (input)="calculateTotalPerProduct(eachSaleDetail.saleDetailNo)" class="inputText" type="number" min="0" max="999999" name="quantity_{{i}}" #quantity="ngModel" [(ngModel)]="model.saleDetails[getIndexByDetailNo(eachSaleDetail.saleDetailNo)].quantity" required></td>
+                <td><input (input)="calculateTotalPerProduct(eachSaleDetail.saleDetailNo)" class="inputText" type="number"min="0" max="999999" name="price_{{i}}" #price="ngModel" [(ngModel)]="model.saleDetails[getIndexByDetailNo(eachSaleDetail.saleDetailNo)].price" required></td>
                 <td>{{ eachSaleDetail.total}}</td>
                 <td><a href="javascript:void(0)" (click)="deleteSaleDetail(eachSaleDetail.saleDetailNo)"><span class="glyphicon glyphicon-remove"></span></a></td>
             </tr>
