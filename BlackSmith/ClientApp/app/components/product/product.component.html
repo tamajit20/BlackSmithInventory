@@ -11,7 +11,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="title">SSN</label>&nbsp;<label *ngIf="f.submitted && !ssn.valid" class="text-danger">Invalid</label>
+                    <label for="title">HSN</label>&nbsp;<label *ngIf="f.submitted && !ssn.valid" class="text-danger">Invalid</label>
                     <div [ngClass]="{ 'has-error': f.submitted && !ssn.valid }">
                         <input type="text" maxlength="100" class="form-control" name="ssn" #ssn="ngModel" [(ngModel)]="model.ssn" required>
                     </div>
@@ -40,14 +40,14 @@
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Price</th>
+                        <th>Availability</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let each of modelList">
                         <td>{{each.name}}</td>
-                        <td>{{each.price}}</td>
+                        <td>{{each.availibility}}</td>
                         <td>
                             <a><span class="glyphicon glyphicon-pencil" (click)="edit(each,model)"></span></a>
                             <a><span class="glyphicon glyphicon-trash" (click)="delete(each)"></span></a>

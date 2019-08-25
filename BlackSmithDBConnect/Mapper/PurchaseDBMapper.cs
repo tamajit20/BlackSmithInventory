@@ -27,6 +27,7 @@ namespace BlackSmithDBConnect
             builder.Property(c => c.DispatchThru);
             builder.Property(c => c.PaymentTerm);
             builder.Property(c => c.FK_SuplierId);
+            builder.Property(c => c.RoundOffTotal);
 
             builder.Property(c => c.CreatedOn);
             builder.Property(c => c.CreatedBy);

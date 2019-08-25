@@ -135,7 +135,7 @@ namespace BlackSmithAPI.Controllers
             {
                 if (input != null)
                 {
-                    Expression<Func<Purchase, object>>[] exp = new Expression<Func<Purchase, object>>[] { x => x.PurchasePayments, x => x.PurchaseDetails , x=>x.Suplier};
+                    Expression<Func<Purchase, object>>[] exp = new Expression<Func<Purchase, object>>[] { x => x.PurchasePayments, x => x.PurchaseDetails, x => x.Suplier };
                     var predicate = PredicateBuilder.True<Purchase>();
                     predicate = predicate.And(x => !x.IsDeleted);
 
@@ -247,7 +247,6 @@ namespace BlackSmithAPI.Controllers
                         HardDelete(input);
                     }
 
-                    input.PurchaseDate = DateTime.Now;
                     if (input != null && input.PurchaseDetails != null)
                     {
 
@@ -275,7 +274,7 @@ namespace BlackSmithAPI.Controllers
                         input.PurchaseDetails = purchaseDetails;
                     }
 
-                    input.FinalTotalInWords = "Rupees " + GetNumberInWords(input.FinalTotal) + " Only";
+                    input.FinalTotalInWords = "Rupees " + GetNumberInWords(input.RoundOffTotal) + " Only";
 
                     SaveBillInBillStore(input);
                 }
@@ -289,7 +288,6 @@ namespace BlackSmithAPI.Controllers
         }
 
         #region private methods
-
 
         private DocumentFormat.OpenXml.Spreadsheet.Cell ConstructCell(string value, CellValues dataType)
         {
@@ -305,7 +303,7 @@ namespace BlackSmithAPI.Controllers
             PurchaseList result = new PurchaseList();
             try
             {
-                Expression<Func<Purchase, object>>[] exp = new Expression<Func<Purchase, object>>[] { x => x.PurchasePayments, x => x.PurchaseDetails,x=>x.Suplier };
+                Expression<Func<Purchase, object>>[] exp = new Expression<Func<Purchase, object>>[] { x => x.PurchasePayments, x => x.PurchaseDetails, x => x.Suplier };
                 var predicate = PredicateBuilder.True<Purchase>();
                 predicate = predicate.And(x => !x.IsDeleted);
 
@@ -408,7 +406,7 @@ namespace BlackSmithAPI.Controllers
             {
                 if (input != null)
                 {
-                   // input.Total = 0; input.SGSTTax = 0; input.CGSTTax = 0; input.FinalTotal = 0;
+                    // input.Total = 0; input.SGSTTax = 0; input.CGSTTax = 0; input.FinalTotal = 0;
 
                     if (input.PurchaseDetails != null)
                     {
@@ -418,10 +416,11 @@ namespace BlackSmithAPI.Controllers
                             input.Total = Math.Round(input.Total + each.Total, 2);
                         }
 
-                     //   input.CGSTTax = Math.Round(input.Total * input.CGSTRate / 100, 2);
-                     //   input.SGSTTax = Math.Round(input.Total * input.SGSTRate / 100, 2);
+                        //   input.CGSTTax = Math.Round(input.Total * input.CGSTRate / 100, 2);
+                        //   input.SGSTTax = Math.Round(input.Total * input.SGSTRate / 100, 2);
 
-                        input.FinalTotal = Math.Round(input.Total + input.CGSTTax + input.SGSTTax - input.Discount, 2);
+                        input.FinalTotal = input.Total + input.CGSTTax + input.SGSTTax - input.Discount;
+                        input.RoundOffTotal = Math.Round(input.FinalTotal,0,MidpointRounding.AwayFromZero);
                     }
                 }
             }

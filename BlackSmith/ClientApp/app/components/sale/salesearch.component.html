@@ -57,7 +57,7 @@
                     <td>{{eachSale.billId}}</td>
                     <td>{{eachSale.customer.name}}</td>
                     <td>{{eachSale.billDate | date: 'dd/MM/yyyy'}}</td>
-                    <td>{{eachSale.finalTotal}}</td>
+                    <td>{{eachSale.roundOffTotal}}</td>
                     <td>{{eachSale.totalPaid}}</td>
                     <td>
                         <button type="button" class="btn btn-info btn-sm" (click)="showSaleDetail(eachSale)" data-toggle="modal" data-target="#saleDetailModal">
@@ -109,7 +109,7 @@
 
                     <div class="col-md-3">
                         <label for="customer">Total(Rs):</label>
-                        <span>{{payment.sale.finalTotal}}</span>
+                        <span>{{payment.sale.roundOffTotal}}</span>
                     </div>
 
                     <div class="col-md-3">
@@ -166,7 +166,7 @@
 
                     <div class="col-md-3">
                         <label for="customer">Total(Rs):</label>
-                        <span>{{saleDetails.finalTotal}}</span>
+                        <span>{{saleDetails.roundOffTotal}}</span>
                     </div>
 
                     <div class="col-md-3">
@@ -226,7 +226,7 @@
 
                     <div class="col-md-3">
                         <label for="customer">Total(Rs):</label>
-                        <span>{{salePayments.finalTotal}}</span>
+                        <span>{{salePayments.roundOffTotal}}</span>
                     </div>
 
                     <div class="col-md-3">

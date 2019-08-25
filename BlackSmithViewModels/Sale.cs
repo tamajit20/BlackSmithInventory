@@ -19,6 +19,7 @@ namespace ViewModels
         public virtual DateTime BillDate { get; set; }
         public virtual double Total { get; set; }
         public virtual double FinalTotal { get; set; }
+        public virtual double RoundOffTotal { get; set; }
         public virtual string FinalTotalInWords { get; set; }
         public string PaymentTerm { get; set; }
         public string DispatchThru { get; set; }

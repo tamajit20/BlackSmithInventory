@@ -11,6 +11,7 @@ export class Purchase extends ModelBase {
     discount: number;
     total: number;
     finalTotal: number;
+    roundOffTotal: number;
     totalPaid: number;
     purchaseDate: string;
     finalTotalInWords: string;

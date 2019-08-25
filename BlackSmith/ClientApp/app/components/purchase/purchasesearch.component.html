@@ -53,7 +53,7 @@
                     <!--<td>{{each.suplier.name}}</td>-->
                     <td>{{each.purchaseId}}</td>
                     <td>{{each.purchaseDate | date: 'dd/MM/yyyy'}}</td>
-                    <td>{{each.finalTotal}}</td>
+                    <td>{{each.roundOffTotal}}</td>
                     <td>{{each.totalPaid}}</td>
                     <td>
                         <button type="button" class="btn btn-info btn-sm" (click)="showPurchaseDetail(each)" data-toggle="modal" data-target="#purchaseDetailModal">
@@ -96,7 +96,7 @@
 
                     <div class="col-md-3">
                         <label for="customer">Total(Rs):</label>
-                        <span>{{purchaseDetails.finalTotal}}</span>
+                        <span>{{purchaseDetails.roundOffTotal}}</span>
                     </div>
 
                     <div class="col-md-3">
@@ -151,7 +151,7 @@
 
                     <div class="col-md-3">
                         <label for="customer">Total(Rs):</label>
-                        <span>{{payment.purchase.finalTotal}}</span>
+                        <span>{{payment.purchase.roundOffTotal}}</span>
                     </div>
 
                     <div class="col-md-3">
@@ -206,7 +206,7 @@
 
                     <div class="col-md-3">
                         <label for="customer">Total(Rs):</label>
-                        <span>{{purchasePayments.finalTotal}}</span>
+                        <span>{{purchasePayments.roundOffTotal}}</span>
                     </div>
 
                     <div class="col-md-3">

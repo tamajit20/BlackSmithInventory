@@ -140,7 +140,7 @@ namespace BlackSmithAPI.Controllers
                         row.Append(
                             ConstructCell(eachSale.BillId, CellValues.Number),
                             ConstructCell(eachSale.Customer.Name, CellValues.String),
-                            ConstructCell(eachSale.FinalTotal.ToString(), CellValues.Number),
+                            ConstructCell(eachSale.RoundOffTotal.ToString(), CellValues.Number),
                             ConstructCell(eachSale.BillDate.ToString("dd/MM/yyyy"), CellValues.String));
 
                         sheetData.AppendChild(row);
@@ -193,7 +193,7 @@ namespace BlackSmithAPI.Controllers
                             }
                         }
 
-                        result.Due = Math.Round(result.FinalTotal - result.TotalPaid, 2);
+                        result.Due = Math.Round(result.RoundOffTotal - result.TotalPaid, 2);
                         //nullifying to avoid object chain
                         if (result.SalePayments != null)
                             result.SalePayments.ForEach(x => x.Sale = null);
@@ -258,7 +258,6 @@ namespace BlackSmithAPI.Controllers
                         input.BillId = GenerateBillId();
                     }
 
-                    input.BillDate = DateTime.Now;
                     if (input != null && input.SaleDetails != null)
                     {
 
@@ -390,7 +389,7 @@ namespace BlackSmithAPI.Controllers
                         if (x.Customer != null)
                             x.Customer.Sales = null;
 
-                        x.Due = Math.Round(x.FinalTotal - x.TotalPaid, 2);
+                        x.Due = Math.Round(x.RoundOffTotal - x.TotalPaid, 2);
 
                     });
                 }
@@ -406,6 +405,8 @@ namespace BlackSmithAPI.Controllers
         {
             try
             {
+                //https://www.pdfescape.com/open/?2232A9CA594F8479C59FB43CE56F8F27B679429F3061D0D6
+
                 SearchObject s = new SearchObject() { SaleIds = new List<long>() { input.Id } };
 
                 var result = GetSaleList(s);
@@ -416,7 +417,7 @@ namespace BlackSmithAPI.Controllers
                 }
                 if (input != null)
                 {
-                    input.FinalTotalInWords = "Rupees " + GetNumberInWords(input.FinalTotal) + " Only";
+                    input.FinalTotalInWords = "Rupees " + GetNumberInWords(input.RoundOffTotal) + " Only";
 
                     string fileNameExisting = @_configuration["Configuration:BillFormatTemplatePath"];
                     string fileNameNew = @_configuration["Configuration:BillStorePath"] + input.Id + "_" + input.BillId + ".pdf";
@@ -504,7 +505,7 @@ namespace BlackSmithAPI.Controllers
                         var finalTotal = fieldKeys.Find(x => x.ToUpper() == "FINALTOTAL");
                         if (finalTotal != null)
                         {
-                            form.SetField(finalTotal, input.FinalTotal.ToString());
+                            form.SetField(finalTotal, input.RoundOffTotal.ToString());
                         }
 
                         var billingAddress = fieldKeys.Find(x => x.ToUpper() == "BILLINGADDRESS");
@@ -538,7 +539,7 @@ namespace BlackSmithAPI.Controllers
                                 var hsn = fieldKeys.Find(x => x.ToUpper() == "HSN" + (i + 1));
                                 if (hsn != null)
                                 {
-                                    form.SetField(hsn, _configuration["Configuration:HSN"]);
+                                    form.SetField(hsn, input.SaleDetails[i].Product != null ? input.SaleDetails[i].Product.SSN : string.Empty);
                                 }
 
                                 var desc = fieldKeys.Find(x => x.ToUpper() == "DESC" + (i + 1));
@@ -653,8 +654,9 @@ namespace BlackSmithAPI.Controllers
                         input.CGSTTax = Math.Round(input.Total * input.CGSTRate / 100, 2);
                         input.SGSTTax = Math.Round(input.Total * input.SGSTRate / 100, 2);
 
-                        input.FinalTotal = Math.Round(input.Total + input.CGSTTax + input.SGSTTax - input.Discount, 2);
-                        input.FinalTotalInWords = "Rupees " + GetNumberInWords(input.FinalTotal) + " Only";
+                        input.FinalTotal = input.Total + input.CGSTTax + input.SGSTTax - input.Discount;
+                        input.RoundOffTotal = Math.Round(input.FinalTotal, 0, MidpointRounding.AwayFromZero);
+                        input.FinalTotalInWords = "Rupees " + GetNumberInWords(input.RoundOffTotal) + " Only";
                     }
                 }
             }
@@ -673,11 +675,14 @@ namespace BlackSmithAPI.Controllers
             string billId = string.Empty;
             string billSeperator = string.Empty;
             string billInitial = string.Empty;
+            string defaultNo = string.Empty;
             try
             {
                 billInitial = _configuration["Configuration:BillInitial"];
                 billSeperator = _configuration["Configuration:BillSeperator"];
-                billId = billInitial + billSeperator + 1;//default
+                defaultNo = _configuration["Configuration:FirstBillNo"];
+
+                billId = billInitial + billSeperator + defaultNo ;//default
 
                 var predicate = PredicateBuilder.True<Sale>();
                 if (_configuration["Configuration:IgnoreDeleted"].ToLower().Trim() == "false")
