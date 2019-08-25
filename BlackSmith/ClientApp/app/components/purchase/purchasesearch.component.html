@@ -39,7 +39,8 @@
                 <tr>
                     <!--<th>Purchase#</th>-->
                     <!--<th>Suplier</th>-->
-                    <th> Invoice Date</th>
+                    <th>Invoice#</th>
+                    <th>Date</th>
                     <th>Amount (Rs)</th>
                     <th>Paid (Rs)</th>
                     <th>Information</th>
@@ -50,7 +51,8 @@
                 <tr *ngFor="let each of searchResult.purchases;let i = index">
                     <!--<td>{{each.billId}}</td>-->
                     <!--<td>{{each.suplier.name}}</td>-->
-                    <td>{{each.purchaseDate}}</td>
+                    <td>{{each.purchaseId}}</td>
+                    <td>{{each.purchaseDate | date: 'dd/MM/yyyy'}}</td>
                     <td>{{each.finalTotal}}</td>
                     <td>{{each.totalPaid}}</td>
                     <td>
@@ -223,7 +225,7 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let each of purchasePayments.purchasePayments;let i = index">
-                                <td>{{each.paymentDate}}</td>
+                                <td>{{each.paymentDate | date: 'dd/MM/yyyy'}}</td>
                                 <td>{{each.amount}}</td>
                             </tr>
                         </tbody>

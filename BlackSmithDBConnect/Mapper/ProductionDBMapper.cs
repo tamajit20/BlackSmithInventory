@@ -15,6 +15,7 @@ namespace BlackSmithDBConnect
         {
             builder.HasKey(c => c.Id);
             builder.Property(c => c.Date);
+            builder.Property(c=>c.Note);
 
             builder.Property(c => c.CreatedOn);
             builder.Property(c => c.CreatedBy);

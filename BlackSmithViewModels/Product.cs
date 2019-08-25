@@ -9,6 +9,7 @@ namespace ViewModels
     public class Product : BaseModel
     {
         public virtual string Name { get; set; }
+        public virtual string SSN { get; set; }
         public virtual string Description { get; set; }
         public virtual string Image { get; set; }
         public virtual double Price { get; set; }

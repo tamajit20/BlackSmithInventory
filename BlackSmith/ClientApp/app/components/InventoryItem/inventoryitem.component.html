@@ -11,8 +11,15 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="title">SSN</label>&nbsp;<label *ngIf="f.submitted && !ssn.valid" class="text-danger">Required</label>
+                    <div [ngClass]="{ 'has-error': f.submitted && !ssn.valid }">
+                        <input type="text" maxlength="100" class="form-control" name="ssn" #ssn="ngModel" [(ngModel)]="model.ssn" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label for="title">Description</label>&nbsp;<label *ngIf="f.submitted && !description.valid" class="text-danger">Required</label>
-                    <div [ngClass]="{ 'has-error': f.submitted && !name.valid }">
+                    <div [ngClass]="{ 'has-error': f.submitted && !description.valid }">
                         <textarea rows="6" maxlength="1000" class="form-control" name="description" #description="ngModel" [(ngModel)]="model.description" required></textarea>
                     </div>
                 </div>

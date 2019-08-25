@@ -23,6 +23,7 @@ namespace BlackSmithDBConnect
             builder.Property(c => c.ModifiedBy);
             builder.Property(c => c.Image);
             builder.Property(c => c.Availibility);
+            builder.Property(c=>c.SSN);
 
             builder.ToTable("tProduct");
         }

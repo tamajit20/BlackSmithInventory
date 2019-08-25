@@ -56,7 +56,7 @@
                 <tr *ngFor="let eachSale of searchResult.sales;let i = index">
                     <td>{{eachSale.billId}}</td>
                     <td>{{eachSale.customer.name}}</td>
-                    <td>{{eachSale.billDate}}</td>
+                    <td>{{eachSale.billDate | date: 'dd/MM/yyyy'}}</td>
                     <td>{{eachSale.finalTotal}}</td>
                     <td>{{eachSale.totalPaid}}</td>
                     <td>

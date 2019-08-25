@@ -9,6 +9,7 @@ namespace ViewModels
     public class Production : BaseModel
     {
         public virtual DateTime Date { get; set; }
+        public virtual string Note { get; set; }
         public virtual List<ProductionInventoryItem> ProductionInventoryItems { get; set; }
         public virtual List<ProductionProduct> ProductionProducts { get; set; }
 

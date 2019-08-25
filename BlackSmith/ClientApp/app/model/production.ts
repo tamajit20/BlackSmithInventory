@@ -4,6 +4,7 @@ import { Product } from "./product";
 
 export class Production extends ModelBase {
     date: string;
+    note: string;
     productionProducts: ProductionProduct[];
     productionInventoryItems: ProductionInventoryItem[];
     isGenerated: boolean = false;

@@ -6,4 +6,5 @@ export class Product extends ModelBase {
   //  image: FileList;
     price: number;
     availibility: number;
+    ssn: string;
 }

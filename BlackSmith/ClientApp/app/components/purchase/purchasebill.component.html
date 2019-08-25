@@ -45,7 +45,7 @@
         <label for="discount">Discount (Rs)</label>
     </div>
     <div class="col-md-2">
-        <input type="number" min="0"  max="999999" maxlength="100" class="form-control" name="discount" #discount="ngModel" [(ngModel)]="model.discount">
+        <input type="number" min="0" max="999999" maxlength="100" class="form-control" name="discount" #discount="ngModel" [(ngModel)]="model.discount">
     </div>
 
     <div class="col-md-1">
@@ -63,6 +63,15 @@
         <input type="number" min="0" max="999999" maxlength="100" class="form-control" name="sgstTax" #sgstTax="ngModel" [(ngModel)]="model.sgstTax">
     </div>
 
+    <div class="col-md-1">
+        <label for="discount">Invoice#</label>
+    </div>
+    <div class="col-md-2">
+        <input type="text" maxlength="100" class="form-control" name="purchaseId" #purchaseId="ngModel" [(ngModel)]="model.purchaseId">
+    </div>
+</div>
+
+<div class="row row-gap">
     <div class="col-md-3">
         <button type="button" class="btn btn-success btn-sm" (click)="save()">
             <span class="btn-default"></span> Generate
@@ -74,7 +83,7 @@
         </span>
     </div>
 
-    <div class="col-md-5">
+    <div class="col-md-5 pull-right">
         <button *ngIf="model.purchaseId && model.isGenerated" type="button" class="btn btn-warning btn-sm" (click)="download()">
             <span class="fa fa-download"></span>
         </button>

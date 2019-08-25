@@ -21,6 +21,7 @@ namespace BlackSmithDBConnect
             builder.Property(c => c.ModifiedOn);
             builder.Property(c => c.ModifiedBy);
             builder.Property(c => c.Availibility);
+            builder.Property(c=>c.SSN);
 
             builder.ToTable("tInventoryItem");
         }
