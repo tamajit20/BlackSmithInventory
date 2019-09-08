@@ -569,7 +569,7 @@ namespace BlackSmithAPI.Controllers
                                 var amount = fieldKeys.Find(x => x.ToUpper() == "AMT" + (i + 1));
                                 if (amount != null)
                                 {
-                                    double amt = Math.Round((input.SaleDetails[i].Price * input.SaleDetails[i].Quantity), 2);
+                                    decimal amt = Math.Round((input.SaleDetails[i].Price * input.SaleDetails[i].Quantity), 2);
                                     form.SetField(amount, amt.ToString());
                                 }
                             }
@@ -709,7 +709,7 @@ namespace BlackSmithAPI.Controllers
             return billId;
         }
 
-        private string GetNumberInWords(double input)
+        private string GetNumberInWords(decimal input)
         {
             string isNegative = "";
             string number = string.Empty;

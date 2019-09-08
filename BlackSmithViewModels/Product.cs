@@ -12,9 +12,9 @@ namespace ViewModels
         public virtual string SSN { get; set; }
         public virtual string Description { get; set; }
         public virtual string Image { get; set; }
-        public virtual double Price { get; set; }
+        public virtual decimal Price { get; set; }
         public virtual List<SaleDetail> SaleDetails { get; set; }
         public virtual List<ProductionProduct> ProductionProducts { get; set; }
-        public virtual double Availibility { get; set; }
+        public virtual decimal Availibility { get; set; }
     }
 }

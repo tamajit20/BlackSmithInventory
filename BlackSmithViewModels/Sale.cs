@@ -9,17 +9,17 @@ namespace ViewModels
     public class Sale : BaseModel
     {
         public virtual long FK_CustomerId { get; set; }
-        public virtual double Discount { get; set; }
-        public virtual double CGSTRate { get; set; }
-        public virtual double CGSTTax { get; set; }
-        public virtual double SGSTRate { get; set; }
-        public virtual double SGSTTax { get; set; }
+        public virtual decimal Discount { get; set; }
+        public virtual decimal CGSTRate { get; set; }
+        public virtual decimal CGSTTax { get; set; }
+        public virtual decimal SGSTRate { get; set; }
+        public virtual decimal SGSTTax { get; set; }
         public virtual string Note { get; set; }
         public virtual string BillId { get; set; }
         public virtual DateTime BillDate { get; set; }
-        public virtual double Total { get; set; }
-        public virtual double FinalTotal { get; set; }
-        public virtual double RoundOffTotal { get; set; }
+        public virtual decimal Total { get; set; }
+        public virtual decimal FinalTotal { get; set; }
+        public virtual decimal RoundOffTotal { get; set; }
         public virtual string FinalTotalInWords { get; set; }
         public string PaymentTerm { get; set; }
         public string DispatchThru { get; set; }
@@ -28,28 +28,28 @@ namespace ViewModels
         public virtual List<SalePayment> SalePayments { get; set; }
         public virtual Customer Customer { get; set; }
 
-        public virtual double TotalPaid { get; set; }
-        public virtual double Due { get; set; }
+        public virtual decimal TotalPaid { get; set; }
+        public virtual decimal Due { get; set; }
     }
 
     public class SaleDetail : BaseModel
     {
         public virtual long FK_SaleId { get; set; }
         public virtual long FK_ProductId { get; set; }
-        public virtual double Price { get; set; }
-        public virtual double Quantity { get; set; }
+        public virtual decimal Price { get; set; }
+        public virtual decimal Quantity { get; set; }
         public virtual Sale Sale { get; set; }
         public virtual long SaleDetailNo { get; set; }
-        public virtual double Total { get; set; }
+        public virtual decimal Total { get; set; }
         public virtual Product Product { get; set; }
-        public virtual double AvailableQuantity { get; set; }
+        public virtual decimal AvailableQuantity { get; set; }
     }
 
     public class SalePayment : BaseModel
     {
         public virtual DateTime PaymentDate { get; set; }
         public virtual long FK_SaleId { get; set; }
-        public virtual double Amount { get; set; }
+        public virtual decimal Amount { get; set; }
         public virtual string Note { get; set; }
         public virtual string BillId { get; set; }
         public virtual Sale Sale { get; set; }

@@ -121,7 +121,7 @@
                                 <td>{{each.item.name}}</td>
                                 <td>{{each.quantity}}</td>
                                 <td>{{each.price}}</td>
-                                <td>{{each.quantity * each.price}}</td>
+                                <td>{{ Math.round(each.quantity * each.price ) }}</td>
                             </tr>
                         </tbody>
                     </table>

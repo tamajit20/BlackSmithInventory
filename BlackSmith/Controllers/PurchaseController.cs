@@ -159,7 +159,7 @@ namespace BlackSmithAPI.Controllers
                             }
                         }
 
-                        result.Due = Math.Round(result.FinalTotal - result.TotalPaid, 2);
+                        result.Due = Math.Round(result.RoundOffTotal - result.TotalPaid, 2);
                         //nullifying to avoid object chain
                         if (result.PurchasePayments != null)
                             result.PurchasePayments.ForEach(x => x.Purchase = null);
@@ -352,7 +352,7 @@ namespace BlackSmithAPI.Controllers
                         if (x.Suplier != null)
                             x.Suplier.Purchases = null;
 
-                        x.Due = Math.Round(x.FinalTotal - x.TotalPaid, 2);
+                        x.Due = Math.Round(x.RoundOffTotal - x.TotalPaid, 2);
 
                     });
                 }
@@ -434,7 +434,7 @@ namespace BlackSmithAPI.Controllers
         }
 
 
-        private string GetNumberInWords(double input)
+        private string GetNumberInWords(decimal input)
         {
             string isNegative = "";
             string number = string.Empty;

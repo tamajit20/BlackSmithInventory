@@ -19,7 +19,7 @@ namespace ViewModels
     {
         public virtual long FK_ProductionId { get; set; }
         public virtual long FK_InventoryItemId { get; set; }
-        public virtual double Quantity { get; set; }
+        public virtual decimal Quantity { get; set; }
         public virtual Production Production { get; set; }
         public virtual InventoryItem InventoryItem { get; set; }
 
@@ -30,7 +30,7 @@ namespace ViewModels
     {
         public virtual long FK_ProductionId { get; set; }
         public virtual long FK_ProductId { get; set; }
-        public virtual double Quantity { get; set; }
+        public virtual decimal Quantity { get; set; }
         public virtual Production Production { get; set; }
         public virtual Product Product { get; set; }
         public virtual int DetailNo { get; set; }
