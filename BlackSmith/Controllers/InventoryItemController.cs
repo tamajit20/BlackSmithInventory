@@ -12,7 +12,7 @@ namespace BlackSmithAPI.Controllers
 {
     [Produces("application/json")]
     [Route("api/InventoryItem/[action]")]
-    public class InventoryItemController : Controller
+    public class InventoryItemController : BaseController
     {
         private IOperation<InventoryItem> _baseOpp;
 

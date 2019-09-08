@@ -1,4 +1,5 @@
-﻿using BlackSmithCore;
+﻿using BlackSmith;
+using BlackSmithCore;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace BlackSmithAPI.Controllers
 {
     [Produces("application/json")]
     [Route("api/Customer/[action]")]
-    public class CustomerController : Controller
+    public class CustomerController : BaseController
     {
         private IOperation<Customer> _custOpp;
 
@@ -54,6 +55,7 @@ namespace BlackSmithAPI.Controllers
             }
             catch (Exception ex)
             {
+               Utility.WriteLog(ex);
             }
             return result;
         }

@@ -29,6 +29,16 @@
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <label for="title">GSTIN</label>
+                    <input type="text" maxlength="100" class="form-control" name="gstin" #gstin="ngModel" [(ngModel)]="model.gstin">
+                </div>
+
+                <div class="form-group">
+                    <label for="title">PAN</label>
+                    <input type="text" maxlength="100" class="form-control" name="pan" #pan="ngModel" [(ngModel)]="model.pan">
+                </div>
+
                 <button class="btn btn-default">Save</button>
                 <input type="button" class="btn btn-default" value="Clear" (click)="addNew()">
             </div>
@@ -39,8 +49,8 @@
                     <tr>
                         <th>Name</th>
                         <th>Contact No</th>
-                        <th>Email</th>
-                        <th>Address</th>
+                        <th>GSTIN</th>
+                        <th>PAN</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -48,8 +58,8 @@
                     <tr *ngFor="let each of modelList">
                         <td>{{each.name}}</td>
                         <td>{{each.contactNo}}</td>
-                        <td>{{each.emailId}}</td>
-                        <td>{{each.address}}</td>
+                        <td>{{each.gstin}}</td>
+                        <td>{{each.pan}}</td>
                         <td>
                             <a><span class="glyphicon glyphicon-pencil" (click)="edit(each,model)"></span></a>
                             <a><span class="glyphicon glyphicon-trash" (click)="delete(each)"></span></a>

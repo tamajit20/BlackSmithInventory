@@ -12,7 +12,7 @@ namespace BlackSmithAPI.Controllers
 {
     [Produces("application/json")]
     [Route("api/Product/[action]")]
-    public class ProductController : Controller
+    public class ProductController : BaseController
     {
         private IOperation<Product> _baseOpp;
 

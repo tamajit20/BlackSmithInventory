@@ -24,7 +24,7 @@ namespace BlackSmithAPI.Controllers
 {
     // [Produces("application/json")]
     [Route("api/Sale/[action]")]
-    public class SaleController : Controller
+    public class SaleController : BaseController
     {
         private IOperation<Sale> _saleOpp;
         private IOperation<SaleDetail> _saleDetailOpp;
@@ -365,7 +365,7 @@ namespace BlackSmithAPI.Controllers
                 if (input.CustomerIds != null && input.CustomerIds.Count > 0)
                     predicate = predicate.And(x => input.CustomerIds.Contains(x.FK_CustomerId));
 
-                result.Sales = _saleOpp.GetAllUsingExpression(out int totalCount, 1, 0, predicate, null, null, exp).OrderByDescending(x => x.BillDate).ToList();
+                result.Sales = _saleOpp.GetAllUsingExpression(out int totalCount, 1, 0, predicate, null, null, exp).OrderByDescending(x => x.Id).ToList();
 
                 var predicateProd = PredicateBuilder.True<Product>();
                 predicateProd = predicateProd.And(x => !x.IsDeleted);

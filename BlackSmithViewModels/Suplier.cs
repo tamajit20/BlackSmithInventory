@@ -8,10 +8,12 @@ namespace ViewModels
 {
     public class Suplier : BaseModel
     {
-        public string Name { get; set; }
-        public string Address { get; set; }
-        public string ContactNo { get; set; }
-        public string EmailId { get; set; }
-        public List<Purchase> Purchases { get; set; }
+        virtual public string Name { get; set; }
+        virtual public string Address { get; set; }
+        virtual public string ContactNo { get; set; }
+        virtual public string EmailId { get; set; }
+        virtual public List<Purchase> Purchases { get; set; }
+        virtual public string GSTIN { get; set; }
+        virtual public string PAN { get; set; }
     }
 }

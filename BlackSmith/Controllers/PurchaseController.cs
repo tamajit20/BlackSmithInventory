@@ -24,7 +24,7 @@ namespace BlackSmithAPI.Controllers
 {
     // [Produces("application/json")]
     [Route("api/Purchase/[action]")]
-    public class PurchaseController : Controller
+    public class PurchaseController : BaseController
     {
         private IOperation<Purchase> _purchaseOpp;
         private IOperation<PurchaseDetail> _purchaseDetailOpp;

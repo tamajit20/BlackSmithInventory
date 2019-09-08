@@ -63,6 +63,7 @@
   "dependencies": {
     "angular4-datepicker": "^1.0.1",
     "file-saver": "^2.0.1",
+    "increase-memory-limit": "^1.0.7",
     "mydatepicker": "^2.6.6"
   }
 }

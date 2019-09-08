@@ -12,7 +12,7 @@ namespace BlackSmithAPI.Controllers
 {
     [Produces("application/json")]
     [Route("api/Suplier/[action]")]
-    public class SuplierController : Controller
+    public class SuplierController : BaseController
     {
         private IOperation<Suplier> _supOpp;
 
