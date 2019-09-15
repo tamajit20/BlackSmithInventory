@@ -23,6 +23,7 @@ export class Sale extends ModelBase {
     due: number;
     paymentTerm: string;
     dispatchThru: string;
+    roundOffTotal: number;
 }
 
 export class SaleDetail extends ModelBase {
