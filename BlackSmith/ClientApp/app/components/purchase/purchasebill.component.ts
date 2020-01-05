@@ -24,7 +24,7 @@ export class PurchaseBillComponent extends BaseComponent implements OnInit {
     };
     today = { date: { year: (new Date()).getFullYear(), month: (new Date()).getMonth() + 1, day: (new Date()).getDate() } };
     purchaseDate: any = this.today;
-    paymentTerms = ['Cash','Check','Transfer'];
+    paymentTerms = ['Cash','Cheque','Transfer'];
 
     constructor(
         private _service: PurchaseService
