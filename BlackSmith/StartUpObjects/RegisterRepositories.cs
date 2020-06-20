@@ -1,8 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ViewModels;
 using BlackSmithCore;
 
@@ -12,6 +8,7 @@ namespace BlackSmith.StartUpObjects
     {
         public void Register(IServiceCollection services)
         {
+            services.AddScoped<IOperation<User>, Operation<User>>();
             services.AddScoped<IOperation<Customer>, Operation<Customer>>();
             services.AddScoped<IOperation<Suplier>, Operation<Suplier>>();
             services.AddScoped<IOperation<InventoryItem>, Operation<InventoryItem>>();

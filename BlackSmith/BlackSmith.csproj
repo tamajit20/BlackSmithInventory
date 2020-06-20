@@ -37,6 +37,7 @@
     <None Remove="ClientApp\app\model\searchobject.ts" />
     <None Remove="ClientApp\app\model\suplier.ts" />
     <None Remove="ClientApp\app\model\user.ts" />
+    <None Remove="ClientApp\app\services\authenticationservice.ts" />
     <None Remove="ClientApp\app\services\customerservice.ts" />
     <None Remove="ClientApp\app\services\inventoryitemservice.ts" />
     <None Remove="ClientApp\app\services\productionservice.ts" />
@@ -66,6 +67,7 @@
     <TypeScriptCompile Include="ClientApp\app\model\product.ts" />
     <TypeScriptCompile Include="ClientApp\app\model\inventoryitem.ts" />
     <TypeScriptCompile Include="ClientApp\app\model\customer.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\authenticationservice.ts" />
     <TypeScriptCompile Include="ClientApp\app\services\productionservice.ts" />
     <TypeScriptCompile Include="ClientApp\app\services\userservice.ts" />
     <TypeScriptCompile Include="ClientApp\app\services\sharedservice.ts" />

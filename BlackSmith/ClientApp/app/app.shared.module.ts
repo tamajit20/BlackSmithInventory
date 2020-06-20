@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
-//import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './components/app/app.component';
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
@@ -17,6 +16,7 @@ import { CustomerSerivce } from './services/customerservice';
 import { SuplierService } from './services/suplierservice';
 import { InventoryItemService } from './services/inventoryitemservice';
 import { ProductSerivce } from './services/productservice';
+import { AuthenticationService } from './services/authenticationservice';
 import { LoginComponent } from './components/login/login.component';
 import { UserService } from './services/userservice';
 import { PurchaseService } from './services/purchaseservice';
@@ -62,16 +62,17 @@ import { ProductionSearchComponent } from './components/production/productionsea
     ],
     providers: [
         CustomerSerivce,
+        UserService,
         SuplierService,
         InventoryItemService,
         ProductSerivce,
         UserService,
         PurchaseService,
         SaleService,
-        ProductionService
+        ProductionService,
+        AuthenticationService
     ],
     imports: [
-       // CommonModule,
         BrowserModule,
         HttpClientModule,
         HttpModule,
@@ -80,17 +81,17 @@ import { ProductionSearchComponent } from './components/production/productionsea
         RouterModule.forRoot([
             { path: '', component: LoginComponent },
             {
-                path: 'home', component: HomeComponent,
+                path: 'home', component: HomeComponent, canActivate:[AuthenticationService],
                 children: [
-                    { path: 'customer', component: CustomerComponent, outlet: 'homeoutlet' },
-                    { path: 'saleconfig', component: SaleConfigComponent, outlet: 'homeoutlet' },
-                    { path: 'productionconfig', component: ProductionConfigComponent, outlet: 'homeoutlet' },
-                    { path: 'purchaseconfig', component: PurchaseConfigComponent, outlet: 'homeoutlet' },
-                    { path: 'report', component: ReportComponent, outlet: 'homeoutlet' },
-                    { path: 'dashboard', component: DashboardComponent, outlet: 'homeoutlet' },
-                    { path: 'product', component: ProductComponent, outlet: 'homeoutlet' },
-                    { path: 'suplier', component: SuplierComponent, outlet: 'homeoutlet' },
-                    { path: 'inventoryitem', component: InventoryItemComponent, outlet: 'homeoutlet' }
+                    { path: 'customer', component: CustomerComponent, outlet: 'homeoutlet', canActivate: [AuthenticationService] },
+                    { path: 'saleconfig', component: SaleConfigComponent, outlet: 'homeoutlet', canActivate: [AuthenticationService]},
+                    { path: 'productionconfig', component: ProductionConfigComponent, outlet: 'homeoutlet', canActivate: [AuthenticationService] },
+                    { path: 'purchaseconfig', component: PurchaseConfigComponent, outlet: 'homeoutlet', canActivate: [AuthenticationService] },
+                    { path: 'report', component: ReportComponent, outlet: 'homeoutlet', canActivate: [AuthenticationService]},
+                    { path: 'dashboard', component: DashboardComponent, outlet: 'homeoutlet', canActivate: [AuthenticationService]},
+                    { path: 'product', component: ProductComponent, outlet: 'homeoutlet', canActivate: [AuthenticationService] },
+                    { path: 'suplier', component: SuplierComponent, outlet: 'homeoutlet', canActivate: [AuthenticationService]},
+                    { path: 'inventoryitem', component: InventoryItemComponent, outlet: 'homeoutlet', canActivate: [AuthenticationService]}
                 ]
             },
             { path: '**', redirectTo: '' }

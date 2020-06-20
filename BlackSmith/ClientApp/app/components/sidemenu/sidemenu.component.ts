@@ -6,4 +6,8 @@ import { Component } from '@angular/core';
     styleUrls: ['./sidemenu.component.css']
 })
 export class SideMenuComponent {
+
+    logout() {
+        localStorage.setItem('ISON', 'false');
+    }
 }

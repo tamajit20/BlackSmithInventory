@@ -15,7 +15,8 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent extends BaseComponent implements OnInit {
 
-   // model: User;
+    model: User;
+    message: String;
 
     constructor(
         private _service: UserService,
@@ -25,13 +26,19 @@ export class LoginComponent extends BaseComponent implements OnInit {
     }
 
     ngOnInit(): void {
-
+        this.model = <User>({});
+        localStorage.setItem('ISON', 'false');
     }
 
     ValidateUser() {
-        //this._service.ValidateUser(this.model).subscribe(data => {
-        //    this.model = data;
-        //});
-        this.router.navigate(['/home', { outlets: {homeoutlet:['dashboard']}}]);
+        this._service.ValidateUser(this.model).subscribe(data => {
+            if (data) {
+                localStorage.setItem('ISON', 'true');
+                this.router.navigate(['/home', { outlets: { homeoutlet: ['dashboard'] } }]);
+            }
+            else {
+                this.message = "Invalid Password";
+            }
+        });
     }
 }

@@ -5,9 +5,9 @@ import { style } from '@angular/core/src/animation/dsl';
     selector: 'home',
     templateUrl: './home.component.html',
     styleUrls: [
-        '../../style/normalized.css',
-        
+        '../../style/normalized.css'    
     ]
 })
+
 export class HomeComponent {
 }

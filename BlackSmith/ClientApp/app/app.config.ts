@@ -1,7 +1,7 @@
 import { Headers, RequestOptions } from '@angular/http';
 
 export class AppConfig {
-    public static API_ENDPOINT = "http://localhost:54885/api/";
+    public static API_ENDPOINT = "http://localhost:54887/api/";
     public static REQUEST_HEADER = new RequestOptions({ headers: new Headers({ 'Content-Type': 'application/json' }) });
 
     public static USER_VALIDATE = "User/Validate";

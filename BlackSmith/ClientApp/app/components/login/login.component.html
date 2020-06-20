@@ -1,1 +1,23 @@
-<button type="button" (click)="ValidateUser()">Click Me!</button>
+<br/><br /><br /><br />  
+  <div>
+        <div class="col-md-4"></div>
+        <div class="container col-md-4">
+            <form name="form" class="form-horizontal" (ngSubmit)="f.form.valid && ValidateUser()" #f="ngForm" novalidate>
+
+                <div class="form-group">
+                    <label for="title">User Name</label>&nbsp;<label *ngIf="f.submitted && !username.valid" class="text-danger">Required</label>
+                    <input type="text" maxlength="100" class="form-control" name="username" #username="ngModel" [(ngModel)]="model.username" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="title">Password</label>&nbsp;<label *ngIf="f.submitted && !password.valid" class="text-danger">Required</label>
+                    <input type="password" maxlength="100" class="form-control" name="password" #password="ngModel" [(ngModel)]="model.password" required>
+                </div>
+
+                <div class="form-group">
+                    <button class="btn btn-info">Login</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-4"></div>
+    </div>

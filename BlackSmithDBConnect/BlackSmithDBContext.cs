@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ViewModels;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using static BlackSmithDBConnect.ProductionDBMapper;
 using static BlackSmithDBConnect.ProductionDBMapper.ProductionInventoryItemDBMapper;
 
@@ -34,6 +28,7 @@ namespace BlackSmithDBConnect
             modelBuilder.ApplyConfiguration(new ProductionDBMapper());
             modelBuilder.ApplyConfiguration(new ProductionInventoryItemDBMapper());
             modelBuilder.ApplyConfiguration(new ProductionProductDBMapper());
+            modelBuilder.ApplyConfiguration(new UserDBMapper());
         }      
     }
 }
