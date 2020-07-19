@@ -97,7 +97,7 @@ export class SaleBillComponent extends BaseComponent implements OnInit {
     }
 
     download() {
-        this._service.downloadBill(this.model);
+        this._service.downloadBill(this.model.id);
     }
 
     validate() {

@@ -48,7 +48,7 @@
         <input type="number" min="0" max="999999" maxlength="100" class="form-control" name="discount" #discount="ngModel" [(ngModel)]="model.discount">
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-5">
         <button type="button" class="btn btn-success btn-sm" (click)="save()">
             <span class="btn-default"></span> Generate
         </button>
@@ -63,7 +63,7 @@
         </span>
     </div>
 
-    <div class="col-md-5">
+    <div class="col-md-4">
         <button *ngIf="model.billId && model.isGenerated" type="button" class="btn btn-warning btn-sm" (click)="download()">
             <span class="fa fa-download"></span>
         </button>

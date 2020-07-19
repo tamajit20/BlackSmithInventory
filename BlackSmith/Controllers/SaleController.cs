@@ -420,7 +420,7 @@ namespace BlackSmithAPI.Controllers
                     input.FinalTotalInWords = "Rupees " + GetNumberInWords(input.RoundOffTotal) + " Only";
 
                     string fileNameExisting = @_configuration["Configuration:BillFormatTemplatePath"];
-                    string fileNameNew = @_configuration["Configuration:BillStorePath"] + input.Id + "_" + input.BillId + ".pdf";
+                    string fileNameNew = @_configuration["Configuration:BillStorePath"] + input.Id + "_" + input.BillId.Replace("/","-") + ".pdf";
 
                     using (var existingFileStream = new FileStream(fileNameExisting, FileMode.Open))
                     using (var newFileStream = new FileStream(fileNameNew, FileMode.Create))
@@ -682,7 +682,8 @@ namespace BlackSmithAPI.Controllers
                 billSeperator = _configuration["Configuration:BillSeperator"];
                 defaultNo = _configuration["Configuration:FirstBillNo"];
 
-                billId = billInitial + billSeperator + defaultNo ;//default
+                string commonPart = billInitial + billSeperator;
+                billId = commonPart + defaultNo;//default
 
                 var predicate = PredicateBuilder.True<Sale>();
                 if (_configuration["Configuration:IgnoreDeleted"].ToLower().Trim() == "false")
@@ -690,14 +691,16 @@ namespace BlackSmithAPI.Controllers
                     predicate = predicate.And(x => !x.IsDeleted);
                 }
                 var result = _saleOpp.GetAllUsingExpression(out int totalCount, 1, 0, predicate, x => x.OrderByDescending(y => y.Id)).FirstOrDefault();
+
                 if (result != null)
                 {
-                    if (!string.IsNullOrWhiteSpace(result.BillId))
+                    if (!string.IsNullOrEmpty(result.BillId) && result.BillId.Contains(commonPart))
                     {
-                        string[] splitted = result.BillId.Split(billSeperator);
-                        if (splitted.Length > 1)
+                        string actualId = result.BillId.Replace(commonPart, string.Empty);
+
+                        if (!string.IsNullOrEmpty(actualId) && !string.IsNullOrEmpty(commonPart))
                         {
-                            billId = billInitial + billSeperator + (Convert.ToDouble(splitted[1]) + 1);
+                            billId = commonPart + (Convert.ToDouble(actualId) + 1);
                         }
                     }
                 }
@@ -987,7 +990,7 @@ namespace BlackSmithAPI.Controllers
                         {
                             var input = _saleOpp.GetUsingId(Convert.ToInt64(each));
 
-                            paths.Add(_configuration["Configuration:BillStorePath"] + input.Id + "_" + input.BillId + ".pdf");
+                            paths.Add(_configuration["Configuration:BillStorePath"] + input.Id + "_" + input.BillId.Replace("/","-") + ".pdf");
                         }
                     }
 
